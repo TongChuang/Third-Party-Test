@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+
+		<!-- 指定连接数据库的URL -->
+		<!-- 指定连接数据库的用户名 -->
+		<!-- 指定连接数据库的密码 -->
+		<!-- 指定连接数据库连接池的最大连接数 -->
+		<!-- 指定连接数据库连接池的最小连接数 -->
+		<!-- 指定连接数据库连接池的初始化连接数 -->
+		<!-- 指定连接数据库连接池的连接的最大空闲时间 -->
+
+		<!-- oracle -->
+		<property name="driverClass" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="jdbcUrl" value="jdbc:oracle:thin:@10.31.96.38:1521:orcl" />
+		<property name="user" value="lab" />
+		<property name="password" value="lab" />
+		<property name="maxPoolSize" value="40" />
+		<property name="minPoolSize" value="1" />
+		<property name="initialPoolSize" value="1" />
+		<property name="maxIdleTime" value="20" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<!-- 依赖注入数据源，注入上面定义的dataSource -->
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+		<!-- mappingResouces属性用来列出全部映射文件 -->
+		<property name="mappingResources">
+			<list>
+				<!-- 以下用来列出Hibernate映射文件 -->
+				<value>common/datamodel/LabUser.hbm.xml</value>
+				<value>common/datamodel/DsfTestitems.hbm.xml</value>
+				<value>common/datamodel/DsfCustomerBaseInfo.hbm.xml</value>
+				<value>common/datamodel/DsfLYlxhdescribe.hbm.xml</value>
+				<value>common/datamodel/LProcess.hbm.xml</value>
+				<value>common/datamodel/LSample.hbm.xml</value>
+				<value>common/datamodel/LTestresult.hbm.xml</value>
+				<value>common/datamodel/DsfControltestitems.hbm.xml</value>
+			</list>
+		</property>
+		<!-- 定义Hibernate的SessionFactory的属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<!-- 指定数据库方言 -->
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop> -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+				<!-- 显示Hibernate持久化操作所生成的SQL -->
+				<prop key="hibernate.show_sql">true</prop>
+				<!-- 将SQL脚本进行格式化后再输出 -->
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 配置Hibernate的局部事务管理器，使用HibernateTransactionManager类 -->
+	<!-- 该类实现PlatformTransactionManager接口，是针对Hibernate的特定实现 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<!-- 配置HibernateTransactionManager时需要依注入SessionFactory的引用 -->
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+
+	<!-- 这里是关于持久化的接口的上层抽象类,针对方法实行通配符,设定事务关系. -->
+	<bean id="baseTxProxy" abstract="true"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+				<prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 这里是关于持久化的接口的实现类,以内部bean的形式作为target. -->
+	<bean id="dataAccessApi" parent="baseTxProxy" lazy-init="true">
+		<property name="target">
+			<bean class="dataaccess.DataAccessApiImpl">
+				<property name="sessionFactory">
+					<ref local="sessionFactory" />
+				</property>
+				<property name="securityDao" ref="securityDao" />
+				<property name="sysconfDao" ref="sysconfDao" />
+				<property name="updownDao" ref="updownDao" />
+				<property name="queryStatsDao" ref="queryStatsDao" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="securityDao" class="dataaccess.dao.SecurityDao"
+		lazy-init="true">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="sysconfDao" class="dataaccess.dao.SysConfDao" lazy-init="true">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="updownDao" class="dataaccess.dao.UpDownDao" lazy-init="true">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="queryStatsDao" class="dataaccess.dao.QueryStatsDao" lazy-init="true">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+</beans>

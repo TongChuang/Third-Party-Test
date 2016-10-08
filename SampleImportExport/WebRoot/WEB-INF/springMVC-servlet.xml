@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
+ "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<!-- 上传，限制20M -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为1MB -->
+		<property name="maxUploadSize">
+			<value>20971520</value>
+		</property>
+	</bean>
+
+	<!-- 用来过滤方法，可以在此控制权限 -->
+	<bean id="tmHandlerInterceptor" class="controller.SIEHandlerInterceptor">
+		<property name="securityApi" ref="securityApi" />
+	</bean>
+
+	<!-- 返回显示 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass">
+			<value>org.springframework.web.servlet.view.JstlView</value>
+		</property>
+	</bean>
+
+	<!-- 映射 -->
+	<bean id="publicUrlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref local="tmHandlerInterceptor" />
+			</list>
+		</property>
+
+		<property name="mappings">
+			<props>
+				<prop key="/login.do">loginController</prop>
+				<prop key="/jsp/security/security.do">
+					securityController
+				</prop>
+				<prop key="/jsp/sysconf/sysConf.do">
+					sysConfController
+				</prop>
+				<prop key="/jsp/updown/updown.do">
+					upDownController
+				</prop>
+				<prop key="/jsp/queryStats/queryStats.do">
+					queryStatsController
+				</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- ====================================== Controllers ============================================== -->
+	<!-- 三种methodNameResolver分别为: org.springframework.web.servlet.mvc.multiaction.InternalPathMethodNameResolver 
+		org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver 
+		org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver 
+		三种书写方式为 1：doTest 2：test.do 3：xxx?func=doTest 此处用的第三种 -->
+		
+	<bean id="queryStatsController" class="controller.QueryStatsController">
+		<property name="queryStatsApi" ref="queryStatsApi"></property>
+		<property name="methodNameResolver">
+			<ref local="queryStatsMethodNameResolver" />
+		</property>
+	</bean>
+	<bean id="queryStatsMethodNameResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName">
+			<value>method</value>
+		</property>
+	</bean>
+
+	<bean id="upDownController" class="controller.UpDownController">
+		<property name="dataAccessApi" ref="dataAccessApi" />
+		<property name="upDownApi" ref="upDownApi"></property>
+		<property name="methodNameResolver">
+			<ref local="upDownMethodNameResolver" />
+		</property>
+	</bean>
+	<bean id="upDownMethodNameResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName">
+			<value>method</value>
+		</property>
+	</bean>
+
+
+	<bean id="loginController" class="controller.LoginController">
+		<property name="dataAccessApi" ref="dataAccessApi" />
+		<property name="securityApi" ref="securityApi" />
+		<property name="sysConfApi" ref="sysConfApi" />
+		<property name="methodNameResolver">
+			<ref local="loginMethodNameResolver" />
+		</property>
+	</bean>
+	<bean id="loginMethodNameResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName">
+			<value>method</value>
+		</property>
+	</bean>
+
+	<bean id="securityController" class="controller.SecurityController">
+		<property name="dataAccessApi" ref="dataAccessApi" />
+		<property name="securityApi" ref="securityApi" />
+		<property name="methodNameResolver">
+			<ref local="securityMethodNameResolver" />
+		</property>
+	</bean>
+
+	<bean id="securityMethodNameResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName">
+			<value>method</value>
+		</property>
+	</bean>
+
+	<bean id="sysConfController" class="controller.SysConfController">
+		<property name="sysConfApi" ref="sysConfApi" />
+		<property name="methodNameResolver">
+			<ref local="sysConfMethodNameResolver" />
+		</property>
+	</bean>
+	<bean id="sysConfMethodNameResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName">
+			<value>method</value>
+		</property>
+	</bean>
+
+</beans>

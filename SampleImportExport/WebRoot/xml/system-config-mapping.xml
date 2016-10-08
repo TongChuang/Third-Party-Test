@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+
+<mapping>
+	<description> A mapping file for system config informations </description>
+
+	<class name="common.xmlmodel.SystemConfigTable">
+		<field name="configs" type="common.xmlmodel.SystemConfigSetting" collection="collection" />
+	</class>
+
+	<class name="common.xmlmodel.SystemConfigSetting">
+		<field name="hospital" type="string" /> <!-- hospital -->
+		<field name="bloodbank" type="string" />
+		<field name="webserviceUrl" type="string" /> <!-- webserviceUrl -->
+		<field name="userId" type="string"/><!-- userId -->
+		<field name="accessCode" type="string"/><!-- accessCode -->
+</class>
+
+</mapping>

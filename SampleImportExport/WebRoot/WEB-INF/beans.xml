@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"  "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="queryStatsApi" class="queryStats.QueryStatsApiImpl" lazy-init="true">
+		<property  name="dataAccessApi" ref="dataAccessApi" />
+	</bean>
+	<bean id="serviceApi" class="webService.server.SIE_ServiceApiImpl" lazy-init="true">
+		<property name="dataAccessApi" ref="dataAccessApi" />
+	</bean>
+	<bean id="upDownApi" class="updown.UpDownApiImpl" lazy-init="true">
+		<property name="dataAccessApi" ref="dataAccessApi" />
+	</bean>
+	<bean id="securityApi" class="security.SecurityApiImpl" lazy-init="true">
+		<property name="dataAccessApi" ref="dataAccessApi" />
+		<property name="handler" ref="securityHandler"></property>
+	</bean>
+	<bean id="securityHandler" class="security.SecurityHandler"
+		lazy-init="true">
+	</bean>
+	<bean id="sysConfApi" class="sysconf.SysConfApiImpl" lazy-init="true">
+		<property name="dataAccessApi" ref="dataAccessApi" />
+		<property name="handler" ref="sysConfHandler"></property>
+	</bean>
+	<bean id="sysConfHandler" class="sysconf.SysConfHandler"
+		lazy-init="true">
+	</bean>
+</beans>

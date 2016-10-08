@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system-config-table>
+	<configs>
+		<hospital>470051726</hospital>
+		<bloodbank>470051873</bloodbank>
+		<webserviceUrl>HTTP://10.10.5.1/WebServiceProxy.asmx?wsdl</webserviceUrl>
+		<userId>6</userId>
+		<accessCode>7AF82020</accessCode>
+	</configs>
+</system-config-table>
