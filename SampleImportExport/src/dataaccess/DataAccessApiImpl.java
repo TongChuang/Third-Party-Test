@@ -16,6 +16,7 @@ import org.apache.poi.ss.formula.functions.T;
 import org.hibernate.Query;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
@@ -149,8 +150,32 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	
 	
 	
+	public List<DsfCustomerBaseInfo> getCustomerInfoList(String clientnumber){
+		return sysconfDao.getCustomerInfoList(clientnumber);
+	}
+	public DsfCustomerBaseInfo getCustomerInfoById(String customerid){
+		return sysconfDao.getCustomerInfoById(customerid);
+	}
+	public void deleteCustomerInfo(String customerid){
+		sysconfDao.deleteCustomerInfo(customerid);
+	}
+	
 	public List<DsfCustomerBaseInfo> getBaseCustomerInfo(){
 		return queryStatsDao.getBaseCustomerInfo();
+	}
+	
+	public List<DsfCustomerBarCode> getNowCode(String customerid){
+		return queryStatsDao.getNowCode(customerid);
+	}
+	
+	public void saveBarCode(DsfCustomerBarCode dsfCustomerBarCode){
+		queryStatsDao.saveBarCode(dsfCustomerBarCode);
+	}
+	
+	
+	
+	public List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state) {
+		return sysconfDao.getCustomerInfoByCnameState(customername,state);
 	}
 
 }

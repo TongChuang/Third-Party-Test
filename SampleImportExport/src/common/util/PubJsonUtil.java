@@ -93,6 +93,21 @@ public class PubJsonUtil {
         return json.toString();
     }
     
+    public static String list2jsonNotRow(List<?> list) {
+        StringBuilder json = new StringBuilder();
+        json.append("[");
+        if (list != null && list.size() > 0) {
+            for (Object obj : list) {
+                json.append(object2json(obj));
+                json.append(",");
+            }
+            json.setCharAt(json.length() - 1, ']');
+        } else {
+            json.append("]");
+        }
+        return json.toString();
+    }
+    
     public static String treelist2json(List<?> list) {
         StringBuilder json = new StringBuilder();
         json.append("[");

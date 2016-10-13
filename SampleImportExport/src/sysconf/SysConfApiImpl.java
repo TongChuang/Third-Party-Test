@@ -1,6 +1,7 @@
 package sysconf;
 
 import common.SIEContext;
+import common.datamodel.DsfCustomerBaseInfo;
 import common.util.CommonUtil;
 import common.xmlmodel.SystemConfigSetting;
 import common.xmlmodel.SystemConfigTable;
@@ -77,6 +78,22 @@ public class SysConfApiImpl
 	public String getHospital() {
 		return handler.getHospital();
 	}
-
-
+	
+	public List<DsfCustomerBaseInfo> getCustomerInfoList(String  clientnumber){
+		return dataAccessApi.getCustomerInfoList(clientnumber);
+	}
+	public DsfCustomerBaseInfo getCustomerInfoById(String customerid){
+		return dataAccessApi.getCustomerInfoById(customerid);
+	}
+	
+	public void saveCustomerInfo(DsfCustomerBaseInfo dcbi){
+		dataAccessApi.saveCustomerBaseInfo(dcbi);
+	}
+	public void deleteCustomerInfo(String customerid){
+		dataAccessApi.deleteCustomerInfo(customerid);
+	}
+	
+	public List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state) {
+		return dataAccessApi.getCustomerInfoByCnameState(customername,state);
+	}
 }

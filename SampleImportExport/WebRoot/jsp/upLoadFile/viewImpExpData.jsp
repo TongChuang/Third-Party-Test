@@ -194,7 +194,6 @@
 	                    type: 'post',  
 	                    success: function (result)  
 	                    {     
-	                        alert(result);
 	                        $.ligerDialog.success('提交成功！');
 	                    }
                		});

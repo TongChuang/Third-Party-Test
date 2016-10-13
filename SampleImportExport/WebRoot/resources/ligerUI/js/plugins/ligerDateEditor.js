@@ -1,8 +1,9 @@
 ﻿/**
-* jQuery ligerUI 1.1.9
+* jQuery ligerUI 1.3.2
 * 
 * http://ligerui.com
 *  
+* Author daomi 2015 [ gd_star@163.com ] 
 * 
 */
 (function ($)
@@ -18,10 +19,13 @@
     };
 
     $.ligerDefaults.DateEditor = {
-        format: "yyyy-MM-dd hh:mm:ss",
+        format: "yyyy-MM-dd hh:mm",
+        width : null,
         showTime: false,
         onChangeDate: false,
-        absolute: true  //选择框是否在附加到body,并绝对定位
+        absolute: true,  //选择框是否在附加到body,并绝对定位
+        cancelable: true,      //可取消选择
+        readonly: false              //是否只读
     };
     $.ligerDefaults.DateEditorString = {
         dayMessage: ["日", "一", "二", "三", "四", "五", "六"],
@@ -51,8 +55,8 @@
         _render: function ()
         {
             var g = this, p = this.options;
-            if (!p.showTime && p.format.indexOf(" hh:mm:ss") > -1)
-                p.format = p.format.replace(" hh:mm:ss", "");
+            if (!p.showTime && p.format.indexOf(" hh:mm") > -1)
+                p.format = p.format.replace(" hh:mm", "");
             if (this.element.tagName.toLowerCase() != "input" || this.element.type != "text")
                 return;
             g.inputText = $(this.element);
@@ -86,7 +90,6 @@
             dateeditorHTML += "        <ul class='l-box-dateeditor-yearselector'><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>";
             dateeditorHTML += "        <ul class='l-box-dateeditor-hourselector'><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>";
             dateeditorHTML += "        <ul class='l-box-dateeditor-minuteselector'><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>";
-            dateeditorHTML += "        <ul class='l-box-dateeditor-secondselector'><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>";
             dateeditorHTML += "    </div>";
             dateeditorHTML += "    <div class='l-box-dateeditor-toolbar'>";
             dateeditorHTML += "        <div class='l-box-dateeditor-time'></div>";
@@ -110,12 +113,10 @@
             g.body.yearselector = $(".l-box-dateeditor-yearselector", g.body);
             g.body.hourselector = $(".l-box-dateeditor-hourselector", g.body);
             g.body.minuteselector = $(".l-box-dateeditor-minuteselector", g.body);
-            g.body.secondselector = $(".l-box-dateeditor-secondselector", g.body);
 
             g.toolbar.time = $(".l-box-dateeditor-time", g.toolbar);
             g.toolbar.time.hour = $("<a></a>");
             g.toolbar.time.minute = $("<a></a>");
-            g.toolbar.time.second = $("<a></a>");
             g.buttons = {
                 btnPrevYear: $(".l-box-dateeditor-header-prevyear", g.header),
                 btnNextYear: $(".l-box-dateeditor-header-nextyear", g.header),
@@ -133,8 +134,7 @@
                 day: nowDate.getDay(),
                 date: nowDate.getDate(),
                 hour: nowDate.getHours(),
-                minute: nowDate.getMinutes(),
-                second: nowDate.getSeconds()
+                minute: nowDate.getMinutes()
             };
             //当前的时间
             g.currentDate = {
@@ -143,8 +143,7 @@
                 day: nowDate.getDay(),
                 date: nowDate.getDate(),
                 hour: nowDate.getHours(),
-                minute: nowDate.getMinutes(),
-                second: nowDate.getSeconds()
+                minute: nowDate.getMinutes()
             };
             //选择的时间
             g.selectedDate = null;
@@ -171,10 +170,7 @@
             if (p.showTime)
             {
                 g.toolbar.time.show();
-                //add by lisa
-                //old -g.toolbar.time.append(g.toolbar.time.hour).append(":").append(g.toolbar.time.minute);
-                g.toolbar.time.append(g.toolbar.time.hour).append(":").append(g.toolbar.time.minute).append(":").append(g.toolbar.time.second);
-                //end
+                g.toolbar.time.append(g.toolbar.time.hour).append(":").append(g.toolbar.time.minute);
                 $("li", g.body.hourselector).each(function (i, item)
                 {
                     var str = i;
@@ -187,17 +183,19 @@
                     if (i < 10) str = "0" + i.toString();
                     $(this).html(str);
                 });
-                $("li", g.body.secondselector).each(function (i, item) {
-                    var str = i;
-                    if (i < 10) str = "0" + i.toString();
-                    $(this).html(str);
-                });
             }
             //设置主体
             g.bulidContent();
             //初始化   
+            //初始值
+            if (p.initValue)
+            {
+                g.inputText.val(p.initValue);
+            }
             if (g.inputText.val() != "")
+            {
                 g.onTextChange();
+            }
             /**************
             **bulid evens**
             *************/
@@ -236,11 +234,6 @@
             {
                 g.inputText.attr("readonly", "readonly");
                 g.text.addClass('l-text-disabled');
-            }
-            //初始值
-            if (p.initValue)
-            {
-                g.inputText.val(p.initValue);
             }
             g.buttons.btnClose.click(function ()
             {
@@ -376,6 +369,7 @@
                 g.currentDate.hour = index;
                 g.body.hourselector.slideToggle();
                 g.bulidContent();
+                g.showDate();
             });
             //选择分钟
             g.toolbar.time.minute.click(function ()
@@ -408,34 +402,9 @@
                 g.currentDate.minute = index;
                 g.body.minuteselector.slideToggle("fast");
                 g.bulidContent();
+                g.showDate();
             });
 
-            //选择秒
-            g.toolbar.time.second.click(function () {
-                $("li", g.body.secondselector).each(function (i, item) {
-                    //add selected style
-                    if (g.currentDate.minute == i)
-                        $(this).addClass("l-selected");
-                    else
-                        $(this).removeClass("l-selected");
-                });
-                g.body.secondselector.slideToggle("fast", function () {
-                    var index = $("li", this).index($('li.l-selected', this));
-                    if (index > 29) {
-                        var offSet = ($('li.l-selected', this).offset().top - $(this).offset().top);
-                        $(this).animate({ scrollTop: offSet });
-                    }
-                });
-            });
-            g.body.secondselector.hover(function () { }, function () {
-                $(this).slideUp("fast");
-            });
-            $("li", g.body.secondselector).click(function () {
-                var index = $("li", g.body.secondselector).index(this);
-                g.currentDate.second = index;
-                g.body.secondselector.slideToggle("fast");
-                g.bulidContent();
-            });
             //上个月
             g.buttons.btnPrevMonth.click(function ()
             {
@@ -529,6 +498,14 @@
             }
 
             g.set(p);
+            //增加鼠标在日期控件外点击隐藏日期选择框功能
+            $(document).bind("click.dateeditor", function (e)
+            {
+                if (g.dateeditor.is(":visible") && $((e.target || e.srcElement)).closest( ".l-box-dateeditor, .l-text-date" ).length == 0)
+                {
+                    g.toggleDateEditor(true);
+                }
+            });
         },
         destroy: function ()
         {
@@ -558,14 +535,10 @@
             g.buttons.btnYear.html(g.currentDate.year);
             g.toolbar.time.hour.html(g.currentDate.hour);
             g.toolbar.time.minute.html(g.currentDate.minute);
-            g.toolbar.time.second.html(g.currentDate.second);
             if (g.toolbar.time.hour.html().length == 1)
                 g.toolbar.time.hour.html("0" + g.toolbar.time.hour.html());
             if (g.toolbar.time.minute.html().length == 1)
                 g.toolbar.time.minute.html("0" + g.toolbar.time.minute.html());
-            if (g.toolbar.time.second.html().length == 1)
-                g.toolbar.time.second.html("0" + g.toolbar.time.second.html());
-
             $("td", this.body.tbody).each(function () { this.className = "" });
             $("tr", this.body.tbody).each(function (i, tr)
             {
@@ -625,7 +598,16 @@
             var g = this, p = this.options;
             if (p.absolute)
             {
-                g.dateeditor.css({ left: g.text.offset().left, top: g.text.offset().top + 1 + g.text.outerHeight() });
+                var contentHeight = $(document).height();
+                if (Number(g.text.offset().top + 1 + g.text.outerHeight() + g.dateeditor.height()) > contentHeight
+            			&& contentHeight > Number(g.dateeditor.height() + 1))
+                {
+                    //若下拉框大小超过当前document下边框,且当前document上留白大于下拉内容高度,下拉内容向上展现
+                    g.dateeditor.css({ left: g.text.offset().left, top: g.text.offset().top - 1 - g.dateeditor.height() });
+                } else
+                {
+                    g.dateeditor.css({ left: g.text.offset().left, top: g.text.offset().top + 1 + g.text.outerHeight() });
+                }
             }
             else
             {
@@ -643,6 +625,25 @@
         toggleDateEditor: function (isHide)
         {
             var g = this, p = this.options;
+            //避免同一界面弹出过个菜单的问题
+            var managers = $.ligerui.find($.ligerui.controls.ComboBox);
+            for ( var i = 0, l = managers.length; i < l; i++) {
+                var o = managers[i];
+                if(o.id!=g.id){
+                    if(o.selectBox.is(":visible")!=null&&o.selectBox.is(":visible")){
+                        o.selectBox.hide();
+                    }
+                }
+            }
+            managers = $.ligerui.find($.ligerui.controls.DateEditor);
+            for ( var i = 0, l = managers.length; i < l; i++) {
+                var o = managers[i];
+                if(o.id!=g.id){
+                    if(o.dateeditor.is(":visible")!=null&&o.dateeditor.is(":visible")){
+                        o.dateeditor.hide();
+                    }
+                }
+            }
             var textHeight = g.text.height();
             g.editorToggling = true;
             if (isHide)
@@ -664,17 +665,14 @@
         showDate: function ()
         {
             var g = this, p = this.options;
-            if (!this.selectedDate) return;
-            var dateStr = g.selectedDate.year + "/" + g.selectedDate.month + "/" + g.selectedDate.date;
+            if (!this.currentDate) return;
             this.currentDate.hour = parseInt(g.toolbar.time.hour.html(), 10);
             this.currentDate.minute = parseInt(g.toolbar.time.minute.html(), 10);
-            this.currentDate.second = parseInt(g.toolbar.time.second.html(), 10);
-            if (p.showTime)
-            {
-                dateStr += " " + this.currentDate.hour + ":" + this.currentDate.minute + ":" + this.currentDate.second;
-            }
+            var dateStr = this.currentDate.year + '/' + this.currentDate.month + '/' + this.currentDate.date + ' ' + this.currentDate.hour + ':' + this.currentDate.minute;
+            var myDate = new Date(dateStr);
+            dateStr = g.getFormatDate(myDate);
             this.inputText.val(dateStr);
-            this.inputText.trigger("change").focus();
+            this.onTextChange();
         },
         isDateTime: function (dateStr)
         {
@@ -688,17 +686,17 @@
         isLongDateTime: function (dateStr)
         {
             var g = this, p = this.options;
-            var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;
+            var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2})$/;
             var r = dateStr.match(reg);
             if (r == null) return false;
-            var d = new Date(r[1], r[3] - 1, r[4], r[5], r[6],r[7]);
+            var d = new Date(r[1], r[3] - 1, r[4], r[5], r[6]);
             if (d == "NaN") return false;
-            return (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4] && d.getHours() == r[5] && d.getMinutes() == r[6] && d.getSeconds() == r[7]);
+            return (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4] && d.getHours() == r[5] && d.getMinutes() == r[6]);
         },
         getFormatDate: function (date)
         {
-            var g = this, p = this.options;
-            if (date == "NaN") return null;
+            if (date === null || date == "NaN") return null;
+        	var g = this, p = this.options;
             var format = p.format;
             var o = {
                 "M+": date.getMonth() + 1,
@@ -724,78 +722,161 @@
             }
             return format;
         },
+        clear: function ()
+        {
+            this.set('value', '');
+            this.usedDate = null;
+        },
+        //取消选择 
+        _setCancelable: function (value)
+        {
+            var g = this, p = this.options;
+            if (!value && g.unselect)
+            {
+                g.unselect.remove();
+                g.unselect = null;
+            }
+            if (!value && !g.unselect) return;
+            g.unselect = $('<div class="l-trigger l-trigger-cancel"><div class="l-trigger-icon"></div></div>').hide();
+            g.text.hover(function ()
+            {
+                g.unselect.show();
+            }, function ()
+            {
+                g.unselect.hide();
+            })
+            if (!p.disabled && p.cancelable)
+            {
+                g.text.append(g.unselect);
+            }
+            g.unselect.hover(function ()
+            {
+                this.className = "l-trigger-hover l-trigger-cancel";
+            }, function ()
+            {
+                this.className = "l-trigger l-trigger-cancel";
+            }).click(function ()
+            {
+                if (p.readonly) return;
+                g.clear();
+            });
+        },
+        //恢复
+        _rever: function ()
+        {
+            var g = this, p = this.options;
+            if (!g.usedDate)
+            {
+                g.inputText.val("");
+            } else
+            {
+                g.inputText.val(g.getFormatDate(g.usedDate));
+            }
+        },
+        _getMatch: function (format)
+        {
+            var r = [-1, -1, -1, -1, -1, -1], groupIndex = 0, regStr = "^", str = format || this.options.format;
+            while (true)
+            {
+                var tmp_r = str.match(/^yyyy|MM|dd|mm|hh|HH|ss|-|\/|:|\s/);
+                if (tmp_r)
+                {
+                    var c = tmp_r[0].charAt(0);
+                    var mathLength = tmp_r[0].length;
+                    var index = 'yMdhms'.indexOf(c);
+                    if (index != -1)
+                    {
+                        r[index] = groupIndex + 1;
+                        regStr += "(\\d{1," + mathLength + "})";
+                    } else
+                    {
+                        var st = c == ' ' ? '\\s' : c;
+                        regStr += "(" + st + ")";
+                    }
+                    groupIndex++;
+                    if (mathLength == str.length)
+                    {
+                        regStr += "$";
+                        break;
+                    }
+                    str = str.substring(mathLength);
+                } else
+                {
+                    return null;
+                }
+            }
+            return { reg: new RegExp(regStr), position: r };
+        },
+        _bulidDate: function (dateStr)
+        {
+            var g = this, p = this.options;
+            var r = this._getMatch();
+            if (!r) return null;
+            var t = dateStr.match(r.reg);
+            if (!t) return null;
+            var tt = {
+                y: r.position[0] == -1 ? 1900 : t[r.position[0]],
+                M: r.position[1] == -1 ? 0 : parseInt(t[r.position[1]], 10) - 1,
+                d: r.position[2] == -1 ? 1 : parseInt(t[r.position[2]], 10),
+                h: r.position[3] == -1 ? 0 : parseInt(t[r.position[3]], 10),
+                m: r.position[4] == -1 ? 0 : parseInt(t[r.position[4]], 10),
+                s: r.position[5] == -1 ? 0 : parseInt(t[r.position[5]], 10)
+            };
+            if (tt.M < 0 || tt.M > 11 || tt.d < 0 || tt.d > 31) return null;
+            var d = new Date(tt.y, tt.M, tt.d);
+            if (p.showTime)
+            {
+                if (tt.m < 0 || tt.m > 59 || tt.h < 0 || tt.h > 23 || tt.s < 0 || tt.s > 59) return null;
+                d.setHours(tt.h);
+                d.setMinutes(tt.m);
+                d.setSeconds(tt.s);
+            }
+            return d;
+        },
+        updateStyle: function ()
+        {
+            this.onTextChange();
+        },
         onTextChange: function ()
         {
             var g = this, p = this.options;
             var val = g.inputText.val();
-            if (val == "")
+            if (!val)
             {
                 g.selectedDate = null;
                 return true;
             }
-            if (!p.showTime && !g.isDateTime(val))
+            var newDate = g._bulidDate(val);
+            if (!newDate)
             {
-                //恢复
-                if (!g.usedDate)
-                {
-                    g.inputText.val("");
-                } else
-                {
-                    g.inputText.val(g.getFormatDate(g.usedDate));
-                }
-            }
-            else if (p.showTime && !g.isLongDateTime(val))
-            {
-                //恢复
-                if (!g.usedDate)
-                {
-                    g.inputText.val("");
-                } else
-                {
-                    g.inputText.val(g.getFormatDate(g.usedDate));
-                }
+                g._rever();
+                return;
             }
             else
             {
-                val = val.replace(/-/g, "/");
-                var formatVal = g.getFormatDate(new Date(val));
-                if (formatVal == null)
-                {
-                    //恢复
-                    if (!g.usedDate)
-                    {
-                        g.inputText.val("");
-                    } else
-                    {
-                        g.inputText.val(g.getFormatDate(g.usedDate));
-                    }
-                }
-                g.usedDate = new Date(val); //记录
-                g.selectedDate = {
-                    year: g.usedDate.getFullYear(),
-                    month: g.usedDate.getMonth() + 1, //注意这里
-                    day: g.usedDate.getDay(),
-                    date: g.usedDate.getDate(),
-                    hour: g.usedDate.getHours(),
-                    minute: g.usedDate.getMinutes(),
-                    //add by lisa
-                    second: g.usedDate.getSeconds()
-                    //end
-                };
-                g.currentDate = {
-                    year: g.usedDate.getFullYear(),
-                    month: g.usedDate.getMonth() + 1, //注意这里
-                    day: g.usedDate.getDay(),
-                    date: g.usedDate.getDate(),
-                    hour: g.usedDate.getHours(),
-                    minute: g.usedDate.getMinutes(),
-                    second: g.usedDate.getSeconds()
-                };
-                g.inputText.val(formatVal);
-                g.trigger('changeDate', [formatVal]);
-                if ($(g.dateeditor).is(":visible"))
-                    g.bulidContent();
+                g.usedDate = newDate;
             }
+            g.selectedDate = {
+                year: g.usedDate.getFullYear(),
+                month: g.usedDate.getMonth() + 1, //注意这里
+                day: g.usedDate.getDay(),
+                date: g.usedDate.getDate(),
+                hour: g.usedDate.getHours(),
+                minute: g.usedDate.getMinutes()
+            };
+            g.currentDate = {
+                year: g.usedDate.getFullYear(),
+                month: g.usedDate.getMonth() + 1, //注意这里
+                day: g.usedDate.getDay(),
+                date: g.usedDate.getDate(),
+                hour: g.usedDate.getHours(),
+                minute: g.usedDate.getMinutes()
+            };
+            var formatVal = g.getFormatDate(newDate);
+            g.inputText.val(formatVal);
+            g.trigger('changeDate', [formatVal]);
+            if ($(g.dateeditor).is(":visible"))
+                g.bulidContent();
         },
         _setHeight: function (value)
         {
@@ -823,9 +904,15 @@
             if (!value) g.inputText.val('');
             if (typeof value == "string")
             {
+                if (/^\/Date/.test(value))
+                {
+                    value = value.replace(/^\//, "new ").replace(/\/$/, "");
+                    eval("value = " + value);
+                }
                 g.inputText.val(value);
+                g.usedDate = value;
             }
-            else if (typeof value == "object")
+            if (typeof value == "object")
             {
                 if (value instanceof Date)
                 {

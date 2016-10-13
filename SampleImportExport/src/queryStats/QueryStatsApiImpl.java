@@ -5,6 +5,7 @@ package queryStats;
 
 import java.util.List;
 
+import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 
 import dataaccess.DataAccessApi;
@@ -29,6 +30,13 @@ public class QueryStatsApiImpl implements QueryStatsApi {
 	
 	public List<DsfCustomerBaseInfo> getBaseCustomerInfo(){
 		return dataAccessApi.getBaseCustomerInfo();
+	}
+	
+	public List<DsfCustomerBarCode> getNowCode(String customerid){
+		return dataAccessApi.getNowCode(customerid);
+	}
+	public void saveBarCode(DsfCustomerBarCode dsfCustomerBarCode){
+		dataAccessApi.saveBarCode(dsfCustomerBarCode);
 	}
 	
 	

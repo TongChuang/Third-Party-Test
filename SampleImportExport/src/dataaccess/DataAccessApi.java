@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.poi.ss.formula.functions.T;
 
 import common.StartAPI;
+import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
@@ -59,8 +60,26 @@ public interface DataAccessApi
 	public abstract List<LTestresult> getTestResultsByWebService(LTestresult ltr);
 	
 	/**
-	 * 条码打印前查询客户信息
+	 * 查询客户信息
 	 * @return
 	 */
-	public abstract List<DsfCustomerBaseInfo> getBaseCustomerInfo() ;
+	public abstract List<DsfCustomerBaseInfo> getCustomerInfoList(String  clientnumber);
+	
+	public abstract DsfCustomerBaseInfo getCustomerInfoById(String customerid);
+	
+	public abstract void deleteCustomerInfo(String customerid);
+	public abstract List<DsfCustomerBaseInfo> getBaseCustomerInfo();
+	/**
+	 * 查询客户当前条码打印到那一个数值
+	 * @return
+	 */
+	public abstract List<DsfCustomerBarCode> getNowCode(String customerid);
+	/**
+	 * 保存条码信息
+	 * @param dsfCustomerBarCode
+	 */
+	public abstract void saveBarCode(DsfCustomerBarCode dsfCustomerBarCode);
+	
+	
+	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state);
 }

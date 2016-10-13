@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import common.datamodel.DsfControltestitems;
+import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
@@ -23,7 +24,16 @@ import dataaccess.help.DataAccessUtil;
 
 public class QueryStatsDao extends HibernateDaoSupport {
 
-	public List<DsfCustomerBaseInfo> getBaseCustomerInfo(){
+	public List<DsfCustomerBaseInfo> getBaseCustomerInfo() {
 		return DataAccessUtil.getAllObjects("DsfCustomerBaseInfo", getHibernateTemplate());
 	}
+
+	public List<DsfCustomerBarCode> getNowCode(String customerid) {
+		return DataAccessUtil.getAllObjects("DsfCustomerBarCode", getHibernateTemplate());
+	}
+
+	public void saveBarCode(DsfCustomerBarCode dsfCustomerBarCode) {
+		DataAccessUtil.saveOrUpdate(dsfCustomerBarCode, "DsfCustomerBarCode", getHibernateTemplate());
+	}
+
 }

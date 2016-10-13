@@ -33,8 +33,8 @@
 				text : '查询统计/条码打印',
 				menu : menu3
 			}, {
-				text : '系统设置',
-				menu : configmenu
+				text : '基础信息设置',
+				menu : baseInfo
 			} ]
 		});
 		//布局
@@ -101,8 +101,8 @@
 		$("#pageloading").hide();
 		pages_init();
 	});
-	//按钮   
 
+	//按钮   
 	var baseDataMenu = {
 		width : 130,
 		items : [ {
@@ -131,6 +131,7 @@
 			click : expResultData
 		}, ]
 	};
+
 	var menu3 = {
 		width : 120,
 		items : [ {
@@ -143,12 +144,48 @@
 			click : tmdy
 		}, ]
 	};
-	var configmenu = {
-		width : 150,
+	var baseInfo = {
+		width : 180,
 		items : [ {
 			text : '系统基础信息设置',
 			click : xtjcxxsz
-		}, ]
+		}, {
+			text : '客户相关信息设置',
+			children : [ {
+				text : '客户信息',
+				click : cinfo
+			}, ],
+		}, {
+			text : '检验信息设置',
+			children : [ {
+				text : '检验信息设置',
+				click : inspectionInfo
+			}, {
+				line : true
+			}, {
+				text : '检验目的对照',
+				click : inspectionItemControl
+			}, ]
+		}, {
+			text : '折扣信息设置',
+			children : [ {
+				text : '基础折扣设置',
+				click : baseDiscount
+			}, ]
+		} ]
+	}
+
+	function baseDiscount() {
+		f_addTab("baseDiscount", "基础折扣", "");
+	}
+	function cinfo() {
+		f_addTab("cinfo", "客户信息", "/jsp/sysconf/sysConf.do?method=viewCustomerInfo");
+	}
+	function inspectionInfo() {
+		f_addTab("inspectionInfo", "检验信息设置", "");
+	}
+	function inspectionItemControl() {
+		f_addTab("inspectionItemControl", "检验目的对照", "");
 	}
 
 	function impBaseData() {
@@ -171,7 +208,8 @@
 				"/jsp/queryStats/queryStats.do?method=viewQueryStats");
 	}
 	function tmdy() {
-		f_addTab("tmdy", "条码打印", "/jsp/queryStats/viewPrintCode.jsp");
+		f_addTab("tmdy", "条码打印",
+				"/jsp/queryStats/queryStats.do?method=viewPrintCode");
 	}
 	function xtjcxxsz() {
 		f_addTab("xtjcxxsz", "系统基础信息",
