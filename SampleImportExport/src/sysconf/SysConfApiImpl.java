@@ -1,7 +1,9 @@
 package sysconf;
 
 import common.SIEContext;
+import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBaseInfo;
+import common.datamodel.DsfLYlxhdescribe;
 import common.util.CommonUtil;
 import common.xmlmodel.SystemConfigSetting;
 import common.xmlmodel.SystemConfigTable;
@@ -95,5 +97,35 @@ public class SysConfApiImpl
 	
 	public List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state) {
 		return dataAccessApi.getCustomerInfoByCnameState(customername,state);
+	}
+	/**
+	 * 检验信息
+	 */
+	@Override
+	public  List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid){
+		return dataAccessApi.getCustomerInfoByNo(clientnumber,customerid);
+	}
+	@Override
+	public  List<DsfLYlxhdescribe> getYlxhdescribe(String customerid){
+		return dataAccessApi.getYlxhdescribe(customerid);
+	}
+	@Override
+	public  List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc){
+		return dataAccessApi.getYlxhdescribeByNo(ylxh,ylmc);
+	}
+	@Override
+	public  void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+		dataAccessApi.updateYlxhdescribe(lYlxhdescribe );
+	}
+	@Override
+	public  void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+		dataAccessApi.addYlxhdescribe(lYlxhdescribe);
+	}
+	/**
+	 * 检验项目对照
+	 */
+	@Override
+	public List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname){
+		return dataAccessApi.getControltestitemsByNo(customeritems,customeritemsname);
 	}
 }

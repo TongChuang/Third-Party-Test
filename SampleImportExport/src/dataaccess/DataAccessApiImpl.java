@@ -1,21 +1,12 @@
 package dataaccess;
 
-import dataaccess.dao.QueryStatsDao;
-import dataaccess.dao.SecurityDao;
-import dataaccess.dao.SysConfDao;
-import dataaccess.dao.UpDownDao;
-import dataaccess.help.DataAccessUtil;
-
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.poi.ss.formula.functions.T;
-import org.hibernate.Query;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
@@ -25,7 +16,11 @@ import common.datamodel.LSample;
 import common.datamodel.LTestresult;
 import common.datamodel.LabUser;
 
-import security.OnlineUserMgr;
+import dataaccess.dao.InspectionDao;
+import dataaccess.dao.QueryStatsDao;
+import dataaccess.dao.SecurityDao;
+import dataaccess.dao.SysConfDao;
+import dataaccess.dao.UpDownDao;
 
 // Referenced classes of package dataaccess:
 //			DataAccessApi
@@ -37,12 +32,14 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	private SysConfDao sysconfDao = null;
 	private UpDownDao updownDao = null;
 	private QueryStatsDao queryStatsDao = null;
+	private InspectionDao inspectionDao = null;
 
 	public DataAccessApiImpl() {
 		securityDao = null;
 		sysconfDao = null;
 		updownDao = null;
 		queryStatsDao = null;
+		inspectionDao = null;
 	}
 
 	public void setQueryStatsDao(QueryStatsDao queryStatsDao) {
@@ -67,6 +64,10 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 
 	public void setUpdownDao(UpDownDao updownDao) {
 		this.updownDao = updownDao;
+	}
+	
+	public void setInspectionDao(InspectionDao inspectionDao) {
+		this.inspectionDao = inspectionDao;
 	}
 
 	public void init() {
@@ -177,5 +178,25 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	public List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state) {
 		return sysconfDao.getCustomerInfoByCnameState(customername,state);
 	}
-
+	//检验信息
+	public List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid){
+		return sysconfDao.getCustomerInfoByNo(clientnumber,customerid);
+	}
+	public List<DsfLYlxhdescribe> getYlxhdescribe(String customerid){
+		return sysconfDao.getYlxhdescribe(customerid);
+	}
+	public List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc){
+		return sysconfDao.getYlxhdescribeByNo(ylxh,ylmc);
+	}
+	public void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+		sysconfDao.updateYlxhdescribe(lYlxhdescribe);
+	}
+	public void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+		sysconfDao.addYlxhdescribe(lYlxhdescribe);
+	}
+	
+	//检验项目对照
+	public List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname){
+		return sysconfDao.getControltestitemsByNo(customeritems,customeritemsname);
+	}
 }
