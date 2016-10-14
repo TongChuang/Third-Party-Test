@@ -21,13 +21,9 @@
 <script src="/resources/ligerUI/js/plugins/ligerForm.js" type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerComboBox.js"
 	type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerCheckBox.js"
-	type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerButton.js"
 	type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerDialog.js"
-	type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerRadio.js"
 	type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerSpinner.js"
 	type="text/javascript"></script>

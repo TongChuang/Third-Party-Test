@@ -185,7 +185,7 @@
 		f_addTab("inspectionInfo", "检验信息设置", "/jsp/sysconf/sysConf.do?method=viewTestObjective");
 	}
 	function inspectionItemControl() {
-		f_addTab("inspectionItemControl", "检验项目对照", "");
+		f_addTab("inspectionItemControl", "检验项目对照", "/jsp/sysconf/sysConf.do?method=viewTestItem");
 	}
 
 	function impBaseData() {
