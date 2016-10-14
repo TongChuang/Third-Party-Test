@@ -17,40 +17,32 @@
 	type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerGrid.js"
 	type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerToolBar.js" type="text/javascript">
+<script src="/resources/ligerUI/js/plugins/ligerToolBar.js"
+	type="text/javascript">
+	
 </script>
 <script type="text/javascript">
-var testItemJson = null;
-var customerJson = null;
-var testObjectiveJson = null;
+	var contorlJson = null;
+	var customerJson = null;
 	$(function() {
-
 		$("#layout1").ligerLayout({
 			leftWidth : 400,
 			rightWidth : 300,
 		});
-		$("#toptoolbar").ligerToolBar({ items: [
-                {
-                    text: '新增检验目的', click: addTestObjective, icon:'add'},
-                { line:true },
-                { text: '修改检验目的', click: modifyTestObjective },
-                 { line:true },
-                { text: '删除检验目的', click: deleteTestObjective }
-            ]
-        });
 		
+
 		$("#customerData").ligerGrid({
 			columns : [ {
 				display : 'customerid',
 				name : 'customerid',
 				width : 150,
-				hide:true,
-			},{
+				hide : true,
+			}, {
 				display : 'customerKey',
 				name : 'customerKey',
 				width : 150,
-				hide:true,
-			},{
+				hide : true,
+			}, {
 				display : '客户编号',
 				name : 'clientnumber',
 				width : 100,
@@ -68,42 +60,51 @@ var testObjectiveJson = null;
 			height : '99%',
 			checkbox : false,
 			onSelectRow : function(data, rowindex, rowobj) {
-				alert("选中的是："+data.customername);			
+				alert("选中的是：" + data.customername);
 			},
 		});
-		
-		$("#testObjective").ligerGrid({
+
+		$("#contorlData").ligerGrid({
 			columns : [ {
-				display : '检验目的编号',
-				name : 'ylxh',
-				width : 150,
-			}, {
-				display : '检验目名称',
-				name : 'ylmc',
-				width : 150,
-			},{
 				display : 'customerid',
 				name : 'customerid',
 				width : 150,
-				hide:true,
+				hide : true,
+			}, {
+				display : 'id',
+				name : 'id',
+				width : 150,
+				hide : true,
+			}, {
+				display : '客户检验项目名称',
+				name : 'customeritemsname',
+				width : 150,
+			}, {
+				display : '客户检验项目ID',
+				name : 'customeritems',
+				width : 150,
+			}, {
+				display : '本地检验项目ID',
+				name : 'localitems',
+				width : 150
+			}, {
+				display : '本地检验项目名称',
+				name : 'localitemsname',
+				width : 150
 			},],
-		data : testObjectiveJson,
+			data : contorlJson,
 			pageSize : 30,
 			width : '100%',
 			height : '99%',
 			checkbox : false,
 			onSelectRow : function(data, rowindex, rowobj) {
-				alert("选中的是："+data.ylmc);			
+				alert("选中的是：" + data.ylmc);
 			},
 		});
-		
+
 	});
-	
-function addTestObjective(){}
 
-function modifyTestObjective(){}
 
-function deleteTestObjective(){}
 </script>
 
 <style type="text/css">
@@ -124,27 +125,30 @@ body {
 	background: #f8f8f8;
 	margin-bottom: 3px;
 }
-
 </style>
 </head>
 <body style="padding:10px">
 	<div id="layout1">
 		<div position="left" title="客户信息">
-			<input type="text" style="margin:5px;"/>
-			<input type="button" value="搜索" class="l-button"/>
+			<input type="text" style="margin:5px;" /> <input type="button"
+				value="搜索" class="l-button" />
 			<div id="customerData"></div>
 		</div>
-		
-		<div position="center" title="检验目的">
-			<input type="text" style="margin:5px"/>
-			<input type="button" value="搜索" class="l-button"/>
-			<div id="toptoolbar"></div>
-			<div id="testObjective"></div>
+
+		<div position="center" title="客户检检验项目对照">
+					
+						<div align="right"><td>
+							<input type="button" value="自动对照相同名称的检验项目" style="width: 210px"
+								class="l-button" /></td>
+							<input type="text" style="margin:5px" /></td>
+							<input type="button" value="搜索" align="right" class="l-button" /></td>
+						</div>
+					
+			<div id="contorlData"></div>
 		</div>
-		
+
 		<div position="right" title="检验项目">
-			<input type="text" style="margin:5px"/>
-			<input type="button" value="添加" class="l-button"/>
+			<input type="text" style="margin:5px" /> 
 		</div>
 	</div>
 </body>
