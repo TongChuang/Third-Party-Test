@@ -182,10 +182,10 @@
 		f_addTab("cinfo", "客户信息", "/jsp/sysconf/sysConf.do?method=viewCustomerInfo");
 	}
 	function inspectionInfo() {
-		f_addTab("inspectionInfo", "检验信息设置", "");
+		f_addTab("inspectionInfo", "检验信息设置", "/jsp/sysconf/sysConf.do?method=viewTestObjective");
 	}
 	function inspectionItemControl() {
-		f_addTab("inspectionItemControl", "检验目的对照", "");
+		f_addTab("inspectionItemControl", "检验项目对照", "");
 	}
 
 	function impBaseData() {

@@ -27,6 +27,25 @@ public class SysConfController extends MultiActionController {
 		this.sysConfApi = sysConfApi;
 	}
 	
+	public ModelAndView viewTestObjective(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			logger.info((Object) (new StringBuilder("Begin to viewTestObjective ")));
+			
+			
+			logger.info((Object) (new StringBuilder("End to viewTestObjective ")));
+			return null;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+		}
+		return null;
+	}
+	
 	public void addBaseCustomerInfo(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {

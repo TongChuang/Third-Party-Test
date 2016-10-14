@@ -46,11 +46,20 @@
 		});
 		$("#toptoolbar").ligerToolBar({ items: [
                 {
-                    text: '增加', click: addBase, icon:'add'},
+                    text: '新增客户基础信息', click: addBase, icon:'add'},
                 { line:true },
-                { text: '修改保存', click: modifyBase },
+                { text: '修改客户基础信息', click: modifyBase },
                  { line:true },
-                { text: '删除', click: deleteBase }
+                { text: '删除客户信息', click: deleteBase }
+            ]
+        });
+        $("#toptoolbar1").ligerToolBar({ items: [
+                {
+                    text: '新增客户联系人信息', click: addBase, icon:'add'},
+                { line:true },
+                { text: '修改客户联系人信息', click: modifyBase },
+                 { line:true },
+                { text: '删除客户联系人信息', click: deleteBase }
             ]
         });
 		$("#toptoolbar1").ligerToolBar({ items: [
@@ -95,8 +104,6 @@
 				$("#customerid").val(data.customerid);
 			},
 		});
-		
-		
 		
 		 $("#contactGrid").ligerGrid({
 			columns : [ {
@@ -201,7 +208,7 @@
 			return;
 		}
 		var customername = $("#customername").val();
-		$.ligerDialog.confirm('确定要删除客户:'+customername+'?', function (yes) { 
+		$.ligerDialog.confirm('确定要删除客户:'+customername+'的基础信息，以及该信息下的所有联系人吗?', function (yes) { 
 				$.ajax({
 					url : '/jsp/sysconf/sysConf.do?method=deleteBaseCustomerInfo',
 					data : 'customerid=' + customerid,
