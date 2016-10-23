@@ -8,11 +8,9 @@
 	</class>
 
 	<class name="common.xmlmodel.SystemConfigSetting">
-		<field name="hospital" type="string" /> <!-- hospital -->
-		<field name="bloodbank" type="string" />
-		<field name="webserviceUrl" type="string" /> <!-- webserviceUrl -->
-		<field name="userId" type="string"/><!-- userId -->
-		<field name="accessCode" type="string"/><!-- accessCode -->
+		<field name="defaultPassword" type="string" /> <!-- default password for users -->
+		<field name="updateServerAddress" type="string" /> <!-- firstRunTime for system -->		
+		<field name="ftpRoot" type="string" /> <!-- SanServerRoot for system -->
 </class>
 
 </mapping>

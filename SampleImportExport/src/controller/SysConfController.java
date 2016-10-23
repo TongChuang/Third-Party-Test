@@ -123,15 +123,18 @@ public class SysConfController extends MultiActionController {
 			String clientnumber = request.getParameter("clientnumber");
 			String customername = request.getParameter("customername");
 			String address = request.getParameter("address");
+			String basicinfostate = request.getParameter("basicinfostate");
 			
 			DsfCustomerBaseInfo dcbi = new DsfCustomerBaseInfo();
 			dcbi.setAddress(address);
 			dcbi.setClientnumber(clientnumber);
 			dcbi.setCustomerid(new BigDecimal(customerid));
 			dcbi.setCustomerKey(customerKey);
-			dcbi.setCustomername(customername);      
+			dcbi.setCustomername(customername);  
+			dcbi.setBasicinfostate(basicinfostate);
 			
 			sysConfApi.saveCustomerInfo(dcbi);
+			
 			jsonObject.put("success", "保存数据成功！");
 			response.setContentType("application/json;charset=utf-8");     
 			response.getWriter().write(jsonObject.toString()); 
@@ -181,11 +184,10 @@ public class SysConfController extends MultiActionController {
 			logger.info((Object) (new StringBuilder("Begin to showSystemBasicInfo ")));
 			
 			SystemConfigSetting sysConfig = sysConfApi.getSystemConfig();
-			request.setAttribute("accesscode", sysConfig.getAccessCode());
-			request.setAttribute("hospital", sysConfig.getHospital());
-			request.setAttribute("userid", sysConfig.getUserId());
-			request.setAttribute("weburl", sysConfig.getWebserviceUrl());
-			request.setAttribute("bloodbank", sysConfig.getBloodbank());
+			request.setAttribute("defaultPassword", sysConfig.getDefaultPassword());
+			request.setAttribute("ftpRoot", sysConfig.getFtpRoot());
+			request.setAttribute("updateServerAddress", sysConfig.getUpdateServerAddress());
+			request.setAttribute("webserviceUrl", sysConfig.getWebserviceUrl());
 			
 			String msg = request.getParameter("msg");
 			request.setAttribute("msg", msg);
@@ -207,39 +209,33 @@ public class SysConfController extends MultiActionController {
 	public ModelAndView updateSystemConfig(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-			String hospital = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0))
-					.getHospital();
-			if (request.getParameter("hospital") != null){
-				hospital = request.getParameter("hospital");
+			String defaultPassword = ((SystemConfigSetting) SIEContext
+					.getSystemConfigTable().getConfigs().get(0)).getDefaultPassword()
+					;
+			if (request.getParameter("defaultPassword") != null){
+				defaultPassword = request.getParameter("defaultPassword");
 			}
-			String webServiceUtl = ((SystemConfigSetting) SIEContext
+			String ftpRoot = ((SystemConfigSetting) SIEContext
+					.getSystemConfigTable().getConfigs().get(0)).getFtpRoot();
+			if (request.getParameter("ftpRoot") != null) {
+				ftpRoot = request.getParameter("ftpRoot");
+			}
+			String updateServerAddress = ((SystemConfigSetting) SIEContext
+					.getSystemConfigTable().getConfigs().get(0)).getUpdateServerAddress();
+			if (request.getParameter("updateServerAddress") != null) {
+				updateServerAddress = request.getParameter("updateServerAddress");
+			}
+			String webserviceUrl = ((SystemConfigSetting) SIEContext
 					.getSystemConfigTable().getConfigs().get(0)).getWebserviceUrl();
-			if (request.getParameter("webServiceUtl") != null) {
-				webServiceUtl = request.getParameter("webServiceUtl");
+			if (request.getParameter("webserviceUrl") != null) {
+				webserviceUrl = request.getParameter("webserviceUrl");
 			}
-			String accessCode = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0)).getAccessCode();
-			if (request.getParameter("accessCode") != null) {
-				accessCode = request.getParameter("accessCode");
-			}
-			String userId = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0)).getUserId();
-			if (request.getParameter("userId") != null) {
-				userId = request.getParameter("userId");
-			}
-			String bloodbank = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0)).getBloodbank();
-			if (request.getParameter("bloodbank") != null) {
-				bloodbank = request.getParameter("bloodbank");
-			} 
 
 			SystemConfigSetting config = new SystemConfigSetting();
-			config.setHospital(hospital);
-			config.setWebserviceUrl(webServiceUtl);
-			config.setAccessCode(accessCode);
-			config.setUserId(userId);
-			config.setBloodbank(bloodbank);
+			config.setDefaultPassword(defaultPassword);
+			config.setFtpRoot(ftpRoot);
+			config.setUpdateServerAddress(updateServerAddress);
+			config.setWebserviceUrl(webserviceUrl);
 
 			try {
 				sysConfApi.updateSystemConfig(config);

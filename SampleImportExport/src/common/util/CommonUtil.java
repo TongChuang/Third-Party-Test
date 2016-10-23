@@ -357,4 +357,11 @@ public class CommonUtil {
 			return str;
 		}
 	}
+	
+	public static  String renameFileName(String newName, String fileName) {
+		String suffix = CommonUtil.getFileSuffix(fileName);
+		String newFileName = null;
+		newFileName = newName+(".")+suffix;
+		return newFileName;
+	}
 }

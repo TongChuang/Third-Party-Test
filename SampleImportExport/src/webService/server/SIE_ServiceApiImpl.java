@@ -20,7 +20,7 @@ import webService.server.help.ConversionBean;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LProcess;
+import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
 import common.datamodel.LTestresult;
 import common.util.XmlUtil;
@@ -183,12 +183,12 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 					// 保存Process 表
 					Process_XML prXml = new Process_XML();
 					prXml = slXml.getProcess();
-					LProcess lp = new LProcess();
-					lp.setExecutetime(prXml.getExecutetime());
-					lp.setExecutor(prXml.getExecutor());
-					lp.setRequester(prXml.getRequester());
-					lp.setRequesttime(prXml.getRequesttime());
-					lp.setSampleId(ls.getId());
+					DsfProcess lp = new DsfProcess();
+//					lp.setExecutetime(prXml.getExecutetime());
+//					lp.setExecutor(prXml.getExecutor());
+//					lp.setRequester(prXml.getRequester());
+//					lp.setRequesttime(prXml.getRequesttime());
+//					lp.setSampleId(ls.getId());
 					String lpseqString = dataAccessApi
 							.getSeqString("PROCESS_SEQUENCE");
 					lp.setId(new BigDecimal(lpseqString));
@@ -198,7 +198,7 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 					StringBuffer profiletest = new StringBuffer();
 					for (TestItem_XML tXml : slXml.getTestItem_XMLs()) {
 						List<DsfTestitems> dsftList = dataAccessApi
-								.getTestItemsByTestItem(tXml.getTestitem(),
+								.getDsfTestItemsByTestItem(tXml.getTestitem(),
 										customerid);
 						if (null == dsftList || dsftList.size() < 1) {
 							DsfTestitems dTestitems = new DsfTestitems();
@@ -273,7 +273,7 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 			if (flag) {
 				// 获取所有当前用户的已存在数据
 				List<DsfLYlxhdescribe> ylxhList = dataAccessApi.getYlxhdescribeByYlxh("", customerid);
-				List<DsfTestitems> dsftList = dataAccessApi.getTestItemsByTestItem("", customerid);
+				List<DsfTestitems> dsftList = dataAccessApi.getDsfTestItemsByTestItem("", customerid);
 				// 查询数据库中的历史数据放入SET以防止新上来的数据会和原来的有重复的
 				Set ylxhSet = new HashSet();
 				Set tiSet = new HashSet();

@@ -4,7 +4,7 @@
 package webService.server.help;
 
 import common.datamodel.DsfTestitems;
-import common.datamodel.LProcess;
+import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
 import common.webmodel.SampleInfo_XML;
 import common.webmodel.TestItem_XML;

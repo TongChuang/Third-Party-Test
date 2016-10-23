@@ -24,7 +24,7 @@
 				text : '基础信息标本导入',
 				menu : baseDataMenu
 			}, {
-				text : '标本接收导入',
+				text : '标本接收/导入',
 				menu : menu1
 			}, {
 				text : '标本结果导出/打印',
@@ -114,10 +114,18 @@
 	var menu1 = {
 		width : 200,
 		items : [ {
-			text : '通过Excel导入接收的标本',
-			click : impExcel
+			text : '手工录入标本信息',
+			click : manualEntry
 		}, {
 			line : true
+		}, {
+			text : '前处理标本信息',
+			click : pretreatment
+		}, {
+			line : true
+		},{
+			text : '通过Excel导入接收的标本',
+			click : impExcel
 		}, {
 			text : '通过Xml导入接收的标本',
 			click : impXml
@@ -125,7 +133,7 @@
 	};
 
 	var menu2 = {
-		width : 170,
+		width : 200,
 		items : [ {
 			text : '查询/导出标本检验结果',
 			click : expResultData
@@ -174,7 +182,13 @@
 			}, ]
 		} ]
 	}
-
+	
+	function manualEntry(){
+		f_addTab("manualEntry", "手工录入标本信息", "/jsp/updown/updown.do?method=viewManualEntry");
+	}
+	function pretreatment(){
+		f_addTab("pretreatment", "前处理标本信息", "/jsp/updown/updown.do?method=viewPretreatment");
+	}
 	function baseDiscount() {
 		f_addTab("baseDiscount", "基础折扣", "");
 	}

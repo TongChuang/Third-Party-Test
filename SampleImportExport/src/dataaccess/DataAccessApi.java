@@ -13,8 +13,9 @@ import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LProcess;
+import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
+import common.datamodel.LTestitem;
 import common.datamodel.LTestresult;
 import common.datamodel.LabUser;
 
@@ -32,10 +33,12 @@ public interface DataAccessApi
 	public List<LTestresult> queryExpData(String beginTime,String endTime,String customerid);
 	public abstract List getExpSampleNoData(String beginTime,String endTime,String customerid);
 	public abstract List<LSample> getSampleNoByLSample(List samplenoList);
-	public abstract LProcess getLProcessByLSampleId(BigDecimal sampleno);
-	public abstract DsfTestitems getDsfTestitemsByLSampleId(BigDecimal sampleno);
+	public abstract LSample getSampleByBarCode(String barcode);
+	public abstract DsfProcess getLProcessByLSampleId(BigDecimal sampleno);
+	public abstract DsfTestitems getDsfTestitemsById(BigDecimal sampleno);
 	public abstract List <DsfLYlxhdescribe> getYlxhdescribeByYlxh(String ylxh,String customerid);
-	public abstract List<DsfTestitems> getTestItemsByTestItem(String dTestitems,String customerid);
+	public abstract List<DsfTestitems> getDsfTestItemsByTestItem(String dTestitems,String customerid);
+	public abstract List<LTestitem> getLTestItemsByTestItem(String testitems,String customerid);
 	/**
 	 * 如果KEY等于local就是本地转为客户的，否则就是客户的转为本地的
 	 * @param key
@@ -65,7 +68,7 @@ public interface DataAccessApi
 	 */
 	public abstract List<DsfCustomerBaseInfo> getCustomerInfoList(String  clientnumber);
 	
-	public abstract DsfCustomerBaseInfo getCustomerInfoById(String customerid);
+	public abstract DsfCustomerBaseInfo getCustomerInfoById(String id);
 	
 	public abstract void deleteCustomerInfo(String customerid);
 	public abstract List<DsfCustomerBaseInfo> getBaseCustomerInfo();

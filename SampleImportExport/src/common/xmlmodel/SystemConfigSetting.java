@@ -5,36 +5,24 @@ import java.io.Serializable;
 public class SystemConfigSetting implements Serializable {
 
 	private static final long serialVersionUID = 0x37bdd4b3818bdd0fL;
-	private String hospital = null;
-	private String bloodbank = null;
+	private String defaultPassword = null;
+	private String updateServerAddress = null;
+	private String ftpRoot = null;
 	private String webserviceUrl = null;
-	private String accessCode = null;
-	private String userId = null;
 
-	public static final String STR_HOSPITAL = "医院";
-	public static final String STR_BLOODBANK = "血站";
-	public static final String STR_WebServiceUrl = "血站接口地址";
-	public static final String STR_UserId = "接入用户ID";
-	public static final String STR_AccessCode = "接入验证码";
+	public static final String STR_DEFAULT_PASSWORD = "帐户默认密码";
+	public static final String Update_Server_Address = "更新服务器地址";
+	public static final String STR_ftp_ROOT = "ftp地址";
+	public static final String Web_Service_Url = "本机webservice地址";
 
-	public SystemConfigSetting(String hospital, String bloodbank,
-			String webserviceUrl, String accessCode, String userId) {
-		this.hospital = hospital;
+	public SystemConfigSetting(String defaultPassword, String updateServerAddress, String ftpRoot,String webserviceUrl) {
+		this.defaultPassword = defaultPassword;
+		this.updateServerAddress = updateServerAddress;
+		this.ftpRoot = ftpRoot;
 		this.webserviceUrl = webserviceUrl;
-		this.accessCode = accessCode;
-		this.userId = userId;
-		this.bloodbank = bloodbank;
 	}
 
 	public SystemConfigSetting() {
-	}
-
-	public String getHospital() {
-		return hospital;
-	}
-
-	public void setHospital(String hospital) {
-		this.hospital = hospital;
 	}
 
 	public String getWebserviceUrl() {
@@ -45,28 +33,28 @@ public class SystemConfigSetting implements Serializable {
 		this.webserviceUrl = webserviceUrl;
 	}
 
-	public String getAccessCode() {
-		return accessCode;
+	public String getDefaultPassword() {
+		return defaultPassword;
 	}
 
-	public void setAccessCode(String accessCode) {
-		this.accessCode = accessCode;
+	public void setDefaultPassword(String defaultPassword) {
+		this.defaultPassword = defaultPassword;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUpdateServerAddress() {
+		return updateServerAddress;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUpdateServerAddress(String updateServerAddress) {
+		this.updateServerAddress = updateServerAddress;
 	}
 
-	public String getBloodbank() {
-		return bloodbank;
+	public String getFtpRoot() {
+		return ftpRoot;
 	}
 
-	public void setBloodbank(String bloodbank) {
-		this.bloodbank = bloodbank;
+	public void setFtpRoot(String ftpRoot) {
+		this.ftpRoot = ftpRoot;
 	}
 
 }

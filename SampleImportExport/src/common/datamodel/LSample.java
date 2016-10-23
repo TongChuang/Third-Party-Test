@@ -35,6 +35,8 @@ public class LSample implements java.io.Serializable {
 	private String ageunit;
 	private String dsfcustomerid;
 	private String dsfbarcode;
+	private String localbarcode;
+	private String imgurl;
 
 	// Constructors
 
@@ -50,7 +52,7 @@ public class LSample implements java.io.Serializable {
 			String patientname, String sampleno, Long samplestatus,
 			String sampletype, String sex, Long stayhospitalmode,
 			Long writeback, String ylxh, String ageunit, String dsfcustomerid,
-			String dsfbarcode) {
+			String dsfbarcode,String localbarcode,String imgurl) {
 		this.id = id;
 		this.age = age;
 		this.birthday = birthday;
@@ -75,6 +77,24 @@ public class LSample implements java.io.Serializable {
 		this.ageunit = ageunit;
 		this.dsfcustomerid = dsfcustomerid;
 		this.dsfbarcode = dsfbarcode;
+		this.localbarcode = localbarcode;
+		this.imgurl = imgurl;		
+	}
+
+	public String getImgurl() {
+		return imgurl;
+	}
+
+	public void setImgurl(String imgurl) {
+		this.imgurl = imgurl;
+	}
+
+	public String getLocalbarcode() {
+		return localbarcode;
+	}
+
+	public void setLocalbarcode(String localbarcode) {
+		this.localbarcode = localbarcode;
 	}
 
 	public BigDecimal getId() {

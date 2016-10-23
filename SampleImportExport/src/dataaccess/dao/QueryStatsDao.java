@@ -17,7 +17,7 @@ import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LProcess;
+import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
 import common.datamodel.LTestresult;
 import dataaccess.help.DataAccessUtil;

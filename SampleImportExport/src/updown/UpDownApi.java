@@ -11,8 +11,9 @@ import common.StartAPI;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LProcess;
+import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
+import common.datamodel.LTestitem;
 import common.datamodel.LTestresult;
 
 
@@ -30,9 +31,13 @@ public interface UpDownApi
 	public abstract Map<String, String> getConversionTestItem(String key);
 	
 	public abstract List<LSample> getSampleNoByLSample(List samplenoList);
-	public abstract LProcess getLProcessByLSampleId(BigDecimal sampleno);
-	public abstract DsfTestitems getDsfTestitemsByLSampleId(BigDecimal sampleno);
+	public abstract DsfProcess getLProcessByLSampleId(BigDecimal sampleno);
+	public abstract DsfTestitems getDsfTestitemsById(BigDecimal id);
 	public abstract List getExpSampleNoData(String beginTime,String endTime,String customerid);
 	public abstract List <DsfLYlxhdescribe> getYlxhdescribeByYlxh(String ylxh,String customerid);
-	public abstract List<DsfTestitems> getTestItemsByTestItem(String dTestitems,String customerid);
+	public abstract List<DsfTestitems> getDsfTestItemsByTestItem(String testitems,String customerid);
+	public abstract List<LTestitem> getLTestItemsByTestItem(String dTestitems,String customerid);
+	public abstract LSample getSampleByBarCode(String barcode);
+	public abstract List getCustomerInfo(String clientid);
+	public abstract DsfCustomerBaseInfo getCustomerInfoById(String customerid);
 }

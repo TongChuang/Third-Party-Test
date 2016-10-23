@@ -64,22 +64,37 @@ public class UpDownApiImpl implements UpDownApi {
 		return dataAccessApi.getYlxhdescribeByYlxh(ylxh,customerid);
 	}
 	
-	public List<DsfTestitems> getTestItemsByTestItem(String dTestitems,String customerid){
-		return dataAccessApi.getTestItemsByTestItem(dTestitems,customerid);
+	public List<DsfTestitems> getDsfTestItemsByTestItem(String dTestitems,String customerid){
+		return dataAccessApi.getDsfTestItemsByTestItem(dTestitems,customerid);
 	}
-	
+
+	public List<LTestitem> getLTestItemsByTestItem(String testitems,String customerid){
+		return dataAccessApi.getLTestItemsByTestItem(testitems,customerid);
+	}
 	public Map<String, String> getConversionTestItem(String key){
 		return dataAccessApi.getConversionTestItem(key);
 	}
 	public List<LSample> getSampleNoByLSample(List samplenoList){
 		return dataAccessApi.getSampleNoByLSample(samplenoList);
 	}
-	public LProcess getLProcessByLSampleId(BigDecimal sampleno){
+	public DsfProcess getLProcessByLSampleId(BigDecimal sampleno){
 		return dataAccessApi.getLProcessByLSampleId(sampleno);
 	}
-	public DsfTestitems getDsfTestitemsByLSampleId(BigDecimal sampleno){
-		return dataAccessApi.getDsfTestitemsByLSampleId(sampleno);
+	public DsfTestitems getDsfTestitemsById(BigDecimal sampleno){
+		return dataAccessApi.getDsfTestitemsById(sampleno);
 	}
+	
+	public LSample getSampleByBarCode(String barcode){
+		return dataAccessApi.getSampleByBarCode( barcode);
+	}
+	
+	public List getCustomerInfo(String cid){
+		return dataAccessApi.getCustomerInfoList(cid);
+	}
+	public DsfCustomerBaseInfo getCustomerInfoById(String customerid){
+		return dataAccessApi.getCustomerInfoById(customerid);
+	}
+
 	
 
 }

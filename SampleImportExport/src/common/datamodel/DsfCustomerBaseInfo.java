@@ -16,6 +16,7 @@ public class DsfCustomerBaseInfo implements java.io.Serializable {
 	private String clientnumber;
 	private BigDecimal sequence;
 	private String customerKey;
+	private String basicinfostate ;
 
 	// Constructors
 
@@ -31,19 +32,28 @@ public class DsfCustomerBaseInfo implements java.io.Serializable {
 	/** full constructor */
 	public DsfCustomerBaseInfo(BigDecimal customerid, String customername,
 			String customerKey, String address, String clientnumber,
-			BigDecimal sequence) {
+			BigDecimal sequence,String basicinfostate) {
 		this.customerid = customerid;
 		this.customername = customername;
 		this.address = address;
 		this.clientnumber = clientnumber;
 		this.sequence = sequence;
 		this.customerKey = customerKey;
+		this.basicinfostate = basicinfostate;
 	}
 
 	// Property accessors
 
 	public BigDecimal getCustomerid() {
 		return this.customerid;
+	}
+
+	public String getBasicinfostate() {
+		return basicinfostate;
+	}
+
+	public void setBasicinfostate(String basicinfostate) {
+		this.basicinfostate = basicinfostate;
 	}
 
 	public void setCustomerid(BigDecimal customerid) {

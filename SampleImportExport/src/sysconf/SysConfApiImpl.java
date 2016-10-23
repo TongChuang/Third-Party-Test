@@ -75,10 +75,6 @@ public class SysConfApiImpl
 		return handler.getWebServiceUrl();
 	}
 	
-	public String getHospital() {
-		return handler.getHospital();
-	}
-	
 	public List<DsfCustomerBaseInfo> getCustomerInfoList(String  clientnumber){
 		return dataAccessApi.getCustomerInfoList(clientnumber);
 	}

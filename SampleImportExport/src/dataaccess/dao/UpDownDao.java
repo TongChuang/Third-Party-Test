@@ -16,8 +16,9 @@ import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LProcess;
+import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
+import common.datamodel.LTestitem;
 import common.datamodel.LTestresult;
 import dataaccess.help.DataAccessUtil;
 
@@ -74,7 +75,7 @@ public class UpDownDao extends HibernateDaoSupport {
 		}
 	}
 	
-	public List<DsfTestitems> getTestItemsByTestItem(String dTestitems,String customerid){
+	public List<DsfTestitems> getDsfTestItemsByTestItem(String dTestitems,String customerid){
 		String sql ="from DsfTestitems where customerid='"+customerid+"'";
 		if(!"".equals(dTestitems)){
 			sql +=" and indexId='"+dTestitems+"' ";
@@ -85,7 +86,17 @@ public class UpDownDao extends HibernateDaoSupport {
 			return null;
 		}
 	}
-	
+	public List<LTestitem> getLTestItemsByTestItem(String testitems,String customerid){
+		String sql ="from LTestitem where customerid='"+customerid+"'";
+		if(!"".equals(testitems)){
+			sql +=" and indexId='"+testitems+"' ";
+		}
+		try {
+			return getHibernateTemplate().find(sql);
+		} catch (DataAccessException e) {
+			return null;
+		}
+	}
 	public Map<String, String> getLocal2CustomerConversionTestItem(){
 		List <DsfControltestitems> ctiList = new ArrayList<DsfControltestitems>();
 		Map <String,String>initMap = new HashMap<String, String>();
@@ -113,12 +124,16 @@ public class UpDownDao extends HibernateDaoSupport {
 	public List<LSample> getSampleNoByLSample(List samplenoList){
 		return DataAccessUtil.getObjectsByColumWithIn(samplenoList, "sampleno", "LSample", getSession());
 	}
-	public LProcess getLProcessByLSampleId(BigDecimal sampleno){
+	public LSample getSampleByBarCode(String barcode){
+		return (LSample) DataAccessUtil.getObjectByColum(barcode, "dsfbarcode", "LSample", getHibernateTemplate());
+	}
+	
+	public DsfProcess getLProcessByLSampleId(BigDecimal sampleno){
 		String sql = "from LProcess where sampleId='"+sampleno+"'";
 		try {
 			List resultList = getHibernateTemplate().find(sql);
 			if(null!=resultList&&resultList.size()>0){
-				return (LProcess) resultList.get(0);
+				return (DsfProcess) resultList.get(0);
 			}else {
 				return null;
 			}
@@ -126,7 +141,7 @@ public class UpDownDao extends HibernateDaoSupport {
 			return null;
 		}	
 	}
-	public DsfTestitems getDsfTestitemsByLSampleId(BigDecimal sampleno){
+	public DsfTestitems getDsfTestitemsById(BigDecimal sampleno){
 		return (DsfTestitems) DataAccessUtil.getObjectById(sampleno, "DsfTestitems", getHibernateTemplate());
 	}
 	

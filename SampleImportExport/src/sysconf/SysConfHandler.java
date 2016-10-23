@@ -47,12 +47,6 @@ public class SysConfHandler {
 		return webserviceUrl;
 	}
 	
-	public String getHospital() {
-		SystemConfigSetting setting = (SystemConfigSetting)SIEContext.getSystemConfigTable().getConfigs().get(0);
-		String hospital = "";
-		hospital = setting.getHospital();
-		return hospital;
-	}
 	
 
 }

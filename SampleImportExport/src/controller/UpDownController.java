@@ -1,6 +1,6 @@
 package controller;
 
-import java.io.File;
+import java.io.File;	
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +22,9 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -41,14 +43,18 @@ import com.sun.org.apache.commons.beanutils.BeanUtils;
 
 import updown.UpDownApi;
 
+import common.SIEBeanFactory;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LProcess;
+import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
 import common.datamodel.LTestresult;
 import common.util.CommonUtil;
 import common.util.DateUtil;
+import common.util.FileOperHelper;
+import common.util.FileStoreUtil;
+import common.util.FtpOperUtil;
 import common.util.PubJsonUtil;
 import common.util.XmlUtil;
 import common.webmodel.Base_TestItem_XML;
@@ -60,6 +66,7 @@ import common.webmodel.TestItem_XML;
 import common.webmodel.TestObjective_XML;
 import common.webmodel.TestObjectives_XML;
 import common.webmodel.Testresult_Xml;
+import common.xmlmodel.SystemConfigSetting;
 
 import dataaccess.DataAccessApi;
 
@@ -79,17 +86,186 @@ public class UpDownController extends MultiActionController {
 	public void setUpDownApi(UpDownApi upDownApi) {
 		this.upDownApi = upDownApi;
 	}
+	
+	public void getCustomerInfoByBasicInfoState(HttpServletRequest request, HttpServletResponse response){
+		try {
+			logger.info((Object) (new StringBuilder("Begin to getSampleInfoByBarCode ")));
+			String dsfcustomerid = request.getParameter("dsfcustomerid");
+			DsfCustomerBaseInfo dcbiBaseInfo = upDownApi.getCustomerInfoById(dsfcustomerid);
+			
+			List resultList = new ArrayList();
+			if("0".equals(dcbiBaseInfo.getBasicinfostate())){
+				resultList = upDownApi.getLTestItemsByTestItem("", dcbiBaseInfo.getClientnumber());
+			}else{
+				resultList = upDownApi.getDsfTestItemsByTestItem("", dcbiBaseInfo.getClientnumber());
+			}
+			JSONObject jsonObject = new JSONObject();
+			String resultJsonString = PubJsonUtil.list2json(resultList);
+			jsonObject.put("resultJson", resultJsonString);
+			response.setContentType("application/json;charset=utf-8");     
+			response.getWriter().write(jsonObject.toString()); 
+			logger.info((Object) (new StringBuilder("End to getCustomerInfoByBasicInfoState ")));
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+		}
+	}
+	
+	public void getSampleInfoByBarCode(HttpServletRequest request, HttpServletResponse response){
+		try {
+			logger.info((Object) (new StringBuilder("Begin to getSampleInfoByBarCode ")));
+			String barcode = request.getParameter("barcode");
+			LSample lSample = upDownApi.getSampleByBarCode(barcode);
+			JSONObject jsonObject = new JSONObject();
+			String sampleJsonString = "";
+			if(null!=lSample){
+				sampleJsonString = PubJsonUtil.bean2json(lSample);
+				String ftpPath = FileStoreUtil.getSamplePic(true,lSample.getDsfcustomerid(),true,false);
+				if("/null/".equals(ftpPath)){
+					request.setAttribute("pic","/resources/images/no-pic.jpg");
+				}else{
+					request.setAttribute("pic",ftpPath);
+				}
+			}else {
+				jsonObject.put("error", "无此条码信息！");
+				jsonObject.put("pic", "/resources/images/top.jpg");
+				sampleJsonString = jsonObject.toString();
+			}
+			
+			response.setContentType("application/json;charset=utf-8");     
+			response.getWriter().write(sampleJsonString); 
+			logger.info((Object) (new StringBuilder("End to getSampleInfoByBarCode ")));
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+		}
+	}
+	
+	public ModelAndView addManualEntry(HttpServletRequest request, HttpServletResponse response,LSample lSample) {
+		try {
+			logger.info((Object) (new StringBuilder("Begin to addManualEntry ")));
+			lSample.setDsfcustomerid("A1600");
+			//获取上传照片
+				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;     
+		        // 获得文件：     
+		        MultipartFile file = multipartRequest.getFile("mpImg");  
+		        if(!file.isEmpty()){
+		        String fileName = CommonUtil.getUTFtoISOEncode(file.getOriginalFilename());
+		        String newFileName = CommonUtil.renameFileName(lSample.getLocalbarcode(), fileName);
+		        String uploadpath = FileStoreUtil.getSamplePic(true,lSample.getDsfcustomerid(),true,false);
+		        FileUtils.copyInputStreamToFile(file.getInputStream(), new File(uploadpath, newFileName)); 
+		        SystemConfigSetting config = SIEBeanFactory.getSysConfApi().getSystemConfig();
+		        String ftpRoot = config.getFtpRoot();
+		    	File uploadFile = new File(uploadpath+newFileName);
+		    	String ftpPath = FileStoreUtil.getSamplePic(true,lSample.getDsfcustomerid(),true,false);
+		    	lSample.setImgurl(ftpRoot+ftpPath+newFileName);
+				try {
+					FtpOperUtil.uploadFile(uploadFile, ftpRoot, ftpPath);
+					FileOperHelper.deleteFileAndFolder(uploadpath+newFileName);
+					logger.info("文件上传成功！");
+				} catch (IOException e) {
+					logger.error(e.getMessage(), e);
+				}
+		      //获取上传照片完成
+		     }
+		       
+		        
+		    //保存FORM表单的数据
+		    String dsfSampSeq = dataAccessApi.getSeqString("DSF_YLXH_SEQUENCE");    
+		    lSample.setId(new BigDecimal(dsfSampSeq));
+		    lSample.setAgeunit(CommonUtil.getUTFtoISOEncode(lSample.getAgeunit()));
+		    upDownApi.saveData(lSample, "LSample");
+		    
+		    //保存时间，采集时间，采集人，录入时间录入人
+		    DsfProcess dsfProcess = new DsfProcess();
+			
+			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewManualEntry.jsp");
+			modelAndView.addObject("pic","/resources/images/no-pic.jpg");
+			modelAndView.addObject("success","数据保存成功！");
+			logger.info((Object) (new StringBuilder("End to addManualEntry ")));
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewManualEntry.jsp");
+			modelAndView.addObject("pic","/resources/images/no-pic.jpg");
+			modelAndView.addObject("error","数据保存失败，请检查数据！");
+			return modelAndView;
+		}
+	}
+
+	/**
+	 * 前处理
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	public ModelAndView viewPretreatment(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			logger.info((Object) (new StringBuilder("Begin to viewPretreatment ")));
+			
+			
+			
+			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewPretreatment.jsp");
+			modelAndView.addObject("pic","/resources/images/no-pic.jpg");
+			logger.info((Object) (new StringBuilder("End to viewPretreatment ")));
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+		}
+		return null;
+	}
+	/**
+	 * 手工录入样本信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	public ModelAndView viewManualEntry(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			logger.info((Object) (new StringBuilder("Begin to viewManualEntry ")));
+			
+			List <DsfCustomerBaseInfo>reList = upDownApi.getCustomerInfo();
+			
+			
+			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewManualEntry.jsp");
+			modelAndView.addObject("pic","/resources/images/no-pic.jpg");
+			modelAndView.addObject("customerList",reList);
+			logger.info((Object) (new StringBuilder("End to viewManualEntry ")));
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+		}
+		return null;
+	}
 
 	public ModelAndView viewUpdatePage(HttpServletRequest request, HttpServletResponse response) {
-		logger.info((Object) (new StringBuilder("Begin to viewUpdatePage ")));
-		String type = request.getParameter("type");
-		List<DsfCustomerBaseInfo> resultList = new ArrayList<DsfCustomerBaseInfo>();
-		resultList = upDownApi.getCustomerInfo();
-		logger.info((Object) (new StringBuilder("End to viewUpdatePage ")));
-		ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewImpExpData.jsp");
-		modelAndView.addObject("type", type);
-		modelAndView.addObject("customerInfoList", resultList);
-		return modelAndView;
+		try {
+			logger.info((Object) (new StringBuilder("Begin to viewUpdatePage ")));
+			String type = request.getParameter("type");
+			List<DsfCustomerBaseInfo> resultList = new ArrayList<DsfCustomerBaseInfo>();
+			resultList = upDownApi.getCustomerInfo();
+			logger.info((Object) (new StringBuilder("End to viewUpdatePage ")));
+			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewImpExpData.jsp");
+			modelAndView.addObject("type", type);
+			modelAndView.addObject("customerInfoList", resultList);
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+		}
+		return null;
 	}
 
 	public ModelAndView uploadExcelFile(HttpServletRequest request, HttpServletResponse response) {
@@ -276,7 +452,7 @@ public class UpDownController extends MultiActionController {
 			return null;
 		}
 	}
-
+	//导入数据
 	public ModelAndView saveData(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			logger.info((Object) (new StringBuilder("Begin to saveData ")));
@@ -331,12 +507,8 @@ public class UpDownController extends MultiActionController {
 					Process_XML prXml = new Process_XML();
 					prXml = PubJsonUtil.jsonToBean(pjsonArray.get(j).toString(), Process_XML.class);
 					if (ls.getDsfbarcode().equals(prXml.getDsfbarcode())) {
-						LProcess lp = new LProcess();
-						lp.setExecutetime(prXml.getExecutetime());
-						lp.setExecutor(prXml.getExecutor());
-						lp.setRequester(prXml.getRequester());
-						lp.setRequesttime(prXml.getRequesttime());
-						lp.setSampleId(ls.getId());
+						DsfProcess lp = new DsfProcess();
+						lp.setSampleId(ls.getId().toString());
 						String lpseqString = dataAccessApi.getSeqString("PROCESS_SEQUENCE");
 						lp.setId(new BigDecimal(lpseqString));
 						upDownApi.saveData(lp, "LProcess");
@@ -360,7 +532,7 @@ public class UpDownController extends MultiActionController {
 						TestItem_XML tXml = new TestItem_XML();
 						tXml = PubJsonUtil.jsonToBean(pjsonArray.get(k).toString(), TestItem_XML.class);
 						if (ls.getDsfbarcode().equals(tXml.getDsfbarcode())) {
-							List<DsfTestitems> dsftList = upDownApi.getTestItemsByTestItem(tXml.getTestitem(),
+							List<DsfTestitems> dsftList = upDownApi.getDsfTestItemsByTestItem(tXml.getTestitem(),
 									customerid);
 							if (null == dsftList || dsftList.size() < 1) {
 								DsfTestitems dTestitems = new DsfTestitems();
@@ -504,7 +676,7 @@ public class UpDownController extends MultiActionController {
 							BeanUtils.copyProperties(sXml, lSample);
 							sList_XML.setSampleInfo(sXml);
 
-							LProcess lProcess = new LProcess();
+							DsfProcess lProcess = new DsfProcess();
 							Process_XML pXml = new Process_XML();
 							lProcess = upDownApi.getLProcessByLSampleId(lSample.getId());
 							BeanUtils.copyProperties(pXml, lProcess);
@@ -741,7 +913,7 @@ public class UpDownController extends MultiActionController {
 
 			// 获取所有当前用户的已存在数据
 			List<DsfLYlxhdescribe> ylxhList = upDownApi.getYlxhdescribeByYlxh("", customerid);
-			List<DsfTestitems> dsftList = upDownApi.getTestItemsByTestItem("", customerid);
+			List<DsfTestitems> dsftList = upDownApi.getDsfTestItemsByTestItem("", customerid);
 			// 查询数据库中的历史数据放入SET以防止新上来的数据会和原来的有重复的
 			Set ylxhSet = new HashSet();
 			Set tiSet = new HashSet();

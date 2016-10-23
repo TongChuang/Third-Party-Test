@@ -20,8 +20,9 @@ import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LProcess;
+import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
+import common.datamodel.LTestitem;
 import common.datamodel.LTestresult;
 import common.datamodel.LabUser;
 
@@ -114,8 +115,11 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		return updownDao.getYlxhdescribeByYlxh(ylxh,customerid);
 	}
 	
-	public List<DsfTestitems> getTestItemsByTestItem(String dTestitems,String customerid){
-		return updownDao.getTestItemsByTestItem(dTestitems,customerid);
+	public List<DsfTestitems> getDsfTestItemsByTestItem(String dTestitems,String customerid){
+		return updownDao.getDsfTestItemsByTestItem(dTestitems,customerid);
+	}
+	public List<LTestitem> getLTestItemsByTestItem(String testitems,String customerid){
+		return updownDao.getLTestItemsByTestItem(testitems,customerid);
 	}
 	
 	public Map<String, String> getConversionTestItem(String key){
@@ -129,13 +133,15 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	public List<LSample> getSampleNoByLSample(List samplenoList){
 		return updownDao.getSampleNoByLSample(samplenoList);
 	}
-	public LProcess getLProcessByLSampleId(BigDecimal sampleno){
+	public DsfProcess getLProcessByLSampleId(BigDecimal sampleno){
 		return updownDao.getLProcessByLSampleId(sampleno);
 	}
-	public DsfTestitems getDsfTestitemsByLSampleId(BigDecimal sampleno){
-		return updownDao.getDsfTestitemsByLSampleId(sampleno);
+	public DsfTestitems getDsfTestitemsById(BigDecimal sampleno){
+		return updownDao.getDsfTestitemsById(sampleno);
 	}
-	
+	public LSample getSampleByBarCode(String barcode){
+		return updownDao.getSampleByBarCode(barcode);
+	}
 	
 	
 	//webservice
