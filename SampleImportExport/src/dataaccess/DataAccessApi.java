@@ -9,7 +9,6 @@ import java.util.Map;
 import org.apache.poi.ss.formula.functions.T;
 
 import common.StartAPI;
-import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
@@ -86,17 +85,4 @@ public interface DataAccessApi
 	
 	
 	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state);
-	/**
-	 * 检验信息
-	 */
-	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid);
-	public abstract List<DsfLYlxhdescribe> getYlxhdescribe(String customerid);
-	public abstract List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc);
-	public abstract void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
-	public abstract void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
-	
-	/**
-	 * 检验项目对照
-	 */
-	public abstract List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname);
 }
