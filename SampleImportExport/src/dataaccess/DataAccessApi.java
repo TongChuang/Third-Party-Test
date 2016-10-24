@@ -85,4 +85,6 @@ public interface DataAccessApi
 	
 	
 	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state);
+	
+	public abstract List<LabUser> getUserInfo(String username);
 }

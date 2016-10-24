@@ -335,7 +335,13 @@ h4 {
 				<table cellpadding="0" cellspacing="0" class="l-table-edit"
 					style="margin-top:10px">
 					<tr>
-						<td align="right" class="l-table-edit-td">条码扫描确认区:</td>
+						<td align="right" class="l-table-edit-td">客户条码扫描区:</td>
+						<td align="left" class="l-table-edit-td"><input
+							onchange="viewCode()" value="" name="code" type="text"
+							style="width: 200px;" id="code" ltype="text" />
+						</td>
+						<td align="left" style="width: 80px;"></td>
+						<td align="right" class="l-table-edit-td">本地条码扫描区:</td>
 						<td align="left" class="l-table-edit-td"><input
 							onchange="viewCode()" value="" name="code" type="text"
 							style="width: 200px;" id="code" ltype="text" />

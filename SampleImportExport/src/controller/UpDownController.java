@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.ctc.wstx.util.DataUtil;
 import com.sun.org.apache.commons.beanutils.BeanUtils;
 
 import updown.UpDownApi;
@@ -50,6 +51,7 @@ import common.datamodel.DsfTestitems;
 import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
 import common.datamodel.LTestresult;
+import common.datamodel.LabUser;
 import common.util.CommonUtil;
 import common.util.DateUtil;
 import common.util.FileOperHelper;
@@ -142,7 +144,8 @@ public class UpDownController extends MultiActionController {
 	public ModelAndView addManualEntry(HttpServletRequest request, HttpServletResponse response,LSample lSample) {
 		try {
 			logger.info((Object) (new StringBuilder("Begin to addManualEntry ")));
-			lSample.setDsfcustomerid("A1600");
+			String collectionpersonnel = request.getParameter("collectionpersonnel");
+			String collectiontime = request.getParameter("collectiontime");
 			//获取上传照片
 				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;     
 		        // 获得文件：     
@@ -176,6 +179,11 @@ public class UpDownController extends MultiActionController {
 		    
 		    //保存时间，采集时间，采集人，录入时间录入人
 		    DsfProcess dsfProcess = new DsfProcess();
+		    dsfProcess.setCollectionpersonnel(collectionpersonnel);
+		    dsfProcess.setCollectiontime(DateUtil.parseLongDate(collectiontime));
+		    dsfProcess.setInputpersonnel(request.getSession().getAttribute("userName").toString());
+		    dsfProcess.setInputtime(new Date());
+		    upDownApi.saveData(dsfProcess, "DsfProcess");
 			
 			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewManualEntry.jsp");
 			modelAndView.addObject("pic","/resources/images/no-pic.jpg");
@@ -191,6 +199,36 @@ public class UpDownController extends MultiActionController {
 		}
 	}
 
+	/**
+	 * 手工录入样本信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	public ModelAndView viewManualEntry(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			logger.info((Object) (new StringBuilder("Begin to viewManualEntry ")));
+			
+			List <DsfCustomerBaseInfo>reList = upDownApi.getCustomerInfo();
+			List <LabUser> userList = upDownApi.getUserInfo("");
+			
+			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewManualEntry.jsp");
+			modelAndView.addObject("pic","/resources/images/no-pic.jpg");
+			modelAndView.addObject("customerList",reList);
+			modelAndView.addObject("userList",userList);
+			logger.info((Object) (new StringBuilder("End to viewManualEntry ")));
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * 前处理
 	 * @param request
@@ -217,34 +255,7 @@ public class UpDownController extends MultiActionController {
 		}
 		return null;
 	}
-	/**
-	 * 手工录入样本信息
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	public ModelAndView viewManualEntry(HttpServletRequest request, HttpServletResponse response) {
-		try {
-			logger.info((Object) (new StringBuilder("Begin to viewManualEntry ")));
-			
-			List <DsfCustomerBaseInfo>reList = upDownApi.getCustomerInfo();
-			
-			
-			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewManualEntry.jsp");
-			modelAndView.addObject("pic","/resources/images/no-pic.jpg");
-			modelAndView.addObject("customerList",reList);
-			logger.info((Object) (new StringBuilder("End to viewManualEntry ")));
-			return modelAndView;
-		} catch (Exception e) {
-			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
-			try {
-				response.sendRedirect("/error.jsp");
-			} catch (IOException e1) {
-				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
-			}
-		}
-		return null;
-	}
+	
 
 	public ModelAndView viewUpdatePage(HttpServletRequest request, HttpServletResponse response) {
 		try {

@@ -184,4 +184,7 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		return sysconfDao.getCustomerInfoByCnameState(customername,state);
 	}
 
+	public List<LabUser> getUserInfo(String username){
+		return updownDao.getUserInfo(username);
+	}
 }

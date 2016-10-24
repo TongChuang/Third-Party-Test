@@ -95,6 +95,8 @@ public class UpDownApiImpl implements UpDownApi {
 		return dataAccessApi.getCustomerInfoById(customerid);
 	}
 
-	
+	public List<LabUser> getUserInfo(String username){
+		return dataAccessApi.getUserInfo(username);
+	}
 
 }

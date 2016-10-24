@@ -15,6 +15,7 @@ import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
 import common.datamodel.LTestitem;
 import common.datamodel.LTestresult;
+import common.datamodel.LabUser;
 
 
 public interface UpDownApi
@@ -40,4 +41,5 @@ public interface UpDownApi
 	public abstract LSample getSampleByBarCode(String barcode);
 	public abstract List getCustomerInfo(String clientid);
 	public abstract DsfCustomerBaseInfo getCustomerInfoById(String customerid);
+	public abstract List<LabUser> getUserInfo(String username);
 }
