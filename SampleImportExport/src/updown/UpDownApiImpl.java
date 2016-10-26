@@ -111,4 +111,9 @@ public class UpDownApiImpl implements UpDownApi {
 	public List<String> getInspectionSectionByYLXH(String ylxh, String customerid){
 		return dataAccessApi.getInspectionSectionByYLXH(ylxh,customerid);
 	}
+
+	public List<LabUser> getUserInfo(String username){
+		return dataAccessApi.getUserInfo(username);
+	}
+
 }

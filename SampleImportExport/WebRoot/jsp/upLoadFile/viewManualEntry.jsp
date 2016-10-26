@@ -59,7 +59,7 @@
                 textField: 'name',
                 grid: getGridOptions(true),
                 onButtonClick:f_buttonclick,
-                condition: { fields: [{ name: 'name', label: '客户', width: 90, type: 'text' }] }
+                condition: { fields: [{ name: 'name', label: '名称', width: 90, type: 'text' }] }
          });
 
 		$.metadata.setType("attr", "validate");
@@ -128,7 +128,7 @@
 			$.ligerDialog.error("请先选择客户信息!");
 			return false;
 		} else {
-
+			
 		}
 	}
 	function getGridOptions(checkbox) {
@@ -193,15 +193,14 @@ body {
 				<td align="left"></td>
 				<td align="right" class="l-table-edit-td">当前客户:</td>
 				<td align="left" class="l-table-edit-td" style="width:160px">
-					<select name="dsfcustomerid" id="dsfcustomerid" >
-							<option value="0">请选择客户</option>
-							<c:forEach items="${customerList}" var="cinfo">
-								<option value="${cinfo.customerid}" >
-									${cinfo.customername}
-								</option>
-							</c:forEach>
+					<select id="dsfcustomerid"  ltype="select">
+						<option value="0">请选择</option>
+						<c:forEach items="${customerList}" var="dsfcinfo">
+							<option value="${dsfcinfo.customerid}"><c:out value="${dsfcinfo.customername}"></c:out> </option>
+						</c:forEach>
 					</select>
 				</td>
+				
 				<td align="left"></td>
 				<td rowspan="10"><img name="pic" id="pic"
 					style="height:400px; with:300px" alt="" border="1" src="${pic}">
@@ -314,8 +313,13 @@ body {
 					name="departBed" type="text" id="departBed" ltype="text" /></td>
 				<td align="left"></td>
 				<td align="right" class="l-table-edit-td">采集人:</td>
-				<td align="left" class="l-table-edit-td" style="width:160px"><input
-					name="collectionpersonnel" type="text" id="collectionpersonnel"  ltype="text" /></td>
+				<td align="left" class="l-table-edit-td" style="width:160px">
+					<select id="collectionpersonnel"  ltype="select">
+						<c:forEach items="${userList}" var="user">
+							<option value="${user.username}"><c:out value="${user.name}"></c:out> </option>
+						</c:forEach>
+					</select>
+				</td>
 				<td align="left"></td>
 			</tr>
 			<tr>

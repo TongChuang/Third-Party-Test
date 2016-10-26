@@ -22,6 +22,9 @@ import common.datamodel.LTestitem;
 import common.datamodel.LTestobjective;
 import common.datamodel.LTestresult;
 
+
+import common.datamodel.LabUser;
+
 import dataaccess.help.DataAccessUtil;
 
 public class UpDownDao extends HibernateDaoSupport {
@@ -256,5 +259,14 @@ public class UpDownDao extends HibernateDaoSupport {
 		} catch (DataAccessException e) {
 			return null;
 		}	
+	}
+	public List<LabUser> getUserInfo(String username){
+		StringBuffer sql = new StringBuffer(" from  LabUser");
+		if(!"".equals(username)){
+			sql.append(" where username ='"+username+"'");
+			return getHibernateTemplate().find(sql.toString());
+		}else {
+			return getHibernateTemplate().find(sql.toString());
+		}
 	}
 }

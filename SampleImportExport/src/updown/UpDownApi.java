@@ -17,6 +17,7 @@ import common.datamodel.LSample;
 import common.datamodel.LTestitem;
 import common.datamodel.LTestobjective;
 import common.datamodel.LTestresult;
+import common.datamodel.LabUser;
 
 
 public interface UpDownApi
@@ -43,6 +44,7 @@ public interface UpDownApi
 	public abstract List<LSample> getSamplesByBarCode(String barcode);
 	public abstract List getCustomerInfo(String clientid);
 	public abstract DsfCustomerBaseInfo getCustomerInfoById(String customerid);
+
 	
 	public abstract List<DsfLYlxhdescribe> getDsfTestObjectiveById(String customerid);
 	public abstract List<LTestresult> getLTestresultByNo(String sampleno);
@@ -55,4 +57,7 @@ public interface UpDownApi
 	//获取检验段
 	public abstract List<String> getInspectionSectionByYLXH(String ylxh,String customerid);
 	
+
+	public abstract List<LabUser> getUserInfo(String username);
+
 }

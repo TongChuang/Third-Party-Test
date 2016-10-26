@@ -251,4 +251,8 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		public List<String> getInspectionSectionByYLXH(String ylxh,String customerid){
 			return updownDao.getInspectionSectionByYLXH(ylxh,customerid);
 		}
+
+	public List<LabUser> getUserInfo(String username){
+		return updownDao.getUserInfo(username);
+	}
 }

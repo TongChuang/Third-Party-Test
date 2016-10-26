@@ -85,6 +85,7 @@ public interface DataAccessApi
 	 */
 	public abstract void saveBarCode(DsfCustomerBarCode dsfCustomerBarCode);
 	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state);
+
 	/**
 	 * 检验信息
 	 */
@@ -116,4 +117,8 @@ public interface DataAccessApi
 	public abstract int getSeralNumber(String dateAndSection);
 	public abstract void saveAllSerialNumber(List<DsfLYlxhdescribe> dydList);
 	public abstract List<String> getInspectionSectionByYLXH(String ylxh,String customerid);
+
+	
+	public abstract List<LabUser> getUserInfo(String username);
+
 }
