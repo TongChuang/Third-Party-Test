@@ -27,9 +27,13 @@
 	var result_Pjson = null;
 	var result_Tjson = null;
 	$(function() {
+		//光标默认第一个输入框
+		$(document).ready(function(){$('input[type=text]:first').focus();});
+		//加载布局
 		$("#layout1").ligerLayout({
 			leftWidth : 230
 		});
+		//加载表格
 		f_initGrid();
 
 		var msg = $("#msg").val();
@@ -51,13 +55,16 @@
 			{display : '是否扫码验证', name : 'state', width : 100,
 				render : function(item) {
 					if (parseInt(item.state) == 1) {
-						return "<span style='color:green'>已验证</span>";
-					} else {
+						return "<span style='color:blue'>已验证</span>";
+					} else if(parseInt(item.state) == 2){
+						return "<span style='color:green'>已对照</span>";
+					}else{
 						return "<span style='color:red'>未验证</span>";
 					}
 				}
 			},
-			{display : '条码号',name : 'dsfbarcode',width : 100,}, 
+			{display : '客户条码号',name : 'dsfbarcode',width : 130,}, 
+			{display : '自有条码号',name : 'localbarcode',width : 130,}, 
 			{display : '病人唯一号',name : 'patientblh',width : 100,},
 			{display : '病人就诊号',name : 'patientid',width : 100,},
 			{display : '病人名称',name : 'patientname',width : 150,},
@@ -144,9 +151,20 @@
         }
 	
 	
-	
-	
-	
+	function viewLocalCode(){
+		var localcode = $("#localcode").val();
+		var sdata = manager.getSelected() ;
+		if(sdata!=null){
+			manager.updateCell('state', "2", sdata);
+			manager.updateCell('localbarcode', localcode, sdata);
+		}else{
+			$.ligerDialog.error('无数据,请检查!');
+			$("#localcode").val("");
+			$("#localcode").focus();
+		}
+		$("#localcode").val("");
+		$("#code").focus();
+	}
 
 	function viewCode() {
 		var rowindex = null;
@@ -157,9 +175,16 @@
 				rowindex = data.indexOf(data[i]);
 			}
 		}
-		manager.updateCell('state', "1", rowindex);
-		$("#code").val("");
-		$("code").focus();
+		if(null!=rowindex){
+			manager.select(rowindex);
+			manager.updateCell('state', "1", rowindex);
+			$("#code").val("");
+			$("#localcode").focus();
+		}else{
+			$.ligerDialog.error('无数据!');
+			$("#code").val("");
+			$("#code").focus();
+		}
 	}
 
 	function saveData() {
@@ -181,7 +206,7 @@
 			return;
 		}
 		
-		if (data.length>1&&data.length != updata.length) {
+		if (data.length>=updata.length&&updata.length>=1) {
 			$.ligerDialog.confirm('客户:'+cinfoText+';此次共收到'+data.length+'条记录,已确认'+updata.length+'条记录,确定保存接收的标本信息么？', function(yes) {
 				if (yes) {
 					var updateJson = JSON.stringify(updata);
@@ -335,18 +360,18 @@ h4 {
 				<table cellpadding="0" cellspacing="0" class="l-table-edit"
 					style="margin-top:10px">
 					<tr>
-						<td align="right" class="l-table-edit-td">客户条码扫描区:</td>
+						<td align="right" class="l-table-edit-td">客户条码扫描:</td>
 						<td align="left" class="l-table-edit-td"><input
 							onchange="viewCode()" value="" name="code" type="text"
 							style="width: 200px;" id="code" ltype="text" />
 						</td>
-						<td align="left" style="width: 80px;"></td>
-						<td align="right" class="l-table-edit-td">本地条码扫描区:</td>
+						<td align="left" style="width: 60px;"></td>
+						<td align="right" class="l-table-edit-td">本地条码扫描:</td>
 						<td align="left" class="l-table-edit-td"><input
-							onchange="viewCode()" value="" name="code" type="text"
-							style="width: 200px;" id="code" ltype="text" />
+							onchange="viewLocalCode()" value="" name="localcode" type="text"
+							style="width: 200px;" id="localcode" ltype="text" />
 						</td>
-						<td align="left" style="width: 80px;"></td>
+						<td align="left" style="width: 60px;"></td>
 						
 						<td align="left" class="l-table-edit-td">
 							<select id="customerid" name="customerid" style="width: 200px;">
@@ -356,22 +381,16 @@ h4 {
 								</c:forEach>
 							</select>
 						</td>
-						<td align="left" style="width: 80px;"></td>
+						<td align="left" style="width: 60px;"></td>
 
 						<td>
 							<div class="l-button" ligeruiid="Button1000" onclick="saveData()"
-								style="width: 120px;">
+								style="width: 100px;">
 								<div class="l-button-l"></div>
 								<div class="l-button-r"></div>
 								<span>保存已确认数据</span>
 							</div></td>
-						<!-- <td>
-									<div class="l-button" ligeruiid="Button1000"
-										onclick="viewCode()" style="width: 120px;">
-										<div class="l-button-l"></div>
-										<div class="l-button-r"></div>
-										<span>保存已确认数据</span>
-									</div></td> -->
+					
 					</tr>
 				</table>
 				</from>

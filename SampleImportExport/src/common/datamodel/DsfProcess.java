@@ -11,16 +11,16 @@ public class DsfProcess implements java.io.Serializable {
 
 	// Fields
 
-	private BigDecimal id;
-	private Date printtime;
-	private String collectionpersonnel;
-	private Date collectiontime;
-	private String inputpersonnel;
-	private Date inputtime;
-	private String prehandlingpersonnel;
-	private Date preprocessingtime;
-	private String printingstaff;
-	private String sampleId;
+	private BigDecimal id;//主键
+	private Date printtime;//打印时间
+	private String collectionpersonnel;//采集人
+	private Date collectiontime;//采集时间
+	private String inputpersonnel;//录入人
+	private Date inputtime;//录入时间
+	private String prehandlingpersonnel;//前处理人
+	private Date preprocessingtime;//前处理时间
+	private String printingstaff;//打印人
+	private String sampleId;//样本id不是编号
 
 	// Constructors
 

@@ -45,6 +45,7 @@ import updown.UpDownApi;
 
 import com.sun.org.apache.commons.beanutils.BeanUtils;
 import common.SIEBeanFactory;
+import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfProcess;
@@ -404,10 +405,8 @@ public class UpDownController extends MultiActionController {
 					errorMsg = "标签1,第" + i + "行,第16列,出现错误,数据不规范。";
 					sampleInfo.setYlxh(row1.getCell(15).getStringCellValue());
 
-					process.setRequester(row1.getCell(16).getStringCellValue());
-					process.setRequesttime(row1.getCell(17).getStringCellValue());
-					process.setExecutetime(row1.getCell(18).getStringCellValue());
-					process.setExecutor(row1.getCell(19).getStringCellValue());
+					process.setCollectionpersonnel(row1.getCell(16).getStringCellValue());
+					process.setCollectiontime(row1.getCell(17).getStringCellValue());
 					process.setDsfbarcode(row1.getCell(6).getStringCellValue());
 
 					sResultList.add(sampleInfo);
@@ -529,32 +528,6 @@ public class UpDownController extends MultiActionController {
 			String pjson = request.getParameter("pjson");
 			String tjson = request.getParameter("tjson");
 			String customerid = request.getParameter("customerid");
-			List<DsfCustomerBaseInfo> dsfcList = dataAccessApi.getCustomerInfo();
-			DsfCustomerBaseInfo dsfcbiBaseInfo = new DsfCustomerBaseInfo();
-			for (DsfCustomerBaseInfo dsfc : dsfcList) {
-				if (customerid.equals(String.valueOf(dsfc.getCustomerid()))) {
-					System.out.println(dsfc.getCustomername());
-					dsfcbiBaseInfo = dsfc;
-				}
-			}
-			String dcnString = "";
-			StringBuffer buffer = new StringBuffer();
-			if (null == dsfcbiBaseInfo.getClientnumber() || "".equals(dsfcbiBaseInfo.getClientnumber())) {
-				dcnString = "000000";
-			} else {
-				buffer.append(dsfcbiBaseInfo.getClientnumber());
-				while (dsfcbiBaseInfo.getClientnumber().length() < 6 && buffer.length() < 6) {
-					buffer.append("0");
-				}
-				dcnString = buffer.toString();
-			}
-
-			String dsfcbiseqString = "";
-			if (dsfcbiBaseInfo.getSequence().toString().length() < 6) {
-				dsfcbiseqString = String.format("%06d", dsfcbiBaseInfo.getSequence().intValue());
-			} else {
-				dsfcbiseqString = dsfcbiBaseInfo.getSequence().toString();
-			}
 
 			JSONArray sjsonArray = JSONArray.fromObject(updateJson);
 			JSONArray pjsonArray = JSONArray.fromObject(pjson.substring(8, pjson.length() - 1));
@@ -562,15 +535,14 @@ public class UpDownController extends MultiActionController {
 			for (int i = 0; i < sjsonArray.size(); i++) {
 				LSample ls = new LSample();
 				ls = PubJsonUtil.jsonToBean(sjsonArray.get(i).toString(), LSample.class);
-				String pseqString = dataAccessApi.getSeqString("SAMPLE_SEQUENCE");
-				String sampleno = buffer + dsfcbiseqString;
-				ls.setId(new BigDecimal(pseqString));
-				ls.setSampleno(sampleno);
-				ls.setDsfcustomerid(customerid);
-				upDownApi.saveData(ls, "LSample");
-				// 客户表SEQ累加一
-				dsfcbiBaseInfo.setSequence(dsfcbiBaseInfo.getSequence().add(new BigDecimal("1")));
-				dataAccessApi.saveCustomerBaseInfo(dsfcbiBaseInfo);
+				String []ylxhStrings = ls.getYlxh().split(",");
+				for(int x=0;x<ylxhStrings.length;x++){
+					String pseqString = dataAccessApi.getSeqString("SAMPLE_SEQUENCE");
+					ls.setId(new BigDecimal(pseqString));
+					ls.setYlxh(ylxhStrings[x]);
+					ls.setDsfcustomerid(customerid);
+					upDownApi.saveData(ls, "LSample");
+				}
 
 				for (int j = 0; j < pjsonArray.size(); j++) {
 					Process_XML prXml = new Process_XML();
@@ -586,6 +558,7 @@ public class UpDownController extends MultiActionController {
 
 				// 检查基础表中检验目的是否存在，已存在不添加，不存在新增
 				String ylxh = ls.getYlxh();
+				
 				List<DsfLYlxhdescribe> ylxhList = upDownApi.getYlxhdescribeByYlxh(ylxh, customerid);
 				if (null != ylxh && ylxhList.size() > 0) {
 
@@ -595,14 +568,18 @@ public class UpDownController extends MultiActionController {
 					dsfYlxhdescribe.setYlxh(ls.getYlxh());
 					String dsfylxhseqString = dataAccessApi.getSeqString("DSF_YLXH_SEQUENCE");
 					dsfYlxhdescribe.setId(new BigDecimal(dsfylxhseqString));
+					
+					List dsfctiList = new ArrayList<DsfControltestitems>();
 
 					StringBuffer profiletest = new StringBuffer();
 					for (int k = 0; k < tjsonArray.size(); k++) {
 						TestItem_XML tXml = new TestItem_XML();
 						tXml = PubJsonUtil.jsonToBean(pjsonArray.get(k).toString(), TestItem_XML.class);
 						if (ls.getDsfbarcode().equals(tXml.getDsfbarcode())) {
+							//获取当前客户的检验项目列表，条件是检验项目编号
 							List<DsfTestitems> dsftList = upDownApi.getDsfTestItemsByTestItem(tXml.getTestitem(),
 									customerid);
+							//如果不存在就添加，存在就不操作
 							if (null == dsftList || dsftList.size() < 1) {
 								DsfTestitems dTestitems = new DsfTestitems();
 								dTestitems.setCustomerid(customerid);
@@ -611,14 +588,31 @@ public class UpDownController extends MultiActionController {
 								String dsftseqString = dataAccessApi.getSeqString("DSF_TESTITEMS_SEQUENCE");
 								dTestitems.setId(new BigDecimal(dsftseqString));
 								upDownApi.saveData(dTestitems, "DsfTestitems");
+								
+								//把该条记录放入List,插入对照表
+								DsfControltestitems  dsfcti = new DsfControltestitems();
+								dsfcti.setCustomerid(customerid);
+								dsfcti.setCustomeritems(tXml.getTestitem());
+								dsfcti.setCustomeritemsname(tXml.getName());
+								String dsfctiseqString = dataAccessApi.getSeqString("DSF_CONTROLTESTITEMS_SEQ");
+								dsfcti.setId(new BigDecimal(dsfctiseqString));
+								dsfctiList.add(dsfcti);
+								
 							}
 							profiletest.append(tXml.getTestitem());
 						}
 					}
+					//保存检验目的
 					dsfYlxhdescribe.setProfiletest(profiletest.toString());
 					upDownApi.saveData(dsfYlxhdescribe, "DsfLYlxhdescribe");
+					//对照表数据添加
+					upDownApi.saveDataByList(dsfctiList, "DsfControltestitems");
 				}
 			}
+			
+			
+			
+			
 			logger.info((Object) (new StringBuilder("Begin to saveData ")));
 			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewImpExpData.jsp");
 			modelAndView.addObject("state", "success");
@@ -862,10 +856,9 @@ public class UpDownController extends MultiActionController {
 						sheet1.addCell(new Label(13, j + 1, sInfo_XML.getSex()));
 						sheet1.addCell(new Label(14, j + 1, sInfo_XML.getStayhospitalmode()));
 						sheet1.addCell(new Label(15, j + 1, sInfo_XML.getYlxh()));
-						sheet1.addCell(new Label(16, j + 1, pXml.getRequester()));
-						sheet1.addCell(new Label(17, j + 1, pXml.getRequesttime()));
-						sheet1.addCell(new Label(18, j + 1, pXml.getExecutor()));
-						sheet1.addCell(new Label(19, j + 1, pXml.getExecutetime()));
+						sheet1.addCell(new Label(16, j + 1, pXml.getCollectionpersonnel()));
+						sheet1.addCell(new Label(17, j + 1, pXml.getCollectiontime()));
+				
 
 						// 标签2
 

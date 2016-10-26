@@ -14,14 +14,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {})
 public class Process_XML {
-	// 开单人
-	private String requester;
-	// 开单时间
-	private String requesttime;
 	// 采集人
-	private String executor;
+	private String collectionpersonnel;
 	// 采集时间
-	private String executetime;
+	private String collectiontime;
 	// 条码号
 	private String dsfbarcode;
 
@@ -29,45 +25,26 @@ public class Process_XML {
 		
 	}
 
-	public Process_XML(String requester, String requesttime, String executor,
-			String dsfbarcode, String executetime) {
-		this.requester = requester;
-		this.requesttime = requesttime;
-		this.executor = executor;
-		this.executetime = executetime;
+	public Process_XML(String collectionpersonnel, String collectiontime, String dsfbarcode) {
+		this.collectionpersonnel = collectionpersonnel;
+		this.collectiontime = collectiontime;
 		this.dsfbarcode = dsfbarcode;
 	}
 
-	public String getRequester() {
-		return requester;
+	public String getCollectionpersonnel() {
+		return collectionpersonnel;
 	}
 
-	public void setRequester(String requester) {
-		this.requester = requester;
+	public void setCollectionpersonnel(String collectionpersonnel) {
+		this.collectionpersonnel = collectionpersonnel;
 	}
 
-	public String getRequesttime() {
-		return requesttime;
+	public String getCollectiontime() {
+		return collectiontime;
 	}
 
-	public void setRequesttime(String requesttime) {
-		this.requesttime = requesttime;
-	}
-
-	public String getExecutor() {
-		return executor;
-	}
-
-	public void setExecutor(String executor) {
-		this.executor = executor;
-	}
-
-	public String getExecutetime() {
-		return executetime;
-	}
-
-	public void setExecutetime(String executetime) {
-		this.executetime = executetime;
+	public void setCollectiontime(String collectiontime) {
+		this.collectiontime = collectiontime;
 	}
 
 	public String getDsfbarcode() {

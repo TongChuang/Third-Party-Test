@@ -23,6 +23,7 @@ import common.datamodel.DsfTestitems;
 import common.datamodel.DsfProcess;
 import common.datamodel.LSample;
 import common.datamodel.LTestresult;
+import common.util.DateUtil;
 import common.util.XmlUtil;
 import common.webmodel.Base_TestItem_XML;
 import common.webmodel.DataSet_XML;
@@ -139,27 +140,7 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 						dsfcbiBaseInfo = dsfc;
 					}
 				}
-				String dcnString = "";
-				StringBuffer buffer = new StringBuffer();
-				if (null == dsfcbiBaseInfo.getClientnumber()
-						|| "".equals(dsfcbiBaseInfo.getClientnumber())) {
-					dcnString = "000000";
-				} else {
-					buffer.append(dsfcbiBaseInfo.getClientnumber());
-					while (dsfcbiBaseInfo.getClientnumber().length() < 6
-							&& buffer.length() < 6) {
-						buffer.append("0");
-					}
-					dcnString = buffer.toString();
-				}
-
-				String dsfcbiseqString = "";
-				if (dsfcbiBaseInfo.getSequence().toString().length() < 6) {
-					dsfcbiseqString = String.format("%06d", dsfcbiBaseInfo
-							.getSequence().intValue());
-				} else {
-					dsfcbiseqString = dsfcbiBaseInfo.getSequence().toString();
-				}
+				
 
 				// 把上传的XML解析为BEAN
 				DataSet_XML dXml = new DataSet_XML();
@@ -170,9 +151,7 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 					sampleInfo_XML = slXml.getSampleInfo();
 					String pseqString = dataAccessApi
 							.getSeqString("SAMPLE_SEQUENCE");
-					String sampleno = buffer + dsfcbiseqString;
 					ls.setId(new BigDecimal(pseqString));
-					ls.setSampleno(sampleno);
 					ls.setDsfcustomerid(customerid);
 					ConversionBean.cSample(ls, sampleInfo_XML);
 					dataAccessApi.saveData(ls, "LSample");
@@ -184,11 +163,9 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 					Process_XML prXml = new Process_XML();
 					prXml = slXml.getProcess();
 					DsfProcess lp = new DsfProcess();
-//					lp.setExecutetime(prXml.getExecutetime());
-//					lp.setExecutor(prXml.getExecutor());
-//					lp.setRequester(prXml.getRequester());
-//					lp.setRequesttime(prXml.getRequesttime());
-//					lp.setSampleId(ls.getId());
+					lp.setCollectionpersonnel(prXml.getCollectionpersonnel());
+					lp.setCollectiontime(DateUtil.parseLongDate(prXml.getCollectiontime()));
+					lp.setSampleId(ls.getId().toString());
 					String lpseqString = dataAccessApi
 							.getSeqString("PROCESS_SEQUENCE");
 					lp.setId(new BigDecimal(lpseqString));
