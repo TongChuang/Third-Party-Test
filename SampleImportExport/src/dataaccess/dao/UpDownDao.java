@@ -2,12 +2,12 @@ package dataaccess.dao;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.hibernate.Query;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -15,11 +15,13 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
-import common.datamodel.DsfTestitems;
 import common.datamodel.DsfProcess;
+import common.datamodel.DsfTestitems;
 import common.datamodel.LSample;
 import common.datamodel.LTestitem;
+import common.datamodel.LTestobjective;
 import common.datamodel.LTestresult;
+
 import dataaccess.help.DataAccessUtil;
 
 public class UpDownDao extends HibernateDaoSupport {
@@ -33,21 +35,48 @@ public class UpDownDao extends HibernateDaoSupport {
 	public void saveDataByList(List <Object>objectList,String tableName){
 		DataAccessUtil.saveOrUpdateAll(objectList, tableName, getHibernateTemplate(), tableName);
 	}
-	
-	public List<LTestresult> queryExpData(String beginTime,String endTime,String customerid){
+	//根据LProcrss查询的SampleId去查询Sample信息
+	public List<LSample> getLSample(String beginTime,String endTime){
 		String sqlString = "";
 		if("".equals(beginTime)||"".equals(endTime)){
-			sqlString = "from LTestresult where customerid='"+customerid+"' order by measuretime desc";
+			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.sampleno";
 		}else{
-			sqlString = "from LTestresult where customerid='"+customerid+"' and measuretime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss') order by measuretime desc";
+			//sqlString = "select  from LProcess p join LSample s on p.sample_id = s.id where p.executetime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
+			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.sampleno "+
+					"and p.collectiontime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
 		}
 		try {
-			return getHibernateTemplate().find(sqlString);
+			return  getSession().createSQLQuery(sqlString).addEntity("s",LSample.class).list();
 		} catch (DataAccessException e) {
 			return ((List) (new Vector()));
 		}
 	}
-	
+	public List<LTestresult> queryExpData(String beginTime,String endTime,String customerid){
+		String sqlString = "";
+		if("".equals(beginTime)||"".equals(endTime)||null!=customerid){
+			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.sampleno and s.dsfcustomerid='"+customerid+"'";
+		}else{
+			//sqlString = "select  from LProcess p join LSample s on p.sample_id = s.id where p.executetime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
+			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.sampleno and s.dsfcustomerid='"+customerid+"'"+
+					"and p.collectiontime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
+		}
+		try {
+			return  getSession().createSQLQuery(sqlString).addEntity("s",LSample.class).list();
+		} catch (DataAccessException e) {
+			return ((List) (new Vector()));
+		}
+	}
+	public List<LTestresult> getLTestresultByNo(String sampleno){
+		String sqlString = "";
+		if(null!=sampleno){
+			sqlString = "from LTestresult where sampleno='"+sampleno+"'";
+		}
+		try {
+			return getHibernateTemplate().find(sqlString);
+		} catch (DataAccessException e) {
+			return null;
+		}
+	}
 	public List getExpSampleNoData(String beginTime,String endTime,String customerid){
 		String sqlString = "";
 		if("".equals(beginTime)||"".equals(endTime)){
@@ -125,9 +154,19 @@ public class UpDownDao extends HibernateDaoSupport {
 		return DataAccessUtil.getObjectsByColumWithIn(samplenoList, "sampleno", "LSample", getSession());
 	}
 	public LSample getSampleByBarCode(String barcode){
-		return (LSample) DataAccessUtil.getObjectByColum(barcode, "dsfbarcode", "LSample", getHibernateTemplate());
+		return (LSample) DataAccessUtil.getObjectByColum(barcode, "localbarcode", "LSample", getHibernateTemplate());
 	}
-	
+	public List<LSample> getSamplesByBarCode(String barcode){
+		String sqlString = "";
+		if(null!=barcode){
+			sqlString = "from LSample where localbarcode = '"+barcode+"' order by id desc";
+		}
+		try {
+			return getHibernateTemplate().find(sqlString);
+		} catch (DataAccessException e) {
+			return null;
+		}
+	}
 	public DsfProcess getLProcessByLSampleId(BigDecimal sampleno){
 		String sql = "from LProcess where sampleId='"+sampleno+"'";
 		try {
@@ -170,6 +209,50 @@ public class UpDownDao extends HibernateDaoSupport {
 		}
 		try {
 			return getHibernateTemplate().find(sql.toString());
+		} catch (DataAccessException e) {
+			return null;
+		}	
+	}
+	/**
+	 * 前处理
+	 */
+	public List<DsfLYlxhdescribe> getDsfTestObjectiveById(String customerid){
+		String sqlString = "";
+		if(null!=customerid){
+			sqlString = "from DsfLYlxhdescribe where customerid = '"+customerid+"' order by id desc";
+		}
+		try {
+			return getHibernateTemplate().find(sqlString);
+		} catch (DataAccessException e) {
+			return null;
+		}	
+	}
+	public int getSeralNumber(String dateAndSection){
+		////select count(*) from DSF_L_YLXHDESCRIBE where SUBSTR(serialnumber,1,10) = '20161024MYA';
+		/*
+		String[] strings1= {"SUBSTR(serialnumber,1,11)"};
+		String[] strings2= {dateAndSection};
+		return DataAccessUtil.cntByStrCols("DsfLYlxhdescribe", strings1, strings2, getSession());*/
+		String sqlString = "";
+		if(null!=dateAndSection){
+			 sqlString = "select count(*) from L_Sample where SUBSTR(sampleno,1,11) = '"+dateAndSection+"'";
+		}
+		try {
+			return Integer.parseInt(getSession().createSQLQuery(sqlString).list().get(0).toString());
+		} catch (DataAccessException e) {
+			return -1;
+		}	
+	}
+	public void saveAllSerialNumber(List<DsfLYlxhdescribe> dydList){
+		DataAccessUtil.saveOrUpdateAll(((Collection) (dydList)), "DsfLYlxhdescribe", getHibernateTemplate(), "update");
+	}
+	public List<String> getInspectionSectionByYLXH(String ylxh,String customerid){
+		String sqlString = "";
+		if(null!=ylxh){
+			sqlString = "from LSample where ylxh = '"+ylxh+"' and customerid = '"+customerid+"' order by id desc";
+		}
+		try {
+			return getHibernateTemplate().find(sqlString);
 		} catch (DataAccessException e) {
 			return null;
 		}	

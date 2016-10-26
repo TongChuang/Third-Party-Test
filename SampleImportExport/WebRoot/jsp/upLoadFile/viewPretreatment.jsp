@@ -43,87 +43,47 @@
 	type="text/javascript"></script>
 
 <script type="text/javascript">
-	var eee;
-	var result_Sjson;
+	var resultJson;
 	var manager;
+	var testObjectiveJson = null;
 	$(function() {
+		/*	
+		var str = "A1600000000001";
+		alert(str.substr(0, 5))
+		*/
 		manager = $("#maingrid").ligerGrid({
-			columns : [
-			//当前状态，开始为空的，扫码后修改值为1
-			{
-				display : '病人名称',
-				name : 'patientname',
+			columns : [{
+				display : 'id',
+				name : 'id',
+				width : 150,
+				hide:true,
+			},{ 
+				display : '流水号',
+				name : 'serialnumber',
+				width : 150,
+			},{ 
+				display : '检验目的编号',
+				name : 'ylxh',
+				width : 150,
+			}, {
+				display : '检验目的名称',
+				name : 'ylmc',
 				width : 150,
 			},{
-				display : '条码号',
-				name : 'dsfbarcode',
-				width : 100,
-			}, {
-				display : '病人唯一号',
-				name : 'patientblh',
-				width : 100,
-			}, {
-				display : '病人就诊号',
-				name : 'patientid',
-				width : 100,
-			}, {
-				display : '病人生日',
-				name : 'birthday',
+				display : 'customerid',
+				name : 'customerid',
 				width : 150,
-			}, {
-				display : '病人性别',
-				name : 'sex',
-				width : 100,
-				render : function(item) {
-					if (parseInt(item.sex) == 1) {
-						return "男";
-					}
-					if (parseInt(item.sex) == 2) {
-						return "女";
-					}
-				}
-			}, {
-				display : '病人年龄',
-				name : 'age',
-				width : 120,
-			}, {
-				display : '病床号',
-				name : 'departBed',
-				width : 100,
-			}, {
-				display : '就诊方式',
-				name : 'stayhospitalmode',
-				width : 100,
-			}, {
-				display : '申请科室',
-				name : 'hossection',
-				width : 100,
-			}, {
-				display : '诊断',
-				name : 'diagnostic',
-				width : 100,
-			}, {
-				display : '检验目的',
-				name : 'inspectionname',
-				width : 100,
-			}, {
-				display : '检验目的id',
-				name : 'ylxh',
-				width : 100,
-			}, {
-				display : '样本类型',
-				name : 'sampletype',
-				width : 100,
-			}, {
-				display : '生理周期',
-				name : 'cycle',
-				width : 100,
-			}, {
-				display : '年龄单位',
-				name : 'ageunit',
-				width : 100,
-			}, ],
-			data : null,
+				hide:true,
+			},{
+				display : '专业组',
+				name : 'professionalgroup',
+				width : 150,
+			},{
+				display : '检验段',
+				name : 'inspectionsection',
+				width : 150,
+			},],
+			data : testObjectiveJson,
 			pageSize : 20,
 			width : '95%',
 			height : '99%',
@@ -132,7 +92,8 @@
 		});
 
 		$("#layout1").ligerLayout({
-			leftWidth : 300
+			//leftWidth : 300
+			leftWidth : 200
 		});
 
 		$("form").ligerForm();
@@ -140,7 +101,8 @@
 		/* $(".l-button-submit").click(function() {
 			alert("提交数据");
 		}); */
-
+		
+		
 	});
 
 	function getSampleInfo() {
@@ -153,28 +115,47 @@
 			error : function(e) {
 				alert('出现未知错误');
 			},
-			success : function(data) {
+			success : function(datas) {
+				manager.loadData(datas.jsonresult1);
+				testObjectiveJson = datas.jsonresult1;
+				var data = manager.getData();
+				//var data = manager.getColumn();
+				alert(JSON.stringify(data))
+				alert(data.length);
+				for(var i=0;i<data.length;i++){
+					if(data[i].serialnumber!=""){
+						
+					}esle{
+						//需要提示弹窗修改流水号
+						
+					}
+				}
+			
+				//
 				$("#barcode").val("");
 				$("#barcode").focus();
-				if (data.error != undefined) {
-					$.ligerDialog.error(data.error);
+				if (datas.error != undefined) {
+					$.ligerDialog.error(datas.error);
 				//	$("#pic").attr('src',data.pic); 
 				}else{
-					$("#patientname").val(data.patientname);
-					$("#patientid").val(data.patientid);
-					$("#departBed").val(data.departBed);
-					$(".select").find("option[text='pxx']").attr("selected",true);
-					$("#patientname").val(data.patientname);
-					$("#patientname").val(data.patientname);
-					$("#patientname").val(data.patientname);
-					$("#patientname").val(data.patientname);
-					$("#patientname").val(data.patientname);
-					$("#patientname").val(data.patientname);
-					$("#patientname").val(data.patientname);
-					$("#patientname").val(data.patientname);
-					$("#patientname").val(data.patientname);
+					$("#patientid").val(datas.sample_json.patientid);
+					$("#departBed").val(datas.sample_json.departBed);
+					$("#patientname").val(datas.sample_json.patientname);
+					$("#sex").val(datas.sample_json.sex);
+					$("#age").val(datas.sample_json.age);
+					$("#birthday").val(datas.sample_json.birthday);
+					$("#stayhospitalmode").val(datas.sample_json.stayhospitalmode);
+					$("#hossection").val(datas.sample_json.hossection);
+					$("#diagnostic").val(datas.sample_json.diagnostic);
+					$("#ylmc").val(data.sample_json.ylmc);
+					$("#sampletype").val(datas.sample_json.sampletype);
+					$("#cycle").val(datas.sample_json.cycle);
+					$("#ageunit").val(datas.sample_json.ageunit);
+					$("#dsfbarcode").val(datas.sample_json.dsfbarcode);
+					$("#patientblh").val(datas.sample_json.patientblh);
+					$("#localbarcode").val(datas.sample_json.localbarcode);
+					
 				}
-				
 			}
 		});
 	}
@@ -206,7 +187,7 @@ body {
 
 <body style="padding:10px">
 	<div id="layout1">
-		<div position="left" title="待接收样本">
+		<div position="left" title="检验目的列表">
 			<div id="maingrid"></div>
 		</div>
 		<div position="center" title="样本详情">
@@ -218,129 +199,85 @@ body {
 					<tr>
 						<td align="right" class="l-table-edit-td">病人就诊号:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="patientid" type="text" id="patientid" ltype="text" />
-						</td>
+							name="patientid" type="text" id="patientid" readonly="readonly" /></td>
 						<td align="left"></td>
 						<td align="right" class="l-table-edit-td">病人病床号:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="departBed" type="text" id="departBed" ltype="text" />
-						</td>
+							name="departBed" type="text" id="departBed" readonly="readonly" /></td>
 						<td align="left"></td>
 						<td rowspan="8"><img name="pic" id="pic"
-							style="height:300px; with:260px" alt="" border="1" src="${pic}">
-						</td>
+							style="height:300px; with:260px" alt="" border="1" src="${pic}"></td>
 					</tr>
-
 					<tr>
 						<td align="right" class="l-table-edit-td">病人名字:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="patientname" type="text" id="patientname" ltype="text"
-							validate="{required:true,minlength:3,maxlength:10}" />
-						</td>
+							name="patientname" type="text" id="patientname" readonly="readonly" /></td>
 						<td align="left"></td>
 						<td align="right" class="l-table-edit-td">病人性别:</td>
-						<td align="left" class="l-table-edit-td" style="width:180px"><select
-							name="sex" id="sex" ltype="select">
-								<option value="1">男</option>
-								<option value="2">女</option>
-						</select></td>
+						<td align="left" class="l-table-edit-td" style="width:160px"><input
+							name="sex" type="text" id="sex" readonly="readonly" /></td>
 						<td align="left"></td>
 					</tr>
 					<tr>
 						<td align="right" class="l-table-edit-td">病人年龄:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="age" type="text" id="age" ltype='spinner'
-							ligerui="{type:'int'}" value="" class="required"
-							validate="{digits:true,min:0,max:200}" /></td>
+							name="age" type="text" id="age" readonly="readonly" /></td>
 						<td align="left"></td>
 						<td align="right" class="l-table-edit-td">病人生日:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="birthday" type="text" id="birthday" ltype="date"
-							validate="{required:true}" /></td>
+							name="birthday" type="text" id="birthday" readonly="readonly" /></td>
 						<td align="left"></td>
 					</tr>
 					<tr>
 						<td align="right" class="l-table-edit-td">就诊方式:</td>
-						<td align="left" class="l-table-edit-td" style="width:180px"><select
-							name="stayhospitalmode" id="stayhospitalmode" ltype="select">
-								<option value="1">门诊</option>
-								<option value="2">住院</option>
-								<option value="3">急诊</option>
-						</select></td>
+						<td align="left" class="l-table-edit-td" style="width:160px"><input
+							name="stayhospitalmode" type="text" id="stayhospitalmode" readonly="readonly" /></td>
 						<td align="left"></td>
 						<td align="right" class="l-table-edit-td">申请科室:</td>
-						<td align="left" class="l-table-edit-td" style="width:180px"><select
-							name="hossection" id="hossection" ltype="select">
-								<option value="">请选择</option>
-						</select></td>
+						<td align="left" class="l-table-edit-td" style="width:160px"><input
+							name="hossection" type="text" id="hossection" readonly="readonly" /></td>
 						<td align="left"></td>
 					</tr>
 
 					<tr>
 						<td align="right" class="l-table-edit-td">诊断结果:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="diagnostic" type="text" id="diagnostic" ltype="text"
-							validate="{required:true}" />
-						</td>
+							name="diagnostic" type="text" id="diagnostic" readonly="readonly" /></td>
 						<td align="left"></td>
 						<td align="right" class="l-table-edit-td">检验目的:</td>
-						<td align="left" class="l-table-edit-td" style="width:180px"><select
-							name="ylxh" id="ylxh" ltype="select">
-								<option value="">请选择</option>
-						</select></td>
+						<td align="left" class="l-table-edit-td" style="width:160px"><input
+							name="ylmc" type="text" id="ylmc" readonly="readonly" /></td>
 						<td align="left"></td>
 					</tr>
 					<tr>
 						<td align="right" class="l-table-edit-td">样本类型:</td>
-						<td align="left" class="l-table-edit-td" style="width:160px"><select
-							name="sampletype" id="sampletype" ltype="select">
-								<option value="">请选择</option>
-						</select>
-						</td>
+						<td align="left" class="l-table-edit-td" style="width:160px"><input
+							name="sampletype" type="text" id="sampletype" readonly="readonly" /></td>
 						<td align="left"></td>
 						<td align="right" class="l-table-edit-td">生理周期:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="cycle" type="text" id="cycle" ltype="text" />
-						</td>
+							name="cycle" type="text" id="cycle" readonly="readonly" /></td>
 						<td align="left"></td>
 					</tr>
 					<tr>
 						<td align="right" class="l-table-edit-td">年龄单位:</td>
-						<td align="left" class="l-table-edit-td" style="width:160px"><select
-							name="ageunit" id="ageunit" ltype="select">
-								<option value="">请选择</option>
-						</select>
-						</td>
+						<td align="left" class="l-table-edit-td" style="width:160px"><input
+							name="ageunit" type="text" id="ageunit" readonly="readonly" /></td>
 						<td align="left"></td>
 						<td align="right" class="l-table-edit-td">客户条码号:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="dsfbarcode" type="text" id="dsfbarcode" ltype="text"
-							validate="{required:true}" />
-						</td>
+							name="dsfbarcode" type="text" id="dsfbarcode" readonly="readonly" /></td>
 						<td align="left"></td>
 					</tr>
 					<tr>
 						<td align="right" class="l-table-edit-td">病人唯一号:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="patientblh" type="text" id="patientblh" ltype="text"
-							validate="{required:true}" />
-						</td>
+							name="patientblh" type="text" id="patientblh" readonly="readonly" /></td>
 						<td align="left"></td>
 						<td align="right" class="l-table-edit-td">本地条码号:</td>
 						<td align="left" class="l-table-edit-td" style="width:160px"><input
-							name="localbarcode" type="text" id="localbarcode" ltype="text"
-							validate="{required:true}" />
-						</td>
+							name="localbarcode" type="text" id="localbarcode" readonly="readonly" /></td>
 						<td align="left"></td>
-					</tr>
-					<tr>
-						<td align="left"></td>
-						<td align="left"></td>
-						<td align="left"></td>
-						<td align="left"></td>
-						<td align="left"></td>
-						<td align="left"></td>
-						<td></td>
 					</tr>
 				</table>
 			</form>
@@ -354,4 +291,7 @@ body {
 		</div>
 	</div>
 </body>
+<script type="text/javascript">
+	resultJson = ${result_json};
+</script>
 </html>

@@ -39,6 +39,11 @@ public class LTestobjective implements java.io.Serializable {
 	private String segment;
 	private String nightsegment;
 	private String template;
+	private String inspectionSection;
+	private String professionalGroup;
+	private String serialNumber;
+
+
 
 	// Constructors
 
@@ -52,10 +57,16 @@ public class LTestobjective implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public LTestobjective(BigDecimal ylxh, String ksdm, String profiletest, String profiletest2, String profiletest3, String ylmc, String english,
-			BigDecimal hospitalid, Long mzpb, String note, String pinyin, String price, String section, Long sfhb, String unit, String wubi,
-			Long zypb, String qbgdd, String qbgsj, String yblx, String jyxmfl, Long tcpb, String sglx, String bbl, String cjbw, Boolean sgsl,
-			String segment, String nightsegment, String template) {
+	public LTestobjective(BigDecimal ylxh, String ksdm, String profiletest,
+			String profiletest2, String profiletest3, String ylmc,
+			String english, BigDecimal hospitalid, Long mzpb, String note,
+			String pinyin, String price, String section, Long sfhb,
+			String unit, String wubi, Long zypb, String qbgdd, String qbgsj,
+			String yblx, String jyxmfl, Long tcpb, String sglx, String bbl,
+			String cjbw, Boolean sgsl, String segment, String nightsegment,
+			String template, String inspectionSection,
+			String professionalGroup, String serialNumber) {
+		super();
 		this.ylxh = ylxh;
 		this.ksdm = ksdm;
 		this.profiletest = profiletest;
@@ -85,9 +96,10 @@ public class LTestobjective implements java.io.Serializable {
 		this.segment = segment;
 		this.nightsegment = nightsegment;
 		this.template = template;
+		this.inspectionSection = inspectionSection;
+		this.professionalGroup = professionalGroup;
+		this.serialNumber = serialNumber;
 	}
-
-	// Property accessors
 
 	public BigDecimal getYlxh() {
 		return this.ylxh;
@@ -319,6 +331,30 @@ public class LTestobjective implements java.io.Serializable {
 
 	public void setTemplate(String template) {
 		this.template = template;
+	}
+
+	public String getInspectionSection() {
+		return inspectionSection;
+	}
+
+	public void setInspectionSection(String inspectionSection) {
+		this.inspectionSection = inspectionSection;
+	}
+
+	public String getProfessionalGroup() {
+		return professionalGroup;
+	}
+
+	public void setProfessionalGroup(String professionalGroup) {
+		this.professionalGroup = professionalGroup;
+	}
+
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 
 }

@@ -289,4 +289,22 @@ public class LSample implements java.io.Serializable {
 		this.dsfbarcode = dsfbarcode;
 	}
 
+	@Override
+	public String toString() {
+		return "LSample [id=" + id + ", age=" + age + ", birthday=" + birthday
+				+ ", cycle=" + cycle + ", departBed=" + departBed
+				+ ", diagnostic=" + diagnostic + ", hasimages=" + hasimages
+				+ ", hossection=" + hossection + ", inspectionname="
+				+ inspectionname + ", iswriteback=" + iswriteback
+				+ ", modifyflag=" + modifyflag + ", patientid=" + patientid
+				+ ", patientblh=" + patientblh + ", patientname=" + patientname
+				+ ", sampleno=" + sampleno + ", samplestatus=" + samplestatus
+				+ ", sampletype=" + sampletype + ", sex=" + sex
+				+ ", stayhospitalmode=" + stayhospitalmode + ", writeback="
+				+ writeback + ", ylxh=" + ylxh + ", ageunit=" + ageunit
+				+ ", dsfcustomerid=" + dsfcustomerid + ", dsfbarcode="
+				+ dsfbarcode + ", localbarcode=" + localbarcode + ", imgurl="
+				+ imgurl + "]";
+	}
+
 }

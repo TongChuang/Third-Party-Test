@@ -1,10 +1,16 @@
 package sysconf;
 
-import common.StartAPI;		
-import common.datamodel.DsfCustomerBaseInfo;
-import common.xmlmodel.SystemConfigSetting;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.util.List;
+
+import common.StartAPI;
+import common.datamodel.DsfControltestitems;
+import common.datamodel.DsfCustomerBaseInfo;
+import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfTestitems;
+import common.datamodel.LTestitem;
+import common.xmlmodel.SystemConfigSetting;
 
 public interface SysConfApi
 	extends StartAPI {
@@ -21,4 +27,31 @@ public interface SysConfApi
 	public abstract DsfCustomerBaseInfo getCustomerInfoById(String customerid);
 	public abstract void deleteCustomerInfo(String customerid);
 	public abstract void saveCustomerInfo(DsfCustomerBaseInfo dcbi);
+	/**
+	 * 获取检验信息
+	 * 
+	 */
+	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid);
+	public abstract List<DsfLYlxhdescribe> getYlxhdescribe(String customerid);
+	public abstract List<DsfLYlxhdescribe> getYlxhdescribeById(String id);
+	public abstract List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc);
+	public abstract void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
+	public abstract void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
+	public abstract void deleteYlxhdescribe(BigDecimal id);
+	public abstract List<DsfTestitems> getTestItemsByNo(String proList);
+	public abstract List<DsfTestitems> getTestItems();
+	public abstract void saveTestObjective(String ylxh, String profiletest);
+	public abstract String getSequence(String seqName);
+	/**
+	 * 检验项目对照
+	 * 
+	 */
+	public abstract List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname);
+	public abstract List<DsfControltestitems> getControltestitems(String customerid);
+	public abstract List<DsfControltestitems> getControltestitemsById(String id);
+	public abstract List<LTestitem> getLocalTestItems();
+	public abstract void saveAll(List<DsfControltestitems> dcttList);
+	public abstract List<LTestitem> getLocalTestItemsByNo(String customerid);
+	public abstract void saveData(Object t,String tableName);
+	public abstract List<LTestitem> getTestItemsByIndexId(String indexId);
 }

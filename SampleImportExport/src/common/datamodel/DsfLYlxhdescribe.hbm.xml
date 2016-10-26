@@ -34,5 +34,11 @@
                 <comment>客户ID</comment>
             </column>
         </property>
+        <property name="inspectionsection" type="java.lang.String">
+            <column name="INSPECTIONSECTION" length="510" />
+        </property>
+        <property name="professionalgroup" type="java.lang.String">
+            <column name="PROFESSIONALGROUP" length="510" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -44,72 +44,119 @@ h4 {
 }
 </style>
 <script type="text/javascript">
-	var resultJson = null;
+	var sampleResultJson = null;
+	var testResultJson = null;
+	var grid = null;
+	var grid2 = null;
 	$(function() {
 		$("#layout1").ligerLayout({
 			isLeftCollapse : true
 		});
-		$("#maingridData").ligerGrid({
-			columns : [ {
-				display : '样本编号',
-				name : 'sampleno',
+		grid = $("#maingridData").ligerGrid({
+			columns : [
+			//当前状态，开始为空的，扫码后修改值为1
+			{
+				display : '病人名称',
+				name : 'patientname',
+				width : 150,
+			},{
+				display : '条码号',
+				name : 'dsfbarcode',
+				width : 100,
+			}, {
+				display : '病人唯一号',
+				name : 'patientblh',
+				width : 100,
+			}, {
+				display : '病人就诊号',
+				name : 'patientid',
+				width : 100,
+			}, {
+				display : '病人生日',
+				name : 'birthday',
 				width : 150,
 			}, {
-				display : 'testid',
-				name : 'testid',
+				display : '病人性别',
+				name : 'sex',
 				width : 100,
-				hide : true,
+				render : function(item) {
+					if (parseInt(item.sex) == 1) {
+						return "男";
+					}
+					if (parseInt(item.sex) == 2) {
+						return "女";
+					}
+				}
 			}, {
-				display : '检测名称',
-				name : 'testname',
-				width : 120
+				display : '病人年龄',
+				name : 'age',
+				width : 120,
 			}, {
-				display : '检测结果',
-				name : 'testresult',
-				width : 120
-			}, {
-				display : '最高值',
-				name : 'refhi',
+				display : '病床号',
+				name : 'departBed',
 				width : 100,
 			}, {
-				display : '最低值',
-				name : 'reflo',
+				display : '就诊方式',
+				name : 'stayhospitalmode',
+				width : 100,
+			}, {
+				display : '申请科室',
+				name : 'hossection',
+				width : 100,
+			}, {
+				display : '诊断',
+				name : 'diagnostic',
+				width : 100,
+			}, {
+				display : '检验目的',
+				name : 'inspectionname',
+				width : 100,
+			}, {
+				display : '检验目的id',
+				name : 'ylxh',
 				width : 100,
 			}, {
 				display : '样本类型',
 				name : 'sampletype',
-				width : 100
+				width : 100,
 			}, {
-				display : '审核人',
-				name : 'operator',
-				width : 100
+				display : '生理周期',
+				name : 'cycle',
+				width : 100,
 			}, {
-				display : '审核时间',
-				name : 'measuretime',
-				width : 100
-			}, {
-				display : '单位',
-				name : 'unit',
-				width : 100
-			}, {
-				display : '检测方法',
-				name : 'method',
-				width : 100
-			}, {
-				display : '客户ID',
-				name : 'customerid',
-				width : 70,
-				hide : true
-			}, {
-				display : '第三方条码号',
-				name : 'dsfbarcode',
-				width : 150,
+				display : '年龄单位',
+				name : 'ageunit',
+				width : 100,
 			}, ],
-			data : resultJson,
+			data : sampleResultJson,
 			pageSize : 30,
 			width : '99%',
 			height : '99%',
-			checkbox : false
+			checkbox : false,
+			onSelectRow : function(data, rowindex, rowobj) {
+				//alert("选中的是："+data.ylmc);		
+				ajaxTestResult(data);
+			},
+		});
+		grid2 = $("#maingridResult").ligerGrid({
+			columns :[{
+				display : '检验结果名称',
+				name : 'testname',
+				width : 100,
+			}, {
+				display : '检验结果',
+				name : 'testresult',
+				width : 100,
+			}, {
+				display : '单位',
+				name : 'unit',
+				width : 100,
+			},],
+			data : testResultJson,
+			pageSize : 30,
+			width : '99%',
+			height : '99%',
+			checkbox : false,
 		});
 	});
 
@@ -165,6 +212,20 @@ h4 {
 		} else {
 			$.ligerDialog.error("起止时间不能单个为空");
 		}
+	}
+	//检验结果ajax方法
+	function ajaxTestResult(data){
+		$.ajax({  
+			url: '/jsp/sysconf/sysConf.do?method=getQueryResult',
+			dataType: 'json',
+			data: "sampleno="+data.sampleno,
+			type: 'post', 
+			success:function(datas)  
+			{
+				grid2.loadData(datas.result_json);
+				testItemJson = datas.result_json;
+	        }
+		});
 	}
 </script>
 </head>
@@ -246,24 +307,13 @@ h4 {
 			<div id="maingridData" style="margin: 0; padding: 0"></div>
 		</div>
 		<div position="right">
-			<table>
-				<tr>
-					<td>asfdfd</td>
-				</tr>
-
-				<tr>
-					<td>asfdfd</td>
-				</tr>
-				<tr>
-					<td>asfdfd</td>
-				</tr>
-			</table>
+			<div id="maingridResult" style="margin: 0; padding: 0"></div>
 		</div>
 	</div>
 </body>
 </html>
 <script type="text/javascript">
-	resultJson = $
+	sampleResultJson = $
 	{
 		result_json
 	};

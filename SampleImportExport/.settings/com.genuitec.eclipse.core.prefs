@@ -1,5 +1,4 @@
-#Fri Jul 08 15:54:51 CST 2016
 eclipse.preferences.version=1
-validator.Checked=.myeclipse/wsgeneration,WebRoot/resources,WebRoot/assets
+validator.Checked=.myeclipse/wsgeneration,WebRoot
 validator.Revalidate=true
 validator.Unchecked=

@@ -1,28 +1,38 @@
 ﻿<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-
-
+<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
 <title></title>
 <link href="/resources/ligerUI/skins/Aqua/css/ligerui-all.css"
 	rel="stylesheet" type="text/css" />
 <style type="text/css">
 </style>
-<script src="/resources/jquery/jquery-1.9.0.min.js"
-	type="text/javascript"></script>
+<script src="/resources/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>
 <script src="/resources/ligerUI/js/core/base.js" type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerLayout.js"
-	type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerGrid.js"
-	type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerToolBar.js" type="text/javascript">
-</script>
+<script src="/resources/ligerUI/js/plugins/ligerLayout.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerGrid.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerToolBar.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerForm.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerTextBox.js" type="text/javascript"></script>  
+<script src="/resources/ligerUI/js/plugins/ligerDrag.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerResizable.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerWindow.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerDialog.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerButton.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerComboBox.js" type="text/javascript"></script>
 <script type="text/javascript">
 var testItemJson = null;
 var customerJson = null;
 var testObjectiveJson = null;
+var autocompleteJson = null;
+var manager = null;
+var mangerTestObjective = null;
+var manager3 = null;
+var grid = null;
+var grid2 = null;
+var grid3 = null;
+var grid4 = null;
 	$(function() {
 
 		$("#layout1").ligerLayout({
@@ -36,10 +46,11 @@ var testObjectiveJson = null;
                 { text: '修改检验目的', click: modifyTestObjective },
                  { line:true },
                 { text: '删除检验目的', click: deleteTestObjective }
+                
             ]
         });
 		
-		$("#customerData").ligerGrid({
+		grid = $("#customerData").ligerGrid({
 			columns : [ {
 				display : 'customerid',
 				name : 'customerid',
@@ -63,22 +74,28 @@ var testObjectiveJson = null;
 				name : 'address',
 				width : 260
 			}, ],
-			data : customerJson,
+			data : $.extend(true,{},customerJson),
+			where : customer_getWhere(),
 			pageSize : 30,
 			height : '99%',
 			checkbox : false,
 			onSelectRow : function(data, rowindex, rowobj) {
-				alert("选中的是："+data.customername);			
+				ajaxTestObjective(data);
 			},
 		});
 		
-		$("#testObjective").ligerGrid({
-			columns : [ {
+		grid2 = $("#testObjective").ligerGrid({
+			columns : [{
+				display : 'id',
+				name : 'id',
+				width : 150,
+				hide:true,
+			},{
 				display : '检验目的编号',
 				name : 'ylxh',
 				width : 150,
 			}, {
-				display : '检验目名称',
+				display : '检验目的名称',
 				name : 'ylmc',
 				width : 150,
 			},{
@@ -86,24 +103,261 @@ var testObjectiveJson = null;
 				name : 'customerid',
 				width : 150,
 				hide:true,
+			},{
+				display : '检验项目编号',
+				name : 'profiletest',
+				width : 150,
+			},{
+				display : '专业组',
+				name : 'professionalgroup',
+				width : 150,
+			},{
+				display : '检验段',
+				name : 'inspectionsection',
+				width : 150,
 			},],
-		data : testObjectiveJson,
+			data : $.extend(true,{},testObjectiveJson),
+			where : testObjective_getWhere(),
 			pageSize : 30,
 			width : '100%',
 			height : '99%',
 			checkbox : false,
 			onSelectRow : function(data, rowindex, rowobj) {
-				alert("选中的是："+data.ylmc);			
+				//alert("选中的是："+data.ylmc);		
+				ajaxTestItems(data);
 			},
 		});
+		grid3 = $("#testItems").ligerGrid({
+			columns : [ {
+				display : '检验项目编号',
+				name : 'indexId',
+				width : 150,
+			},{
+				display : '检验项目名称',
+				name : 'name',
+				width : 150,
+			}],
+			data : testItemJson,
+			pageSize : 30,
+			width : '100%',
+			height : '99%',
+		});	
+		/*grid4 = $("#searchIndex").ligerComboBox(
+		    {
+		    	
+		        url: '/jsp/sysconf/sysConf.do?method=addTestItemsSearch',
+		        valueField: 'indexId',
+		        textField: 'name', 
+		        selectBoxWidth: 200,
+		        autocomplete: function (e)
+	            {	
+	            	alert(1);
+	                alert(e.key);
+	                e.show();
+	            },
+                keySupport: true,
+		        width: 200
+		       
+		        data: autocompleteJson, 
+		        valueField: 'indexId',
+		        textField: 'name', 
+		        autocomplete: true,
+            	onSelected: function(newValue){
+            		alert(newValue);
+            	},
+            	emptyText: '<所有事件类型>',
+            	isMultiSelect: false,
+            	highLight:true,
+            	Width: 280
+		    }
+		);
+		 */ 
 		
+	    var rs ;
+        var array = new Array();
+        for(var i = 0;i<rs.length;i++){
+        	var option = {};
+        	option.id = rs[i].childNodes[1].firstChild.data;
+        	option.text = rs[i].childNodes[1].firstChild.data;
+        	array.push(option);
+        }					
+        grid4 =  $("#itemsSelect").ligerComboBox({ 
+         	data: array, 
+            	onSelected: function(newValue){
+            		alert(newValue);
+            	},
+            	emptyText: '<所有事件类型>',
+            	isMultiSelect: false,
+            	highLight:true,
+            	Width: 280
+        });
+        
 	});
+	function customerSearch(){
+		grid.options.data = $.extend(true, {}, customerJson);
+        grid.loadData(customer_getWhere());
+	}
+	function customer_getWhere()
+    {
+        if (!grid) return null;
+        var clause = function (rowdata, rowindex)
+        {
+            var key = $("#customerText").val();
+            return rowdata.customername.indexOf(key) > -1;
+        };
+        return clause; 
+    }
+ 	function testObjectiveSearch(){
+	 	var row = grid.getSelectedRow();
+	    if (!row) { 
+	    	alert('客户信息行未选中'); return; 
+	    }
+		grid2.options.data = $.extend(true, {}, testObjectiveJson);
+        grid2.loadData(testObjective_getWhere());
+	}
+	function testObjective_getWhere()
+    {
+        if (!grid2) return null;
+        var clause = function (rowdata, rowindex)
+        {
+            var key = $("#testText").val();
+            return rowdata.ylxh.indexOf(key) > -1;
+        };
+        return clause; 
+    }
 	
-function addTestObjective(){}
+//检验目的ajax方法
+function ajaxTestObjective(data){
+	if(data.clientnumber == "AAAAA"){
+		alert("查询本地检验目的表");
+	}else{
+	$.ajax({  
+		 url: '/jsp/sysconf/sysConf.do?method=getInspectionInfo',
+		 dataType: 'json',
+		 data: "customerid=" + data.clientnumber,
+		 type: 'post',  
+		 success:function(datas)  
+		 {     	 	
+			grid2.loadData(datas.result_json);
+			/*
+			testObjectiveJson = JSON.stringify(datas.result_json);   
+			alert(testObjectiveJson);
+			alert(JSON.stringify(customerJson));
+			*/
+			testObjectiveJson = datas.result_json;
+			     	
+		 },
+		 error:function(){
+			alert(4);
+		 }
+		});	
+	}
+}
+//检验项目ajax方法
+function ajaxTestItems(data){
+	$.ajax({  
+		url: '/jsp/sysconf/sysConf.do?method=getInspectionItem',
+		dataType: 'json',
+		//data: "profiletest="+data.profiletest+"&profiletest2="+data.profiletest2+"&profiletest3="+data.profiletest3,
+		data: "profiletest="+data.profiletest,
+		type: 'post', 
+		success:function(datas)  
+		{
+			grid3.loadData(datas.result_json);
+			testItemJson = datas.result_json;
+        }
+	});
+}
+	
+function addTestObjective(){
+	//$.ligerWindow.show({ target: $("#addTestObjective").clone(), width: 300, height: 400, title:"增加界面" });
+	//$.ligerDialog.open({ height: 300,url: 'addTestObjective.jsp',title:"增加界面" });
+	
+	
+	var row = grid.getSelectedRow();
+    if (!row) { 
+    	alert('客户信息未选中'); 
+    	return; 
+    }
+    else{
+    	$.ligerDialog.open({ height: 400, Width: 350, url: '/jsp/sysconf/sysConf.do?method=viewAddTestObjective&clientnumber='+row.clientnumber,title:"增加界面" });
+    
+    }
+}
 
-function modifyTestObjective(){}
 
-function deleteTestObjective(){}
+function modifyTestObjective(){
+	//1$.ligerWindow.show({ target: $("#updateTestObjective").clone(), width: 300, height: 400, title:"修改界面" });
+	var row = grid2.getSelectedRow();
+    if (!row) { 
+    	alert('请选择需要修改的检验目的行'); 
+    	return; 
+    }
+    else{
+    	alert(row.ylmc+':'+row.professionalgroup+':'+row.inspectionsection);
+    	//访问控制器之前打印可以显示中文，到了控制器就编乱码了
+    	//$.ligerDialog.open({ height: 400, Width: 350,url: '/jsp/sysconf/sysConf.do?method=viewUpdateTestObjective&id='+row.id+'&ylxh='+row.ylxh+'&ylmc='+row.ylmc+'&customerid='+row.customerid+'&profiletest='+row.profiletest+'&professionalgroup='+row.professionalgroup+'&inspectionsection='+row.inspectionsection,title:"修改界面" });
+    	$.ligerDialog.open({ height: 400, Width: 350,url: '/jsp/sysconf/sysConf.do?method=viewUpdateTestObjective&id='+row.id,title:"修改界面" });
+    
+    }
+}
+function deleteTestObjective(){
+	var row = grid2.getSelectedRow();
+    if (!row) { 
+      alert('请选择需要删除的行'); 
+      return; 
+    }
+    else{
+      	if(confirm('确认删除'+row.ylmc+'？'))
+		{
+			$.ajax({  
+	      	url: '/jsp/sysconf/sysConf.do?method=deleteTestObjective',
+			dataType: 'json',
+			data:'id='+row.id+'&customerid='+row.customerid,
+			type: 'post', 
+			success:function(datas)  
+			{
+				grid2.loadData(datas.result_json);
+				testObjectiveJson = datas.result_json;
+				alert(datas.success);
+	        },
+	        error:function(){
+	        	alert("删除失败！");
+	        }
+	      	});
+		} 
+      	return;
+      }
+}
+function itemsAdd(){
+	  var indexId = $('#itemsSelect option:selected').val();
+      var row = grid2.getSelectedRow();
+      if (!row) { alert('检验目的行未选中'); return; }
+      //alert(row.profiletest.indexOf(indexId)+"测试用");
+      //可以减少后台更新
+      if(-1 != row.profiletest.indexOf(indexId)){
+      	alert("该检验项目已经存在！");
+      	return;
+      }
+ 	  $.ajax({  
+		url: '/jsp/sysconf/sysConf.do?method=addTestItems',
+		dataType: 'json',
+		data:'customerid='+row.customerid+'&indexId='+indexId+'&ylxh='+row.ylxh+'&profiletest='+row.profiletest,
+		type: 'post', 
+		success:function(datas)  
+		{
+			grid3.loadData(datas.result_json);
+			testItemJson = datas.result_json;
+			//重载数据  --重新加载会丢失当前页面的选中行状态
+			//grid2.loadData(datas.result_json2);
+			//testObjectiveJson = datas.result_json2;
+			//更新行 --行更新当前行数据,行状态还会存在
+            if (!row) { alert('请选择行'); return; }
+            grid2.updateCell('profiletest',row.profiletest+indexId+',',row);
+        }
+	  });     
+}
+
 </script>
 
 <style type="text/css">
@@ -128,24 +382,130 @@ body {
 </style>
 </head>
 <body style="padding:10px">
+	<div id="addTestObjective" style="width: 200px; margin: 3px; display: none;">
+		<form id="form">
+		<table cellpadding="0" cellspacing="0" class="l-table-edit" >
+            <tr>
+                <td align="right" class="l-table-edit-td">id:</td>
+                <td align="left" class="l-table-edit-td"><input name="id" type="text" id="form_id" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">客户编号:</td>
+                <td align="left" class="l-table-edit-td"><input name="customerid" type="text" id="form_customerid" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">医疗序号:</td>
+                <td align="left" class="l-table-edit-td"><input name="ylxh" type="text" id="form_ylxh" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr>   
+            <tr>
+                <td align="right" class="l-table-edit-td">医疗名称:</td>
+                <td align="left" class="l-table-edit-td"><input name="ylmc" type="text" id="form_ylmc" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+				<td align="left"></td>
+            </tr> 
+            <tr>
+                <td align="right" class="l-table-edit-td">检验项目编号:</td>
+                <td align="left" class="l-table-edit-td"><input name="profiletest" type="text" id="form_profiletest" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr> 
+             <tr>
+                <td align="right" class="l-table-edit-td">专业组:</td>
+                <td align="left" class="l-table-edit-td"><input name="professionalgroup" type="text" id="form_professionalgroup" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr> 
+            <tr>
+                <td align="right" class="l-table-edit-td">检验段:</td>
+                <td align="left" class="l-table-edit-td"><input name="inspectionsection" type="text" id="form_inspectionsection" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">
+                	<input type="button" value="确认增加" onclick="addTestObjectiveButton()"/>
+                </td>
+                <td align="left" class="l-table-edit-td">
+                    <input type="button" value="重置"/>
+                </td>
+                <td align="left"></td>
+            </tr>
+        </table>
+		</form> 
+    </div>
+    <div id="updateTestObjective" style="width: 200px; margin: 3px; display: none;">
+		<form id="form2">
+		<table cellpadding="0" cellspacing="0" class="l-table-edit" >
+            <tr>
+                <td align="right" class="l-table-edit-td">id:</td>
+                <td align="left" class="l-table-edit-td"><input name="id" type="text" id="id" value="1" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">医疗序号:</td>
+                <td align="left" class="l-table-edit-td"><input name="ylxh" type="text" id="ylxh" value="2" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr>   
+            <tr>
+                <td align="right" class="l-table-edit-td">医疗名称:</td>
+                <td align="left" class="l-table-edit-td"><input name="ylmc" type="text" id="ylmc" value="3" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+				<td align="left"></td>
+            </tr> 
+            <tr>
+                <td align="right" class="l-table-edit-td">检验项目编号:</td>
+                <td align="left" class="l-table-edit-td"><input name="profiletest" type="text" id="profiletest" value="4" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr> 
+             <tr>
+                <td align="right" class="l-table-edit-td">专业组:</td>
+                <td align="left" class="l-table-edit-td"><input name="professionalgroup" type="text" id="professionalgroup" value="5" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr> 
+             <tr>
+                <td align="right" class="l-table-edit-td">检验段:</td>
+                <td align="left" class="l-table-edit-td"><input name="inspectionsection" type="text" id="inspectionsection" value="6" ltype="text" validate="{required:true,minlength:3,maxlength:10}" /></td>
+                <td align="left"></td>
+            </tr> 
+            <tr>
+                <td align="right" class="l-table-edit-td">
+                	<input type="button" value="确认修改"/>
+                </td>
+                <td align="left" class="l-table-edit-td">
+                    <input type="button" value="重置"/>
+                </td>
+                <td align="left"></td>
+            </tr>
+        </table>
+		</form> 
+    </div>
 	<div id="layout1">
 		<div position="left" title="客户信息">
-			<input type="text" style="margin:5px;"/>
-			<input type="button" value="搜索" class="l-button"/>
+			<input id="customerText" type="text" style="margin:5px;"/>
+			<input id="cButton" type="button" value="搜索" class="l-button" onclick="customerSearch();"/>
 			<div id="customerData"></div>
 		</div>
 		
 		<div position="center" title="检验目的">
-			<input type="text" style="margin:5px"/>
-			<input type="button" value="搜索" class="l-button"/>
+			<input id="testText" type="text" style="margin:5px"/>
+			<input id="tButton" type="button" value="搜索" class="l-button" onclick="testObjectiveSearch()";/>
 			<div id="toptoolbar"></div>
 			<div id="testObjective"></div>
 		</div>
 		
 		<div position="right" title="检验项目">
-			<input type="text" style="margin:5px"/>
-			<input type="button" value="添加" class="l-button"/>
+			<select id="itemsSelect" name="indexId" style="width: 200px;">
+				<option value="">请选择检验项目</option>
+				<c:forEach items="${items_list}" var="tinfo">
+					<option value="${tinfo.indexId}">${tinfo.name}</option>
+				</c:forEach>
+			</select><br/>
+			<input id="searchIndex" type="text"/>
+			<input id="iButton" type="button" value="添加" class="l-button" onclick="itemsAdd()"/>
+			<div id="testItems"></div>
 		</div>
 	</div>
 </body>
+<script type="text/javascript">
+	customerJson = ${customer_json};
+	autocompleteJson = ${items_json};
+</script>
 </html>

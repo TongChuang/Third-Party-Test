@@ -1,15 +1,24 @@
 package sysconf;
 
+import java.io.FileNotFoundException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import sysconf.xml.XmlWriter;
+import sysconf.xml.XmlWriterImpl;
+
 import common.SIEContext;
+import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBaseInfo;
+import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfTestitems;
+import common.datamodel.LTestitem;
 import common.util.CommonUtil;
 import common.xmlmodel.SystemConfigSetting;
 import common.xmlmodel.SystemConfigTable;
+
 import dataaccess.DataAccessApi;
-import sysconf.xml.XmlWriter;
-import sysconf.xml.XmlWriterImpl;
-import java.io.FileNotFoundException;
-import java.util.*;
 
 
 
@@ -91,5 +100,87 @@ public class SysConfApiImpl
 	
 	public List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state) {
 		return dataAccessApi.getCustomerInfoByCnameState(customername,state);
+	}
+	/**
+	 * 检验信息
+	 */
+	@Override
+	public  List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid){
+		return dataAccessApi.getCustomerInfoByNo(clientnumber,customerid);
+	}
+	@Override
+	public  List<DsfLYlxhdescribe> getYlxhdescribe(String customerid){
+		return dataAccessApi.getYlxhdescribe(customerid);
+	}
+	public List<DsfLYlxhdescribe> getYlxhdescribeById(String id){
+		return dataAccessApi.getYlxhdescribeById(id);
+	}
+	@Override
+	public  List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc){
+		return dataAccessApi.getYlxhdescribeByNo(ylxh,ylmc);
+	}
+	@Override
+	public  void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+		dataAccessApi.updateYlxhdescribe(lYlxhdescribe );
+	}
+	@Override
+	public  void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+		dataAccessApi.addYlxhdescribe(lYlxhdescribe);
+	}
+	@Override
+	public void deleteYlxhdescribe(BigDecimal id){
+		dataAccessApi.deleteYlxhdescribe(id);
+	}
+	@Override
+	public List<DsfTestitems> getTestItemsByNo(String proList){
+		return dataAccessApi.getTestItemsByNo(proList);
+	}
+	@Override
+	public List<DsfTestitems> getTestItems(){
+		return dataAccessApi.getTestItems();
+	}
+	@Override
+	public void saveTestObjective(String ylxh, String profiletest){
+		dataAccessApi.saveTestObjective(ylxh, profiletest);
+	}
+	@Override
+	public String getSequence(String seqName){
+		return dataAccessApi.getSequence(seqName);
+	}
+	/**
+	 * 检验项目对照
+	 */
+	@Override
+	public List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname){
+		return dataAccessApi.getControltestitemsByNo(customeritems,customeritemsname);
+	}
+	@Override
+	public List<DsfControltestitems> getControltestitems(String customerid){
+		return dataAccessApi.getControltestitems(customerid);
+	}
+	@Override
+	public List<DsfControltestitems> getControltestitemsById(String id){
+		return dataAccessApi.getControltestitemsById(id);
+	}
+	@Override
+	public List<LTestitem> getLocalTestItems(){
+		return dataAccessApi.getLocalTestItems();
+	}
+	@Override
+	public List<LTestitem> getLocalTestItemsByNo(String customerid){
+		return dataAccessApi.getLocalTestItemsByNo(customerid);
+	}
+	
+	@Override
+	public void saveAll(List<DsfControltestitems> dcttList){
+		dataAccessApi.saveAll(dcttList);
+	}
+	@Override
+	public void saveData(Object t,String tableName){
+		dataAccessApi.saveData(t,tableName);
+	}
+	@Override
+	public List<LTestitem> getTestItemsByIndexId(String indexId){
+		return dataAccessApi.getTestItemsByIndexId(indexId);
 	}
 }

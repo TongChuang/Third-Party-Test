@@ -425,4 +425,11 @@ public class LTestitem implements java.io.Serializable {
 		this.dictionaries = dictionaries;
 	}
 
+	@Override
+	public String toString() {
+		return "LTestitem [ indexId="+indexId+
+				"name=" + name
+				+"]";
+	}
+
 }

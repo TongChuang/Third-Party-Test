@@ -1,6 +1,6 @@
 package controller;
 
-import java.io.File;	
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -39,16 +38,17 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
-import com.sun.org.apache.commons.beanutils.BeanUtils;
-
+import sysconf.SysConfApi;
 import updown.UpDownApi;
 
+import com.sun.org.apache.commons.beanutils.BeanUtils;
 import common.SIEBeanFactory;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
-import common.datamodel.DsfTestitems;
 import common.datamodel.DsfProcess;
+import common.datamodel.DsfTestitems;
 import common.datamodel.LSample;
+import common.datamodel.LTestobjective;
 import common.datamodel.LTestresult;
 import common.util.CommonUtil;
 import common.util.DateUtil;
@@ -58,8 +58,8 @@ import common.util.FtpOperUtil;
 import common.util.PubJsonUtil;
 import common.util.XmlUtil;
 import common.webmodel.Base_TestItem_XML;
-import common.webmodel.Process_XML;
 import common.webmodel.DataSet_XML;
+import common.webmodel.Process_XML;
 import common.webmodel.SampleInfoList_XML;
 import common.webmodel.SampleInfo_XML;
 import common.webmodel.TestItem_XML;
@@ -69,6 +69,7 @@ import common.webmodel.Testresult_Xml;
 import common.xmlmodel.SystemConfigSetting;
 
 import dataaccess.DataAccessApi;
+import dataaccess.dao.SysConfDao;
 
 public class UpDownController extends MultiActionController {
 	private Logger logger = null;
@@ -111,14 +112,68 @@ public class UpDownController extends MultiActionController {
 	}
 	
 	public void getSampleInfoByBarCode(HttpServletRequest request, HttpServletResponse response){
+		String resultJson = "";
+		String sampletJson = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to getSampleInfoByBarCode ")));
-			String barcode = request.getParameter("barcode");
-			LSample lSample = upDownApi.getSampleByBarCode(barcode);
+			//String barcode = request.getParameter("barcode");
+			String barcode = "11S36200404ZZE0041P60N";
+			//System.out.println("扫描枪的扫描号码:"+barcode);
+			//String customerid = barcode.substring(0, 5);
+			String customerid = "A1600";
+			//根据本地条码号获取样本信息
+			LSample lSample = null;
+			List<LSample> lsList = upDownApi.getSamplesByBarCode(barcode);
+			System.out.println("根据本地条码号获取样本信息"+lsList);
+			if(null!=lsList&&lsList.size()>0){
+				lSample = lsList.get(0);
+			}
+			System.out.println("根据条码查询样本信息："+lSample);
+			//根据客户id获取Dsf检验目的
+			List<DsfLYlxhdescribe> lYlxhdescribeList = upDownApi.getDsfTestObjectiveById(customerid);
+			lYlxhdescribeList = upDownApi.getDsfTestObjectiveById(customerid);
+			//流水值
+			int num = 0;
+			//流水号
+			String serialNumber = "";
+			//获取当天yyyyMMdd格式的日期字符串
+			String dateString = DateUtil.getFolerDate(new Date());
+			JSONArray jsonArray = new JSONArray();
+			for(LSample ls: lsList){
+				JSONObject jo = new JSONObject();
+				for(DsfLYlxhdescribe ly :lYlxhdescribeList){
+					if(ls.getYlxh().equals(ly.getYlxh())){
+						//重新组织json
+						jo.put("ylxh", ly.getYlxh());
+						jo.put("professionalgroup", ly.getProfessionalgroup());
+						jo.put("inspectionsection", ly.getInspectionsection());
+						jo.put("id", ly.getId());
+						jo.put("ylmc", ly.getYlmc());
+						jo.put("customerid",ly.getCustomerid());
+						jo.put("professiongroup", ly.getProfessionalgroup());
+						jo.put("inspectionsection", ly.getInspectionsection());
+						
+						num = upDownApi.getSeralNumber(dateString+ly.getInspectionsection());
+						num += 1; 
+						//获取流水号
+						serialNumber = dateString + "" +ly.getInspectionsection() +""+ String.format("%04d",num);
+						jo.put("serialnumber", serialNumber);
+						System.out.println("打印流水号："+serialNumber);
+						jsonArray.add(jo);
+						//更新流水号
+						/*
+						ls.setSampleno(serialNumber);
+						upDownApi.saveData(ls, "LSample");
+						*/
+					}
+				}
+			}
+			String jsonresult1 = "{Rows:"+jsonArray.toString()+"}";
+			System.out.println("数据1："+jsonresult1);
 			JSONObject jsonObject = new JSONObject();
 			String sampleJsonString = "";
 			if(null!=lSample){
-				sampleJsonString = PubJsonUtil.bean2json(lSample);
+				sampletJson = PubJsonUtil.bean2json(lSample);
 				String ftpPath = FileStoreUtil.getSamplePic(true,lSample.getDsfcustomerid(),true,false);
 				if("/null/".equals(ftpPath)){
 					request.setAttribute("pic","/resources/images/no-pic.jpg");
@@ -128,9 +183,13 @@ public class UpDownController extends MultiActionController {
 			}else {
 				jsonObject.put("error", "无此条码信息！");
 				jsonObject.put("pic", "/resources/images/top.jpg");
-				sampleJsonString = jsonObject.toString();
+				
 			}
-			
+			System.out.println("数据2："+resultJson);
+			//jsonObject.put("result_json", resultJson);
+			jsonObject.put("sample_json", sampletJson);
+			jsonObject.put("jsonresult1", jsonresult1);
+			sampleJsonString = jsonObject.toString();
 			response.setContentType("application/json;charset=utf-8");     
 			response.getWriter().write(sampleJsonString); 
 			logger.info((Object) (new StringBuilder("End to getSampleInfoByBarCode ")));
@@ -586,7 +645,7 @@ public class UpDownController extends MultiActionController {
 		}
 
 	}
-
+	
 	public ModelAndView queryExpData(HttpServletRequest request, HttpServletResponse response) {
 		List<LTestresult> resutlList = new ArrayList<LTestresult>();
 		String resultString = "";
@@ -597,6 +656,36 @@ public class UpDownController extends MultiActionController {
 			String customerid = request.getParameter("customerid");
 
 			resutlList = upDownApi.queryExpData(beginTime, endTime, customerid);
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			resultString = PubJsonUtil.list2json(resutlList);
+
+			List<DsfCustomerBaseInfo> resultCList = new ArrayList<DsfCustomerBaseInfo>();
+			resultCList = upDownApi.getCustomerInfo();
+
+			logger.info((Object) (new StringBuilder("End to queryExpData")));
+			ModelAndView modelAndView = new ModelAndView("/jsp/downLoadFile/viewDownLoadPage.jsp");
+			modelAndView.addObject("result_json", resultString);
+			modelAndView.addObject("customerInfoList", resultCList);
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+			return null;
+		}
+	}
+	public ModelAndView getQueryResult(HttpServletRequest request, HttpServletResponse response) {
+		List<LTestresult> resutlList = new ArrayList<LTestresult>();
+		String resultString = "";
+		try {
+			logger.info((Object) (new StringBuilder("Begin to queryExpData")));
+			String sampleno = request.getParameter("sampleno");
+
+			resutlList = upDownApi.getLTestresultByNo(sampleno);
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			resultString = PubJsonUtil.list2json(resutlList);

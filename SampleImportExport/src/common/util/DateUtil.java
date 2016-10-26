@@ -262,5 +262,9 @@ public class DateUtil {
 
 		System.out.println(DateUtil.getYesTodayBeginTime());
 		System.out.println(DateUtil.getYesTodayEndTime());
+		System.out.println(DateUtil.getFolerDate(new Date()));
+		
+		String dateString = DateUtil.getFolerDate(new Date());
+		System.out.println(dateString + "" +"ABA" +""+ String.format("%04d",1));
 	}
 }

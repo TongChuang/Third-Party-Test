@@ -90,4 +90,12 @@ public class DsfControltestitems implements java.io.Serializable {
 		this.localitemsname = localitemsname;
 	}
 
+	@Override
+	public String toString() {
+		return "DsfControltestitems [id=" + id + ", customerid=" + customerid
+				+ ", localitems=" + localitems + ", customeritems="
+				+ customeritems + ", customeritemsname=" + customeritemsname
+				+ ", localitemsname=" + localitemsname + "]";
+	}
+
 }

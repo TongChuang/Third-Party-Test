@@ -87,14 +87,28 @@ public class UpDownApiImpl implements UpDownApi {
 	public LSample getSampleByBarCode(String barcode){
 		return dataAccessApi.getSampleByBarCode( barcode);
 	}
-	
+	public List<LSample> getSamplesByBarCode(String barcode){
+		return dataAccessApi.getSamplesByBarCode( barcode);
+	}
 	public List getCustomerInfo(String cid){
 		return dataAccessApi.getCustomerInfoList(cid);
 	}
 	public DsfCustomerBaseInfo getCustomerInfoById(String customerid){
 		return dataAccessApi.getCustomerInfoById(customerid);
 	}
-
-	
-
+	public List<LTestresult> getLTestresultByNo(String sampleno){
+		return dataAccessApi.getLTestresultByNo(sampleno);
+	}
+	public List<DsfLYlxhdescribe> getDsfTestObjectiveById(String customerid){
+		return dataAccessApi.getDsfTestObjectiveById(customerid);
+	}
+	public void saveAllSerialNumber(List<DsfLYlxhdescribe> dydList){
+		dataAccessApi.saveAllSerialNumber(dydList);
+	}
+	public int getSeralNumber(String dateAndSection){
+		return dataAccessApi.getSeralNumber(dateAndSection);
+	}
+	public List<String> getInspectionSectionByYLXH(String ylxh, String customerid){
+		return dataAccessApi.getInspectionSectionByYLXH(ylxh,customerid);
+	}
 }

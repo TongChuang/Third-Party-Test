@@ -17,6 +17,8 @@ public class DsfLYlxhdescribe implements java.io.Serializable {
 	private String profiletest3;
 	private String ylmc;
 	private String customerid;
+	private String inspectionsection;
+	private String professionalgroup;
 
 	// Constructors
 
@@ -26,6 +28,22 @@ public class DsfLYlxhdescribe implements java.io.Serializable {
 
 	public BigDecimal getId() {
 		return this.id;
+	}
+
+	public DsfLYlxhdescribe(BigDecimal id, String ylxh, String profiletest,
+			String profiletest2, String profiletest3, String ylmc,
+			String customerid, String inspectionsection,
+			String professionalgroup, String serialnumber) {
+		super();
+		this.id = id;
+		this.ylxh = ylxh;
+		this.profiletest = profiletest;
+		this.profiletest2 = profiletest2;
+		this.profiletest3 = profiletest3;
+		this.ylmc = ylmc;
+		this.customerid = customerid;
+		this.inspectionsection = inspectionsection;
+		this.professionalgroup = professionalgroup;
 	}
 
 	public DsfLYlxhdescribe(BigDecimal id, String ylxh, 
@@ -94,5 +112,30 @@ public class DsfLYlxhdescribe implements java.io.Serializable {
 		this.customerid = customerid;
 	}
 
+	public String getInspectionsection() {
+		return inspectionsection;
+	}
 
+	public void setInspectionsection(String inspectionsection) {
+		this.inspectionsection = inspectionsection;
+	}
+
+	public String getProfessionalgroup() {
+		return professionalgroup;
+	}
+
+	public void setProfessionalgroup(String professionalgroup) {
+		this.professionalgroup = professionalgroup;
+	}
+
+
+	@Override
+	public String toString() {
+		return "DsfLYlxhdescribe [id=" + id + ", ylxh=" + ylxh
+				+ ", profiletest=" + profiletest + ", profiletest2="
+				+ profiletest2 + ", profiletest3=" + profiletest3 + ", ylmc="
+				+ ylmc + ", customerid=" + customerid + ", inspectionsection="
+				+ inspectionsection + ", professionalgroup="
+				+ professionalgroup + ", serialnumber=" + "]";
+	}
 }

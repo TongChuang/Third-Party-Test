@@ -43,6 +43,9 @@
 				<value>common/datamodel/LTestresult.hbm.xml</value>
 				<value>common/datamodel/DsfControltestitems.hbm.xml</value>
 				<value>common/datamodel/DsfCustomerBarCode.hbm.xml</value>
+				<value>common/datamodel/LTestitem.hbm.xml</value>
+				<value>common/datamodel/LTestobjective.hbm.xml</value>
+				
 			</list>
 		</property>
 		<!-- 定义Hibernate的SessionFactory的属性 -->
