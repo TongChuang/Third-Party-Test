@@ -41,6 +41,7 @@ public interface DataAccessApi
 	public abstract List<DsfTestitems> getDsfTestItemsByTestItem(String dTestitems,String customerid);
 	public abstract List<LTestitem> getLTestItemsByTestItem(String testitems,String customerid);
 	public abstract List<LTestresult> getLTestresultByNo(String sampleno);
+	public abstract List<LSample> getSampleByTime(String beginTime,String endTime,String customerid);
 	/**
 	 * 如果KEY等于local就是本地转为客户的，否则就是客户的转为本地的
 	 * @param key
@@ -105,7 +106,7 @@ public interface DataAccessApi
 	 */
 	public abstract List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname);
 	public abstract List<DsfControltestitems> getControltestitems(String customerid);
-	public abstract List<DsfControltestitems> getControltestitemsById(String id);
+	public abstract List<DsfControltestitems> getControltestitemsById(BigDecimal id);
 	public abstract List<LTestitem> getLocalTestItems();
 	public abstract List<LTestitem> getLocalTestItemsByNo(String customerid);
 	public abstract void saveAll(List<DsfControltestitems> dcttList);

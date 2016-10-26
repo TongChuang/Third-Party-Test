@@ -232,7 +232,7 @@ h4 {
 
 <body>
 	<div id="layout1">
-		<div position="center" title="标题">
+		<div position="center" title="样本信息">
 			<form class="l-form" ligeruiid="form1" id="form1" name="form1"
 				action="" method="post">
 				<input type="hidden" id="msg" name="msg" value="${msg}">
@@ -268,7 +268,7 @@ h4 {
 											style="width: 170px;">
 											<option value="">请选择客户</option>
 											<c:forEach items="${customerInfoList}" var="cinfo">
-												<option value="${cinfo.customerid}">${cinfo.customername}</option>
+												<option value="${cinfo.clientnumber}">${cinfo.customername}</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -306,15 +306,12 @@ h4 {
 			</form>
 			<div id="maingridData" style="margin: 0; padding: 0"></div>
 		</div>
-		<div position="right">
+		<div position="right"  title="检验结果">
 			<div id="maingridResult" style="margin: 0; padding: 0"></div>
 		</div>
 	</div>
 </body>
 </html>
 <script type="text/javascript">
-	sampleResultJson = $
-	{
-		result_json
-	};
+	sampleResultJson = ${result_json};
 </script>

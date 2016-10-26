@@ -119,11 +119,9 @@ public class UpDownController extends MultiActionController {
 		String sampletJson = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to getSampleInfoByBarCode ")));
-			//String barcode = request.getParameter("barcode");
-			String barcode = "11S36200404ZZE0041P60N";
+			String barcode = request.getParameter("barcode");
 			//System.out.println("扫描枪的扫描号码:"+barcode);
-			//String customerid = barcode.substring(0, 5);
-			String customerid = "A1600";
+			String customerid = barcode.substring(0, 5);
 			//根据本地条码号获取样本信息
 			LSample lSample = null;
 			List<LSample> lsList = upDownApi.getSamplesByBarCode(barcode);
@@ -659,7 +657,7 @@ public class UpDownController extends MultiActionController {
 	}
 	
 	public ModelAndView queryExpData(HttpServletRequest request, HttpServletResponse response) {
-		List<LTestresult> resutlList = new ArrayList<LTestresult>();
+		List<LSample> resutlList = new ArrayList<LSample>();
 		String resultString = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to queryExpData")));
@@ -667,7 +665,7 @@ public class UpDownController extends MultiActionController {
 			String endTime = request.getParameter("endTime");
 			String customerid = request.getParameter("customerid");
 
-			resutlList = upDownApi.queryExpData(beginTime, endTime, customerid);
+			resutlList = upDownApi.getSampleByTime(beginTime, endTime, customerid);
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			resultString = PubJsonUtil.list2json(resutlList);

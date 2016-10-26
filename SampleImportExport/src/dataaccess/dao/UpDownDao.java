@@ -54,17 +54,30 @@ public class UpDownDao extends HibernateDaoSupport {
 			return ((List) (new Vector()));
 		}
 	}
-	public List<LTestresult> queryExpData(String beginTime,String endTime,String customerid){
+	public List<LSample> getSampleByTime(String beginTime,String endTime,String customerid){
 		String sqlString = "";
 		if("".equals(beginTime)||"".equals(endTime)||null!=customerid){
-			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.sampleno and s.dsfcustomerid='"+customerid+"'";
+			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.id and s.dsfcustomerid='"+customerid+"'";
 		}else{
 			//sqlString = "select  from LProcess p join LSample s on p.sample_id = s.id where p.executetime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
-			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.sampleno and s.dsfcustomerid='"+customerid+"'"+
+			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.id and s.dsfcustomerid='"+customerid+"'"+
 					"and p.collectiontime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
 		}
 		try {
 			return  getSession().createSQLQuery(sqlString).addEntity("s",LSample.class).list();
+		} catch (DataAccessException e) {
+			return ((List) (new Vector()));
+		}
+	}
+	public List<LTestresult> queryExpData(String beginTime,String endTime,String customerid){
+		String sqlString = "";
+		if("".equals(beginTime)||"".equals(endTime)){
+			sqlString = "from LTestresult where customerid='"+customerid+"' order by measuretime desc";
+		}else{
+			sqlString = "from LTestresult where customerid='"+customerid+"' and measuretime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss') order by measuretime desc";
+		}
+		try {
+			return getHibernateTemplate().find(sqlString);
 		} catch (DataAccessException e) {
 			return ((List) (new Vector()));
 		}

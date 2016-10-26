@@ -26,6 +26,8 @@ public interface UpDownApi
 	public abstract void saveData(Object t,String tableName);
 	public abstract void saveDataByList(List <Object>objectList,String tableName);
 	public abstract List<LTestresult> queryExpData(String beginTime,String endTime,String customerid);
+	public abstract List<LSample> getSampleByTime(String beginTime,String endTime,String customerid);
+	
 	/**
 	 * 如果KEY等于local就是本地转为客户的，否则就是客户的转为本地的
 	 * @param key
@@ -48,6 +50,7 @@ public interface UpDownApi
 	
 	public abstract List<DsfLYlxhdescribe> getDsfTestObjectiveById(String customerid);
 	public abstract List<LTestresult> getLTestresultByNo(String sampleno);
+	
 	
 	//前处理
 	//批量更新流水号

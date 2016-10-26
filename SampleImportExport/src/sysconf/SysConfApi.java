@@ -48,7 +48,7 @@ public interface SysConfApi
 	 */
 	public abstract List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname);
 	public abstract List<DsfControltestitems> getControltestitems(String customerid);
-	public abstract List<DsfControltestitems> getControltestitemsById(String id);
+	public abstract List<DsfControltestitems> getControltestitemsById(BigDecimal id);
 	public abstract List<LTestitem> getLocalTestItems();
 	public abstract void saveAll(List<DsfControltestitems> dcttList);
 	public abstract List<LTestitem> getLocalTestItemsByNo(String customerid);

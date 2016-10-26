@@ -227,8 +227,8 @@
 			grid3.loadData(datas.result_json);
 			testItemJson = datas.result_json;
 			//重载数据  --重新加载会丢失当前页面的选中行状态
-			grid2.loadData(datas.result_json);
-			controlJson = datas.result_json;
+			grid2.loadData(datas.result_json2);
+			controlJson = datas.result_json2;
 			//更新行 --行更新当前行数据,行状态还会存在
             //if (!row) { alert('请选择行'); return; }
             //grid2.updateCell('profiletest',row.profiletest+indexId+',',row);

@@ -178,12 +178,12 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}		
 	}
-	public List<DsfControltestitems> getControltestitemsByid(String id){
+	public List<DsfControltestitems> getControltestitemsById(BigDecimal id){
 		String sqlString = "";
 		if("".equals(id)){
 			
 		}else{
-			sqlString = "from DsfControltestitems where id = '"+id+"'";
+			sqlString = "from DsfControltestitems where id = "+id;
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);

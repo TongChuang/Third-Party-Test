@@ -57,6 +57,9 @@ public class UpDownApiImpl implements UpDownApi {
 	public List<LTestresult> queryExpData(String beginTime,String endTime,String customerid){
 		return dataAccessApi.queryExpData(beginTime,endTime,customerid);
 	}
+	public List<LSample> getSampleByTime(String beginTime,String endTime,String customerid){
+		return dataAccessApi.getSampleByTime(beginTime,endTime,customerid);
+	}
 	public List getExpSampleNoData(String beginTime,String endTime,String customerid){
 		return dataAccessApi.getExpSampleNoData(beginTime,endTime,customerid); 
 	}

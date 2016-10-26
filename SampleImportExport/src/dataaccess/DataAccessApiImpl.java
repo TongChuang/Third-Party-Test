@@ -102,7 +102,10 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		return updownDao.queryExpData(beginTime,endTime,customerid);
 	}
 	
-
+	public List<LSample> getSampleByTime(String beginTime,String endTime,String customerid){
+		return updownDao.getSampleByTime(beginTime,endTime,customerid);
+	}
+	
 	public List getExpSampleNoData(String beginTime,String endTime,String customerid){
 		return updownDao.getExpSampleNoData(beginTime,endTime,customerid);
 	}
@@ -220,8 +223,8 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		public List<DsfControltestitems> getControltestitems(String customerid){
 			return sysconfDao.getControltestitems(customerid);
 		}
-		public List<DsfControltestitems> getControltestitemsById(String id){
-			return sysconfDao.getControltestitems(id);
+		public List<DsfControltestitems> getControltestitemsById(BigDecimal id){
+			return sysconfDao.getControltestitemsById(id);
 		}
 		public List<LTestitem> getLocalTestItems(){
 			return sysconfDao.getLocalTestItems();

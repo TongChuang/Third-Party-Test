@@ -47,10 +47,6 @@
 	var manager;
 	var testObjectiveJson = null;
 	$(function() {
-		/*	
-		var str = "A1600000000001";
-		alert(str.substr(0, 5))
-		*/
 		manager = $("#maingrid").ligerGrid({
 			columns : [{
 				display : 'id',

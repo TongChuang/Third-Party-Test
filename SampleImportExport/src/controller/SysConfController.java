@@ -701,7 +701,8 @@ public class SysConfController extends MultiActionController {
 			String indexId = request.getParameter("indexId");
 			System.out.println("id:"+id+"customerid:"+customerid);
 			//根据id可以获取选中行唯一的对照表信息
-			List<DsfControltestitems> dctiList = sysConfApi.getControltestitemsById(id);
+			BigDecimal bigId = new BigDecimal(id);
+			List<DsfControltestitems> dctiList = sysConfApi.getControltestitemsById(bigId);
 			System.out.println(dctiList);
 			//
 			List<LTestitem> ltocList = sysConfApi.getTestItemsByIndexId(indexId);
@@ -711,8 +712,8 @@ public class SysConfController extends MultiActionController {
 				customeritemsname = ltocList.get(0).getName();
 			}
 			if(null!=dctiList&&dctiList.size()>0){
-				dctiList.get(0).setCustomeritems(indexId);
-				dctiList.get(0).setCustomeritemsname(customeritemsname);
+				dctiList.get(0).setLocalitems(indexId);
+				dctiList.get(0).setLocalitemsname(customeritemsname);
 			}
 			//更新
 			sysConfApi.saveData(dctiList.get(0), "DsfControltestitems");

@@ -159,7 +159,7 @@ public class SysConfApiImpl
 		return dataAccessApi.getControltestitems(customerid);
 	}
 	@Override
-	public List<DsfControltestitems> getControltestitemsById(String id){
+	public List<DsfControltestitems> getControltestitemsById(BigDecimal id){
 		return dataAccessApi.getControltestitemsById(id);
 	}
 	@Override
