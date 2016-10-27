@@ -58,12 +58,12 @@ public class SysConfDao extends HibernateDaoSupport {
 	 */
 	public List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid){
 		String sqlString = "";
-		if("".equals(clientnumber)||"".equals(customerid)){
+		if("".equals(clientnumber)&&"".equals(customerid)){
 			sqlString = "from DsfCustomerBaseInfo";
-		}else{
-			//sqlString = "from DsfCustomerBaseInfo where clientnumber='"+clientnumber+"' or customerid='"+customerid+"'";
+		}else if(!"".equals(clientnumber)&&!"".equals(customerid)){
 			sqlString = "from DsfCustomerBaseInfo where clientnumber like '%"+clientnumber+"%' or customerid like'%"+customerid+"%'";
-			
+		}else {
+			sqlString = "from DsfCustomerBaseInfo where customerid ='"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);

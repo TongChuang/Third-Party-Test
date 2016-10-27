@@ -845,7 +845,11 @@ public class SysConfController extends MultiActionController {
 			
 			sysConfApi.saveCustomerInfo(dcbi);
 			
+			cList = sysConfApi.getCustomerInfoByNo("", "");
+			String cjson = PubJsonUtil.list2json(cList);
 			jsonObject.put("success", "保存数据成功！");
+			jsonObject.put("cjson", cjson);
+			System.out.println(cjson);
 			response.setContentType("application/json;charset=utf-8");     
 			response.getWriter().write(jsonObject.toString()); 
 			
@@ -895,7 +899,8 @@ public class SysConfController extends MultiActionController {
 			
 			SystemConfigSetting sysConfig = sysConfApi.getSystemConfig();
 			request.setAttribute("defaultPassword", sysConfig.getDefaultPassword());
-			request.setAttribute("ftpRoot", sysConfig.getFtpRoot());
+			request.setAttribute("upftpRoot", sysConfig.getUpftpRoot());
+			request.setAttribute("downftpRoot", sysConfig.getDownftpRoot());
 			request.setAttribute("updateServerAddress", sysConfig.getUpdateServerAddress());
 			request.setAttribute("webserviceUrl", sysConfig.getWebserviceUrl());
 			
@@ -925,10 +930,15 @@ public class SysConfController extends MultiActionController {
 			if (request.getParameter("defaultPassword") != null){
 				defaultPassword = request.getParameter("defaultPassword");
 			}
-			String ftpRoot = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0)).getFtpRoot();
-			if (request.getParameter("ftpRoot") != null) {
-				ftpRoot = request.getParameter("ftpRoot");
+			String upftpRoot = ((SystemConfigSetting) SIEContext
+					.getSystemConfigTable().getConfigs().get(0)).getUpftpRoot();
+			if (request.getParameter("upftpRoot") != null) {
+				upftpRoot = request.getParameter("upftpRoot");
+			}
+			String downftpRoot = ((SystemConfigSetting) SIEContext
+					.getSystemConfigTable().getConfigs().get(0)).getDownftpRoot();
+			if (request.getParameter("downftpRoot") != null) {
+				downftpRoot = request.getParameter("downftpRoot");
 			}
 			String updateServerAddress = ((SystemConfigSetting) SIEContext
 					.getSystemConfigTable().getConfigs().get(0)).getUpdateServerAddress();
@@ -943,7 +953,8 @@ public class SysConfController extends MultiActionController {
 
 			SystemConfigSetting config = new SystemConfigSetting();
 			config.setDefaultPassword(defaultPassword);
-			config.setFtpRoot(ftpRoot);
+			config.setUpftpRoot(upftpRoot);
+			config.setDownftpRoot(downftpRoot);
 			config.setUpdateServerAddress(updateServerAddress);
 			config.setWebserviceUrl(webserviceUrl);
 

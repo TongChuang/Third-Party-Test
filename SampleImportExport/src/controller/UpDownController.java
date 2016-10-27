@@ -215,10 +215,10 @@ public class UpDownController extends MultiActionController {
 		        String uploadpath = FileStoreUtil.getSamplePic(true,lSample.getDsfcustomerid(),true,false);
 		        FileUtils.copyInputStreamToFile(file.getInputStream(), new File(uploadpath, newFileName)); 
 		        SystemConfigSetting config = SIEBeanFactory.getSysConfApi().getSystemConfig();
-		        String ftpRoot = config.getFtpRoot();
+		        String ftpRoot = config.getUpftpRoot();
 		    	File uploadFile = new File(uploadpath+newFileName);
 		    	String ftpPath = FileStoreUtil.getSamplePic(true,lSample.getDsfcustomerid(),true,false);
-		    	lSample.setImgurl(ftpRoot+ftpPath+newFileName);
+		    	lSample.setImgurl(config.getDownftpRoot()+ftpPath+newFileName);
 				try {
 					FtpOperUtil.uploadFile(uploadFile, ftpRoot, ftpPath);
 					FileOperHelper.deleteFileAndFolder(uploadpath+newFileName);
@@ -1034,6 +1034,7 @@ public class UpDownController extends MultiActionController {
 					dsftODateList.add(dYlxhdescribe);
 				}
 			}
+			List dsfctiList = new ArrayList();
 			for (Base_TestItem_XML tItemList_XML : tObjectives_XML.getBase_testitemList()) {
 				if (null != tItemList_XML) {
 					if (!tiSet.contains(tItemList_XML.getTestitem())) {
@@ -1047,11 +1048,23 @@ public class UpDownController extends MultiActionController {
 							dsftiDateList.add(dsfTestitems);
 						}
 						newTiSet.add(dsfTestitems.getIndexId());
+						
+						//把该条记录放入List,插入对照表
+						DsfControltestitems  dsfcti = new DsfControltestitems();
+						dsfcti.setCustomerid(customerid);
+						dsfcti.setCustomeritems(tItemList_XML.getTestitem());
+						dsfcti.setCustomeritemsname(tItemList_XML.getName());
+						String dsfctiseqString = dataAccessApi.getSeqString("DSF_CONTROLTESTITEMS_SEQ");
+						dsfcti.setId(new BigDecimal(dsfctiseqString));
+						dsfctiList.add(dsfcti);
 					}
 					// 返回页面的JSON List数据
 					xmlTiMao.put(tItemList_XML.getTestitem(), tItemList_XML);
 				}
 			}
+			//对照表数据添加
+			upDownApi.saveDataByList(dsfctiList, "DsfControltestitems");
+			
 			// 返回页面数据需要的JSON集合
 			for (Map.Entry entry : xmlTiMao.entrySet()) {
 				resultTIlist.add(entry.getValue());
