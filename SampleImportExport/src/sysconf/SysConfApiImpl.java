@@ -87,10 +87,15 @@ public class SysConfApiImpl
 	public List<DsfCustomerBaseInfo> getCustomerInfoList(String  clientnumber){
 		return dataAccessApi.getCustomerInfoList(clientnumber);
 	}
+	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String clientnumber){
+		return dataAccessApi.getCustomerBaseInfoByCustomerId(clientnumber);
+	}	
 	public DsfCustomerBaseInfo getCustomerInfoById(String customerid){
 		return dataAccessApi.getCustomerInfoById(customerid);
 	}
-	
+	public List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername){
+		return dataAccessApi.getCustomerInfoByName(customername);
+	}
 	public void saveCustomerInfo(DsfCustomerBaseInfo dcbi){
 		dataAccessApi.saveCustomerBaseInfo(dcbi);
 	}
@@ -132,8 +137,8 @@ public class SysConfApiImpl
 		dataAccessApi.deleteYlxhdescribe(id);
 	}
 	@Override
-	public List<DsfTestitems> getTestItemsByNo(String proList){
-		return dataAccessApi.getTestItemsByNo(proList);
+	public List<DsfTestitems> getTestItemsByNo(String proList, String customerid){
+		return dataAccessApi.getTestItemsByNo(proList,customerid);
 	}
 	@Override
 	public List<DsfTestitems> getTestItems(){

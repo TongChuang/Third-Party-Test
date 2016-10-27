@@ -163,10 +163,15 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	public DsfCustomerBaseInfo getCustomerInfoById(String customerid){
 		return sysconfDao.getCustomerInfoById(customerid);
 	}
+	public List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername){
+		return sysconfDao.getCustomerInfoByName(customername);
+	}
 	public void deleteCustomerInfo(String customerid){
 		sysconfDao.deleteCustomerInfo(customerid);
 	}
-	
+	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String clientnumber){
+		return sysconfDao.getCustomerBaseInfoByCustomerId(clientnumber);
+	}
 	public List<DsfCustomerBaseInfo> getBaseCustomerInfo(){
 		return queryStatsDao.getBaseCustomerInfo();
 	}
@@ -204,8 +209,8 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		public void deleteYlxhdescribe(BigDecimal id){
 			sysconfDao.deleteYlxhdescribe(id);
 		}
-		public List<DsfTestitems> getTestItemsByNo(String proList){
-			return sysconfDao.getTestItemsByNo(proList);
+		public List<DsfTestitems> getTestItemsByNo(String proList, String customerid){
+			return sysconfDao.getTestItemsByNo(proList,customerid);
 		}
 		public List<DsfTestitems> getTestItems(){
 			return sysconfDao.getTestItems();

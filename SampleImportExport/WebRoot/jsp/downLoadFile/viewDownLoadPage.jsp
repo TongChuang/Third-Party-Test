@@ -216,7 +216,7 @@ h4 {
 	//检验结果ajax方法
 	function ajaxTestResult(data){
 		$.ajax({  
-			url: '/jsp/sysconf/sysConf.do?method=getQueryResult',
+			url: '/jsp/updown/updown.do?method=getQueryResult',
 			dataType: 'json',
 			data: "sampleno="+data.sampleno,
 			type: 'post', 

@@ -100,4 +100,13 @@ public class DsfCustomerBaseInfo implements java.io.Serializable {
 		this.customerKey = customerKey;
 	}
 
+	@Override
+	public String toString() {
+		return "DsfCustomerBaseInfo [customerid=" + customerid
+				+ ", customername=" + customername + ", address=" + address
+				+ ", clientnumber=" + clientnumber + ", sequence=" + sequence
+				+ ", customerKey=" + customerKey + ", basicinfostate="
+				+ basicinfostate + "]";
+	}
+	
 }

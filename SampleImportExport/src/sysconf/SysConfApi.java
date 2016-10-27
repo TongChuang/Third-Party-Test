@@ -27,6 +27,8 @@ public interface SysConfApi
 	public abstract DsfCustomerBaseInfo getCustomerInfoById(String customerid);
 	public abstract void deleteCustomerInfo(String customerid);
 	public abstract void saveCustomerInfo(DsfCustomerBaseInfo dcbi);
+	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String clientnumber);
+	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername);
 	/**
 	 * 获取检验信息
 	 * 
@@ -38,7 +40,7 @@ public interface SysConfApi
 	public abstract void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
 	public abstract void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
 	public abstract void deleteYlxhdescribe(BigDecimal id);
-	public abstract List<DsfTestitems> getTestItemsByNo(String proList);
+	public abstract List<DsfTestitems> getTestItemsByNo(String proList, String customerid);
 	public abstract List<DsfTestitems> getTestItems();
 	public abstract void saveTestObjective(String ylxh, String profiletest);
 	public abstract String getSequence(String seqName);

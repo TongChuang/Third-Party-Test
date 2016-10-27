@@ -66,4 +66,11 @@ public class TestObjectives_XML {
 		this.customerid = customerid;
 	}
 
+	@Override
+	public String toString() {
+		return "TestObjectives_XML [customerid=" + customerid
+				+ ", testObjectList=" + testObjectList + ", base_testitemList="
+				+ base_testitemList + "]";
+	}
+
 }

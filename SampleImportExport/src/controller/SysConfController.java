@@ -415,6 +415,7 @@ public class SysConfController extends MultiActionController {
 			try{
 			logger.info((Object) (new StringBuilder("Begin to getInspectionItem")));
 			String profiletest = request.getParameter("profiletest");
+			String customerid = request.getParameter("customerid");
 			//将传入的参数以','分割并组装成字符串
 			String proList = "";
 			if(!profiletest.equals("")){
@@ -430,7 +431,7 @@ public class SysConfController extends MultiActionController {
 			
 			List<DsfTestitems> resultTList = new ArrayList<DsfTestitems>();
 			//List<DsfTestitems> resultList = new ArrayList<DsfTestitems>();
-			resultTList = sysConfApi.getTestItemsByNo(proList);
+			resultTList = sysConfApi.getTestItemsByNo(proList,customerid);
 			//resultList = sysConfApi.getTestItems();
 			
 			System.out.println(resultJson);
@@ -514,7 +515,7 @@ public class SysConfController extends MultiActionController {
 			//System.out.println("主要编号："+proList);
 			List<DsfTestitems> resultTList = new ArrayList<DsfTestitems>();
 			//查询修改后的数据
-			resultTList = sysConfApi.getTestItemsByNo(proList);
+			resultTList = sysConfApi.getTestItemsByNo(proList,customerid);
 			resultJson = PubJsonUtil.list2json(resultTList);
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("result_json", resultJson);
@@ -774,19 +775,83 @@ public class SysConfController extends MultiActionController {
 			}
 		}	
 		
-	//3001
-	public void addBaseCustomerInfo(HttpServletRequest request,
-			HttpServletResponse response) {
-		try {
-			logger.info((Object) (new StringBuilder("Begin to addBaseCustomerInfo ")));
+	//3001客户信息增加页面
+		public ModelAndView viewAddBaseCustomerInfo(HttpServletRequest request, HttpServletResponse response) {
+		String resultJson = "";
+		try{
+			logger.info((Object) (new StringBuilder("Begin to viewAddTestObjective")));
 			
-			
-			logger.info((Object) (new StringBuilder("End to addBaseCustomerInfo ")));
-		} catch (Exception e) {
+			//获取sequence先
+			String id = sysConfApi.getSequence("DSFCUSTOMERBASEINFO_SEQUENCE");
+			System.out.println("新增序号:"+id);
+			ModelAndView modelAndView = new ModelAndView("viewAddBaseCustomerInfo.jsp");
+			modelAndView.addObject("baseInfo_id",id);
+			logger.info((Object) (new StringBuilder("End to viewAddBaseCustomerInfo ")));
+			return modelAndView;
+		}catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("error", "新增数据失败，出现错误！");
+				jsonObject.put("error", "搜索数据失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");     
+				response.getWriter().write(jsonObject.toString()); 
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+			return null;
+		}	
+	}
+	//客户信息增加页面
+	public void addBaseCustomerInfo(HttpServletRequest request, HttpServletResponse response) {
+		String resultString = "";
+		try{
+		logger.info((Object) (new StringBuilder("Begin to addTestObjective")));
+		String customerid = request.getParameter("customerid");
+		String customername = request.getParameter("customername");
+		String address = request.getParameter("address");
+		String clientnumber = request.getParameter("clientnumber");
+		String customerkey = request.getParameter("customerkey");
+		String basicinfostate = request.getParameter("basicinfostate");
+		//System.out.println(customerid+":"+customername+":"+address+":"+clientnumber+":"+customerkey+":"+basicinfostate);
+		JSONObject jsonObject = new JSONObject();
+		List<DsfCustomerBaseInfo> dcbiList = sysConfApi.getCustomerInfoList("");
+		//验证名字是否已经存在
+		List<DsfCustomerBaseInfo> nameList =  sysConfApi.getCustomerInfoByName(customername);
+		if(null==nameList||nameList.size()>0){
+			jsonObject.put("nameExist", "名字已经存在或未填！");
+			
+			response.setContentType("application/json;charset=utf-8");     
+			response.getWriter().write(jsonObject.toString()); 
+			logger.info((Object) (new StringBuilder("End to addTestObjective")));
+		}else{
+			DsfCustomerBaseInfo dcbi = new DsfCustomerBaseInfo();
+			dcbi.setAddress(address);
+			dcbi.setBasicinfostate(basicinfostate);
+			BigDecimal bigId = new BigDecimal(customerid);
+			dcbi.setCustomerid(bigId);
+			dcbi.setClientnumber(clientnumber);
+			dcbi.setCustomername(customername);
+			System.out.println(dcbi);
+			sysConfApi.saveData(dcbi, "DsfCustomerBaseInfo");
+			
+			jsonObject.put("success", "增加检验目的成功！");
+			
+			//需要跟新页父页面的客户信息表格
+			//List<DsfCustomerBaseInfo> dcbiList = sysConfApi.getCustomerBaseInfoByCustomerId(clientnumber);
+			
+			resultString = PubJsonUtil.list2json(dcbiList);
+			System.out.println(resultString);
+			 
+			jsonObject.put("result_json", resultString);
+			response.setContentType("application/json;charset=utf-8");     
+			response.getWriter().write(jsonObject.toString()); 
+			logger.info((Object) (new StringBuilder("End to addTestObjective")));
+		}
+		}catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "搜索数据失败，出现错误！");
 				response.setContentType("application/json;charset=utf-8");     
 				response.getWriter().write(jsonObject.toString()); 
 			} catch (IOException e1) {
@@ -794,6 +859,7 @@ public class SysConfController extends MultiActionController {
 			}
 		}
 	}
+
 	
 	public void deleteBaseCustomerInfo(HttpServletRequest request,
 			HttpServletResponse response) {
