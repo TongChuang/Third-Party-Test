@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,12 +37,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
-import com.ctc.wstx.util.DataUtil;
 import com.sun.org.apache.commons.beanutils.BeanUtils;
 
 import updown.UpDownApi;
 
-import com.sun.org.apache.commons.beanutils.BeanUtils;
 import common.SIEBeanFactory;
 import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBaseInfo;
@@ -51,7 +48,6 @@ import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfProcess;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LSample;
-import common.datamodel.LTestobjective;
 import common.datamodel.LTestresult;
 import common.datamodel.LabUser;
 import common.util.CommonUtil;
@@ -73,7 +69,6 @@ import common.webmodel.Testresult_Xml;
 import common.xmlmodel.SystemConfigSetting;
 
 import dataaccess.DataAccessApi;
-import dataaccess.dao.SysConfDao;
 
 public class UpDownController extends MultiActionController {
 	private Logger logger = null;
@@ -1029,11 +1024,8 @@ public class UpDownController extends MultiActionController {
 					dsftODateList.add(dYlxhdescribe);
 				}
 			}
-<<<<<<< HEAD
+
 			List dsfctiList = new ArrayList();
-=======
-			System.out.println(tObjectives_XML.getBase_testitemList());
->>>>>>> origin/master
 			for (Base_TestItem_XML tItemList_XML : tObjectives_XML.getBase_testitemList()) {
 				if (null != tItemList_XML) {
 					if (!tiSet.contains(tItemList_XML.getTestitem())) {
