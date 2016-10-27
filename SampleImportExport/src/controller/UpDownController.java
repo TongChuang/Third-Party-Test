@@ -1029,7 +1029,7 @@ public class UpDownController extends MultiActionController {
 					dsftODateList.add(dYlxhdescribe);
 				}
 			}
-			System.out.println(tObjectives_XML.getBase_testitemList());
+			//System.out.println(tObjectives_XML.getBase_testitemList());
 			for (Base_TestItem_XML tItemList_XML : tObjectives_XML.getBase_testitemList()) {
 				if (null != tItemList_XML) {
 					if (!tiSet.contains(tItemList_XML.getTestitem())) {

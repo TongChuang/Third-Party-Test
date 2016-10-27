@@ -224,7 +224,7 @@ h4 {
 		</div>
 		<!-- 详细信息 -->
 
-		<div position="center" title="数据来源，客户${customerid==null?"'请先导入数据'":customerid}，检验目的，检验项目，内容如下">
+		<div position="center" title="数据来源，客户${customerid==null?'请先导入数据':customerid}，检验目的，检验项目，内容如下">
 			<div id="maingrid" style="margin-top:10px"></div>
 			<br />
 		</div>
