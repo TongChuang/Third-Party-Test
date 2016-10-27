@@ -44,6 +44,13 @@ public class SysConfDao extends HibernateDaoSupport {
 			return DataAccessUtil.getAllObjects("DsfCustomerBaseInfo", getHibernateTemplate());
 		}
 	}
+	public List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername){
+		if (!"".equals(customername)) {
+			return DataAccessUtil.getObjectsByColum(customername, "customername", "DsfCustomerBaseInfo", getHibernateTemplate());
+		}else{
+			return null;
+		}
+	}
 
 	public DsfCustomerBaseInfo getCustomerInfoById(String customerid) {
 		BigDecimal bigDecimal = new BigDecimal(customerid);
@@ -52,6 +59,21 @@ public class SysConfDao extends HibernateDaoSupport {
 
 	public void deleteCustomerInfo(String customerid) {
 		DataAccessUtil.deleteObjectsByStrColum(customerid, "customerid", "DsfCustomerBaseInfo", getSession());
+	}
+	
+	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String clientnumber){
+		String sqlString = "";
+		if("".equals(clientnumber)){
+			sqlString = "from DsfCustomerBaseInfo";
+		}else{
+			//sqlString = "from DsfCustomerBaseInfo where clientnumber='"+clientnumber+"' or customerid='"+customerid+"'";
+			sqlString = "from DsfCustomerBaseInfo where clientnumber '"+clientnumber+"'";
+		}
+		try {
+			return getHibernateTemplate().find(sqlString);
+		} catch (DataAccessException e) {
+			return null;
+		}	
 	}
 	/**
 	 * 检验信息
@@ -129,10 +151,10 @@ public class SysConfDao extends HibernateDaoSupport {
 	public void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
 		DataAccessUtil.saveOrUpdate(lYlxhdescribe, "DsfLYlxhdescribe", getHibernateTemplate());
 	}
-	public List<DsfTestitems> getTestItemsByNo(String proList){
+	public List<DsfTestitems> getTestItemsByNo(String proList,String customerid){
 		String sqlString = "";
-		if(!"".equals(proList)){
-			sqlString = "from DsfTestitems where indexId in("+proList+")";
+		if(!"".equals(proList)||!"".equals(customerid)){
+			sqlString = "from DsfTestitems where indexId in("+proList+") and customerid = '"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);

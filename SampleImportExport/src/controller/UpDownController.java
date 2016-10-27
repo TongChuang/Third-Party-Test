@@ -660,10 +660,9 @@ public class UpDownController extends MultiActionController {
 			String customerid = request.getParameter("customerid");
 
 			resutlList = upDownApi.getSampleByTime(beginTime, endTime, customerid);
-
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
 			resultString = PubJsonUtil.list2json(resutlList);
-
+			//System.out.println("根据时间查询:"+resultString);
 			List<DsfCustomerBaseInfo> resultCList = new ArrayList<DsfCustomerBaseInfo>();
 			resultCList = upDownApi.getCustomerInfo();
 
@@ -682,26 +681,22 @@ public class UpDownController extends MultiActionController {
 			return null;
 		}
 	}
-	public ModelAndView getQueryResult(HttpServletRequest request, HttpServletResponse response) {
+	public void getQueryResult(HttpServletRequest request, HttpServletResponse response) {
 		List<LTestresult> resutlList = new ArrayList<LTestresult>();
 		String resultString = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to queryExpData")));
 			String sampleno = request.getParameter("sampleno");
-
+			//System.out.println(sampleno);
 			resutlList = upDownApi.getLTestresultByNo(sampleno);
-
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			
 			resultString = PubJsonUtil.list2json(resutlList);
-
-			List<DsfCustomerBaseInfo> resultCList = new ArrayList<DsfCustomerBaseInfo>();
-			resultCList = upDownApi.getCustomerInfo();
-
+			//System.out.println(resultString);
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("result_json", resultString);
+			response.setContentType("application/json;charset=utf-8");     
+			response.getWriter().write(jsonObject.toString()); 
 			logger.info((Object) (new StringBuilder("End to queryExpData")));
-			ModelAndView modelAndView = new ModelAndView("/jsp/downLoadFile/viewDownLoadPage.jsp");
-			modelAndView.addObject("result_json", resultString);
-			modelAndView.addObject("customerInfoList", resultCList);
-			return modelAndView;
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -709,7 +704,6 @@ public class UpDownController extends MultiActionController {
 			} catch (IOException e1) {
 				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
 			}
-			return null;
 		}
 	}
 
@@ -994,6 +988,7 @@ public class UpDownController extends MultiActionController {
 			xmlString = document.asXML();
 			System.out.println("document 字符串：" + xmlString);
 			TestObjectives_XML tObjectives_XML = XmlUtil.converyToJavaBean(xmlString, TestObjectives_XML.class);
+			System.out.println("xml转为javas对象:"+tObjectives_XML);
 
 			List dsftODateList = new ArrayList();
 			List dsftiDateList = new ArrayList();
@@ -1034,6 +1029,7 @@ public class UpDownController extends MultiActionController {
 					dsftODateList.add(dYlxhdescribe);
 				}
 			}
+			System.out.println(tObjectives_XML.getBase_testitemList());
 			for (Base_TestItem_XML tItemList_XML : tObjectives_XML.getBase_testitemList()) {
 				if (null != tItemList_XML) {
 					if (!tiSet.contains(tItemList_XML.getTestitem())) {

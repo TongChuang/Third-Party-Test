@@ -121,7 +121,7 @@
 				for(var i=0;i<data.length;i++){
 					if(data[i].serialnumber!=""){
 						
-					}esle{
+					}else{
 						//需要提示弹窗修改流水号
 						
 					}

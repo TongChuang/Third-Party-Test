@@ -259,7 +259,7 @@ function ajaxTestItems(data){
 		url: '/jsp/sysconf/sysConf.do?method=getInspectionItem',
 		dataType: 'json',
 		//data: "profiletest="+data.profiletest+"&profiletest2="+data.profiletest2+"&profiletest3="+data.profiletest3,
-		data: "profiletest="+data.profiletest,
+		data: "profiletest="+data.profiletest+"&customerid="+data.customerid,
 		type: 'post', 
 		success:function(datas)  
 		{

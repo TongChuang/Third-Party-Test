@@ -58,5 +58,10 @@ public class TestObjective_XML {
 		this.ylmc = ylmc;
 	}
 
+	@Override
+	public String toString() {
+		return "TestObjective_XML [ylxh=" + ylxh + ", profiletest="
+				+ profiletest + ", ylmc=" + ylmc + "]";
+	}
 
 }

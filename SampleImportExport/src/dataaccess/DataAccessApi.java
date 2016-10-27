@@ -75,6 +75,8 @@ public interface DataAccessApi
 	
 	public abstract void deleteCustomerInfo(String customerid);
 	public abstract List<DsfCustomerBaseInfo> getBaseCustomerInfo();
+	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String clientnumber);
+	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername);
 	/**
 	 * 查询客户当前条码打印到那一个数值
 	 * @return
@@ -97,7 +99,7 @@ public interface DataAccessApi
 	public abstract void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
 	public abstract void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
 	public abstract void deleteYlxhdescribe(BigDecimal id);
-	public abstract List<DsfTestitems> getTestItemsByNo(String proList);
+	public abstract List<DsfTestitems> getTestItemsByNo(String proList,String customerid);
 	public abstract List<DsfTestitems> getTestItems();
 	public abstract void saveTestObjective(String ylxh, String profiletest);
 	public abstract String getSequence(String seqName);

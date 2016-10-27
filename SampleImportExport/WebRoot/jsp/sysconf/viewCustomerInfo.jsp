@@ -59,28 +59,6 @@
 				click : deleteBase
 			} ]
 		});
-		$("#toptoolbar1").ligerToolBar({
-			items : [ {
-				text : '新增客户联系人信息',
-				click : addBase,
-				icon : 'add'
-			}, {
-				line : true
-			}, {
-				text : '修改客户联系人信息',
-				click : modifyBase
-			}, {
-				line : true
-			}, {
-				text : '删除客户联系人信息',
-				click : deleteBase
-			} ]
-		});
-		$("#toptoolbar1").ligerToolBar({
-			items : [
-
-			]
-		});
 
 		grid = $("#maingridData").ligerGrid({
 			columns : [ {
@@ -212,7 +190,7 @@
 	});
 
 	function addBase() {
-		alert(1);
+		   	$.ligerDialog.open({ height: 400, Width: 350, url: '/jsp/sysconf/sysConf.do?method=viewAddBaseCustomerInfo',title:"增加客户信息界面" });
 	}
 	function deleteBase() {
 		var customerid = $("#customerid").val();
