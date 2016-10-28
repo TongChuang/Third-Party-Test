@@ -427,9 +427,26 @@ public class LTestitem implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "LTestitem [ indexId="+indexId+
-				"name=" + name
-				+"]";
+		return "LTestitem [id=" + id + ", createTime=" + createTime
+				+ ", createUser=" + createUser + ", description=" + description
+				+ ", algorithm=" + algorithm + ", english=" + english
+				+ ", enumData=" + enumData + ", guide=" + guide
+				+ ", importance=" + importance + ", indexId=" + indexId
+				+ ", isprint=" + isprint + ", knowledgename=" + knowledgename
+				+ ", method=" + method + ", modifyTime=" + modifyTime
+				+ ", modifyUser=" + modifyUser + ", name=" + name
+				+ ", needhistory=" + needhistory + ", printord=" + printord
+				+ ", sampleFrom=" + sampleFrom + ", type=" + type + ", unit="
+				+ unit + ", labdepartment=" + labdepartment + ", instrument="
+				+ instrument + ", defaultvalue=" + defaultvalue
+				+ ", principle=" + principle + ", workcriterion="
+				+ workcriterion + ", increasedhint=" + increasedhint
+				+ ", decreasedhint=" + decreasedhint + ", notes=" + notes
+				+ ", inuredate=" + inuredate + ", outdate=" + outdate
+				+ ", outdateoperator=" + outdateoperator + ", tea=" + tea
+				+ ", ccv=" + ccv + ", testclass=" + testclass + ", qcneed="
+				+ qcneed + ", methodname=" + methodname + ", testkind="
+				+ testkind + ", dictionaries=" + dictionaries + "]";
 	}
 
 }

@@ -246,12 +246,12 @@
 			},
 			success : function(data) {
 				if (data.success != undefined) {
+					grid.loadData(data.cjson);
 					$.ligerDialog.success('修改客户基础信息成功！');
 				}
 				if (data.error != undefined) {
 					$.ligerDialog.error('修改客户基础信息失败！');
 				}
-				grid.reload();
 			}
 		});
 	}

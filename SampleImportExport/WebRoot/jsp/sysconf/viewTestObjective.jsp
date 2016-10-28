@@ -21,6 +21,8 @@
 <script src="/resources/ligerUI/js/plugins/ligerDialog.js" type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerButton.js" type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerComboBox.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/resources/ligerUI/js/jquery-ui.min.css">
+<script src="/resources/ligerUI/js/jquery-ui.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 var testItemJson = null;
 var customerJson = null;
@@ -33,6 +35,134 @@ var grid = null;
 var grid2 = null;
 var grid3 = null;
 var grid4 = null;
+var availableTags = null;
+
+(function( $ ) {
+    $.widget( "custom.combobox", {
+      _create: function() {
+        this.wrapper = $( "<span>" )
+          .addClass( "custom-combobox" )
+          .insertAfter( this.element );
+ 
+        this.element.hide();
+        this._createAutocomplete();
+        this._createShowAllButton();
+      },
+ 
+      _createAutocomplete: function() {
+        var selected = this.element.children( ":selected" ),
+          value = selected.val() ? selected.text() : "";
+ 
+        this.input = $( "<input>" )
+          .appendTo( this.wrapper )
+          .val( value )
+          .attr( "title", "" )
+          //.addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+          .addClass( "custom-combobox-input ui-widget " )
+          .autocomplete({
+            delay: 0,
+            minLength: 0,
+            source: $.proxy( this, "_source" )
+          })
+          .tooltip({
+            tooltipClass: "ui-state-highlight"
+          });
+ 
+        this._on( this.input, {
+          autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+            this._trigger( "select", event, {
+              item: ui.item.option
+            });
+          },
+ 
+          autocompletechange: "_removeIfInvalid"
+        });
+      },
+ 
+      _createShowAllButton: function() {
+        var input = this.input,
+          wasOpen = false;
+ 
+        $( "<a>" )
+          .attr( "tabIndex", -1 )
+          .attr( "title", "显示所有检验项目" )
+          .tooltip()
+          .appendTo( this.wrapper )
+          
+          .removeClass( "ui-corner-all" )
+          //.addClass( "custom-combobox-toggle ui-corner-right" )
+          .addClass( "custom-combobox-toggle" )
+          .mousedown(function() {
+            wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+          })
+          .click(function() {
+            input.focus();
+ 
+            // 如果已经可见则关闭
+            if ( wasOpen ) {
+              return;
+            }
+ 
+            // 传递空字符串作为搜索的值，显示所有的结果
+            input.autocomplete( "search", "" );
+          });
+      },
+ 
+      _source: function( request, response ) {
+        var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        response( this.element.children( "option" ).map(function() {
+          var text = $( this ).text();
+          if ( this.value && ( !request.term || matcher.test(text) ) )
+            return {
+              label: text,
+              value: text,
+              option: this
+            };
+        }) );
+      },
+ 
+      _removeIfInvalid: function( event, ui ) {
+ 
+        // 选择一项，不执行其他动作
+        if ( ui.item ) {
+          return;
+        }
+ 
+        // 搜索一个匹配（不区分大小写）
+        var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+        this.element.children( "option" ).each(function() {
+          if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+            this.selected = valid = true;
+            return false;
+          }
+        });
+ 
+        // 找到一个匹配，不执行其他动作
+        if ( valid ) {
+          return;
+        }
+ 
+        // 移除无效的值
+        this.input
+          .val( "" )
+          .attr( "title", value + " didn't match any item" )
+          .tooltip( "open" );
+        this.element.val( "" );
+        this._delay(function() {
+          this.input.tooltip( "close" ).attr( "title", "" );
+        }, 2500 );
+        this.input.data( "ui-autocomplete" ).term = "";
+      },
+ 
+      _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+      }
+    });
+  })( jQuery );
 	$(function() {
 
 		$("#layout1").ligerLayout({
@@ -142,6 +272,9 @@ var grid4 = null;
 			width : '100%',
 			height : '99%',
 		});	
+		var data =["java","javaee","jquery","c++","css","html","htm5","bb","ejb","c#"];  
+		 
+        grid4 =  $( "#itemsSelect" ).combobox();
 		/*grid4 = $("#searchIndex").ligerComboBox(
 		    {
 		    	
@@ -379,6 +512,22 @@ body {
 	margin-bottom: 3px;
 }
 
+ .custom-combobox {
+    position: relative;
+    display: inline-block;
+  }
+  .custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+  }
+  .custom-combobox-input {
+    margin: 0;
+    padding: 0.3em;
+  }
+
 </style>
 </head>
 <body style="padding:10px">
@@ -492,13 +641,12 @@ body {
 		</div>
 		
 		<div position="right" title="检验项目">
-			<select id="itemsSelect" name="indexId" style="width: 200px;">
+			<select id="itemsSelect" name="indexId" style="width: 400px;">
 				<option value="">请选择检验项目</option>
 				<c:forEach items="${items_list}" var="tinfo">
 					<option value="${tinfo.indexId}">${tinfo.name}</option>
 				</c:forEach>
-			</select><br/>
-			<input id="searchIndex" type="text"/>
+			</select>
 			<input id="iButton" type="button" value="添加" class="l-button" onclick="itemsAdd()"/>
 			<div id="testItems"></div>
 		</div>

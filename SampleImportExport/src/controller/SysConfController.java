@@ -3,7 +3,9 @@ package controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -635,36 +637,43 @@ public class SysConfController extends MultiActionController {
 				String customerid = request.getParameter("customerid");
 				//获取第三方检验项目
 				List<DsfControltestitems> resultCList = new ArrayList<DsfControltestitems>();
+				//根据customerid获取检验项目
 				resultCList = sysConfApi.getControltestitems(customerid);
 				List<LTestitem> resultTList = new ArrayList<LTestitem>();
 				resultTList = sysConfApi.getLocalTestItems();
-				/*
+				
 				System.out.println(customerid);
 				System.out.println("对照表信息:"+resultCList);
 				System.out.println("本地检验项表:"+resultTList);
-				*/
+				
 				List<LTestobjective> resultOList = new ArrayList<LTestobjective>();
 				
-				DsfControltestitems dctt = new DsfControltestitems();
-				
 				List<DsfControltestitems> dcttList = new ArrayList<DsfControltestitems>();
+				
+				Map<String, LTestitem> map = new HashMap<String, LTestitem>();
+				
+				for(LTestitem iTestitem:resultTList ){
+					map.put(iTestitem.getName(), iTestitem);
+				}
 				
 				List<String> resultLList= new ArrayList<String>();
 				if(null!=resultCList){
 					for(DsfControltestitems resultControltestitems : resultCList){
 						if(null!=resultTList){
-							for(LTestitem iTestitem:resultTList ){
-								if(resultControltestitems.getCustomeritemsname().trim().equals(iTestitem.getName().trim())){
+							//for(LTestitem iTestitem:resultTList ){
+								//if(resultControltestitems.getCustomeritemsname().trim().equals(iTestitem.getName().trim())){
+								if(null!=map.get(resultControltestitems.getCustomeritemsname())){
+									DsfControltestitems dctt = new DsfControltestitems();
 									dctt.setCustomerid(customerid);
 									dctt.setCustomeritems(resultControltestitems.getCustomeritems());
 									dctt.setCustomeritemsname(resultControltestitems.getCustomeritemsname());
-									dctt.setLocalitems(iTestitem.getIndexId());
-									dctt.setLocalitemsname(iTestitem.getName());
+									dctt.setLocalitems(map.get(resultControltestitems.getCustomeritemsname()).getIndexId());
+									dctt.setLocalitemsname(map.get(resultControltestitems.getCustomeritemsname()).getName());
 									dctt.setId(resultControltestitems.getId());
 									//System.out.println("对照信息："+dctt);
 									dcttList.add(dctt);
 								}
-							}
+							//}
 						}
 					}
 				}
@@ -911,7 +920,11 @@ public class SysConfController extends MultiActionController {
 			
 			sysConfApi.saveCustomerInfo(dcbi);
 			
+			cList = sysConfApi.getCustomerInfoByNo("", "");
+			String cjson = PubJsonUtil.list2json(cList);
 			jsonObject.put("success", "保存数据成功！");
+			jsonObject.put("cjson", cjson);
+			System.out.println(cjson);
 			response.setContentType("application/json;charset=utf-8");     
 			response.getWriter().write(jsonObject.toString()); 
 			
@@ -961,7 +974,8 @@ public class SysConfController extends MultiActionController {
 			
 			SystemConfigSetting sysConfig = sysConfApi.getSystemConfig();
 			request.setAttribute("defaultPassword", sysConfig.getDefaultPassword());
-			request.setAttribute("ftpRoot", sysConfig.getFtpRoot());
+			request.setAttribute("upftpRoot", sysConfig.getUpftpRoot());
+			request.setAttribute("downftpRoot", sysConfig.getDownftpRoot());
 			request.setAttribute("updateServerAddress", sysConfig.getUpdateServerAddress());
 			request.setAttribute("webserviceUrl", sysConfig.getWebserviceUrl());
 			
@@ -991,10 +1005,15 @@ public class SysConfController extends MultiActionController {
 			if (request.getParameter("defaultPassword") != null){
 				defaultPassword = request.getParameter("defaultPassword");
 			}
-			String ftpRoot = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0)).getFtpRoot();
-			if (request.getParameter("ftpRoot") != null) {
-				ftpRoot = request.getParameter("ftpRoot");
+			String upftpRoot = ((SystemConfigSetting) SIEContext
+					.getSystemConfigTable().getConfigs().get(0)).getUpftpRoot();
+			if (request.getParameter("upftpRoot") != null) {
+				upftpRoot = request.getParameter("upftpRoot");
+			}
+			String downftpRoot = ((SystemConfigSetting) SIEContext
+					.getSystemConfigTable().getConfigs().get(0)).getDownftpRoot();
+			if (request.getParameter("downftpRoot") != null) {
+				downftpRoot = request.getParameter("downftpRoot");
 			}
 			String updateServerAddress = ((SystemConfigSetting) SIEContext
 					.getSystemConfigTable().getConfigs().get(0)).getUpdateServerAddress();
@@ -1009,7 +1028,8 @@ public class SysConfController extends MultiActionController {
 
 			SystemConfigSetting config = new SystemConfigSetting();
 			config.setDefaultPassword(defaultPassword);
-			config.setFtpRoot(ftpRoot);
+			config.setUpftpRoot(upftpRoot);
+			config.setDownftpRoot(downftpRoot);
 			config.setUpdateServerAddress(updateServerAddress);
 			config.setWebserviceUrl(webserviceUrl);
 

@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,12 +37,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
-import com.ctc.wstx.util.DataUtil;
 import com.sun.org.apache.commons.beanutils.BeanUtils;
 
 import updown.UpDownApi;
 
-import com.sun.org.apache.commons.beanutils.BeanUtils;
 import common.SIEBeanFactory;
 import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBaseInfo;
@@ -51,7 +48,6 @@ import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfProcess;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LSample;
-import common.datamodel.LTestobjective;
 import common.datamodel.LTestresult;
 import common.datamodel.LabUser;
 import common.util.CommonUtil;
@@ -73,7 +69,6 @@ import common.webmodel.Testresult_Xml;
 import common.xmlmodel.SystemConfigSetting;
 
 import dataaccess.DataAccessApi;
-import dataaccess.dao.SysConfDao;
 
 public class UpDownController extends MultiActionController {
 	private Logger logger = null;
@@ -215,10 +210,10 @@ public class UpDownController extends MultiActionController {
 		        String uploadpath = FileStoreUtil.getSamplePic(true,lSample.getDsfcustomerid(),true,false);
 		        FileUtils.copyInputStreamToFile(file.getInputStream(), new File(uploadpath, newFileName)); 
 		        SystemConfigSetting config = SIEBeanFactory.getSysConfApi().getSystemConfig();
-		        String ftpRoot = config.getFtpRoot();
+		        String ftpRoot = config.getUpftpRoot();
 		    	File uploadFile = new File(uploadpath+newFileName);
 		    	String ftpPath = FileStoreUtil.getSamplePic(true,lSample.getDsfcustomerid(),true,false);
-		    	lSample.setImgurl(ftpRoot+ftpPath+newFileName);
+		    	lSample.setImgurl(config.getDownftpRoot()+ftpPath+newFileName);
 				try {
 					FtpOperUtil.uploadFile(uploadFile, ftpRoot, ftpPath);
 					FileOperHelper.deleteFileAndFolder(uploadpath+newFileName);
@@ -1029,7 +1024,8 @@ public class UpDownController extends MultiActionController {
 					dsftODateList.add(dYlxhdescribe);
 				}
 			}
-			//System.out.println(tObjectives_XML.getBase_testitemList());
+
+			List dsfctiList = new ArrayList();
 			for (Base_TestItem_XML tItemList_XML : tObjectives_XML.getBase_testitemList()) {
 				if (null != tItemList_XML) {
 					if (!tiSet.contains(tItemList_XML.getTestitem())) {
@@ -1043,11 +1039,24 @@ public class UpDownController extends MultiActionController {
 							dsftiDateList.add(dsfTestitems);
 						}
 						newTiSet.add(dsfTestitems.getIndexId());
+						
+						//把该条记录放入List,插入对照表
+						DsfControltestitems  dsfcti = new DsfControltestitems();
+						dsfcti.setCustomerid(customerid);
+						dsfcti.setCustomeritems(tItemList_XML.getTestitem());
+						dsfcti.setCustomeritemsname(tItemList_XML.getName());
+						String dsfctiseqString = dataAccessApi.getSeqString("DSF_CONTROLTESTITEMS_SEQ");
+						dsfcti.setId(new BigDecimal(dsfctiseqString));
+						dsfctiList.add(dsfcti);
 					}
 					// 返回页面的JSON List数据
 					xmlTiMao.put(tItemList_XML.getTestitem(), tItemList_XML);
 				}
 			}
+			//对照表数据添加
+			System.out.println("对照表信息："+dsfctiList);
+			upDownApi.saveDataByList(dsfctiList, "DsfControltestitems");
+			
 			// 返回页面数据需要的JSON集合
 			for (Map.Entry entry : xmlTiMao.entrySet()) {
 				resultTIlist.add(entry.getValue());
@@ -1058,6 +1067,7 @@ public class UpDownController extends MultiActionController {
 			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewImpBaseData.jsp");
 			String result_TOList = PubJsonUtil.list2json(resultTOList);
 			String result_TIlist = PubJsonUtil.list2json(resultTIlist);
+			System.out.println("检验项目返回值："+result_TIlist);
 			modelAndView.addObject("result_TOjson", result_TOList);
 			modelAndView.addObject("result_TIjson", result_TIlist);
 			modelAndView.addObject("customerid", customerid);

@@ -10,7 +10,9 @@
 	<class name="common.xmlmodel.SystemConfigSetting">
 		<field name="defaultPassword" type="string" /> <!-- default password for users -->
 		<field name="updateServerAddress" type="string" /> <!-- firstRunTime for system -->		
-		<field name="ftpRoot" type="string" /> <!-- SanServerRoot for system -->
+		<field name="upftpRoot" type="string" /> <!-- 系统内部上传使用FTP帐号 -->
+		<field name="downftpRoot" type="string" /> <!-- 展示文件FTP地址 -->
+		<field name="webserviceUrl" type="string"></field><!-- 客户的webService地址 -->
 </class>
 
 </mapping>

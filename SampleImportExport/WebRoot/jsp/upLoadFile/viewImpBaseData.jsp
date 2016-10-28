@@ -57,7 +57,7 @@
 				display : 'profiletest',
 				name : 'profiletest',
 				width : 100,
-				hide : true,
+				//hide : true,
 			}, ],
 			data : $.extend(true, {}, resultTOjson),
 			pageSize : 20,
@@ -93,7 +93,7 @@
 		$(grid).css('margin', 10).ligerGrid({
 			columns : [ {
 				display : '检验项目编号',
-				name : 'testitem',
+				name : 'indexId',
 				width : 150,
 			}, {
 				display : '检验项目名称',
