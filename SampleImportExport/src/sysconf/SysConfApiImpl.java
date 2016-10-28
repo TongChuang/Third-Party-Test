@@ -84,8 +84,8 @@ public class SysConfApiImpl
 		return handler.getWebServiceUrl();
 	}
 	
-	public List<DsfCustomerBaseInfo> getCustomerInfoList(String  clientnumber){
-		return dataAccessApi.getCustomerInfoList(clientnumber);
+	public List<DsfCustomerBaseInfo> getCustomerInfoList(String  customerid){
+		return dataAccessApi.getCustomerBaseInfoByCustomerId(customerid);
 	}
 	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String clientnumber){
 		return dataAccessApi.getCustomerBaseInfoByCustomerId(clientnumber);

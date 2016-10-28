@@ -1,13 +1,12 @@
 package dataaccess;
 
-import java.math.BigDecimal;
+import java.math.BigDecimal;	
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import common.datamodel.DsfControltestitems;
-import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfProcess;
@@ -160,30 +159,19 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	public List<DsfCustomerBaseInfo> getCustomerInfoList(String clientnumber){
 		return sysconfDao.getCustomerInfoList(clientnumber);
 	}
-	public DsfCustomerBaseInfo getCustomerInfoById(String customerid){
-		return sysconfDao.getCustomerInfoById(customerid);
+	public DsfCustomerBaseInfo getCustomerInfoById(String id){
+		return sysconfDao.getCustomerInfoById(id);
 	}
 	public List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername){
 		return sysconfDao.getCustomerInfoByName(customername);
 	}
-	public void deleteCustomerInfo(String customerid){
-		sysconfDao.deleteCustomerInfo(customerid);
+	public void deleteCustomerInfo(String id){
+		sysconfDao.deleteCustomerInfo(id);
 	}
 	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String clientnumber){
 		return sysconfDao.getCustomerBaseInfoByCustomerId(clientnumber);
 	}
-	public List<DsfCustomerBaseInfo> getBaseCustomerInfo(){
-		return queryStatsDao.getBaseCustomerInfo();
-	}
 	
-	public List<DsfCustomerBarCode> getNowCode(String customerid){
-		return queryStatsDao.getNowCode(customerid);
-	}
-	
-	public void saveBarCode(DsfCustomerBarCode dsfCustomerBarCode){
-		queryStatsDao.saveBarCode(dsfCustomerBarCode);
-	}
-
 	public List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state) {
 		return sysconfDao.getCustomerInfoByCnameState(customername,state);
 	}

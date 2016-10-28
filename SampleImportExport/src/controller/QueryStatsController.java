@@ -1,6 +1,6 @@
 package controller;
 
-import java.io.IOException;
+import java.io.IOException;	
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +8,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
-import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.util.CommonUtil;
 import common.util.PubJsonUtil;
@@ -50,9 +50,9 @@ public class QueryStatsController extends MultiActionController {
 		logger.info((Object) (new StringBuilder("Begin to viewPrintCode")));
 		try {
 			List<DsfCustomerBaseInfo> resultList = new ArrayList<DsfCustomerBaseInfo>();
-			resultList = queryStatsApi.getBaseCustomerInfo();
 			String resultJson = "";
-			if (null != resultList && resultList.size() > 0) {
+			resultList = queryStatsApi.getBaseCustomerInfo("");
+			if(null!=resultList&&resultList.size()>0){
 				resultJson = PubJsonUtil.list2json(resultList);
 			}
 			ModelAndView modelAndView = new ModelAndView("viewPrintCode.jsp");
@@ -72,36 +72,29 @@ public class QueryStatsController extends MultiActionController {
 
 	public synchronized void printCode(HttpServletRequest request, HttpServletResponse response) {
 		logger.info((Object) (new StringBuilder("Begin to printCode")));
-		List <DsfCustomerBarCode>oldBarCodeList = new ArrayList<DsfCustomerBarCode>();
+		
+		List <DsfCustomerBaseInfo>oldBarCodeList = new ArrayList<DsfCustomerBaseInfo>();
+		DsfCustomerBaseInfo dcbi = new DsfCustomerBaseInfo(); 
 		List <String>resultList = new ArrayList<String>();
 		try {
-			String clientnumber = request.getParameter("clientnumber");
+			String customerid = request.getParameter("customerid");
 			String printNum = request.getParameter("printNum");
 			String codeType = request.getParameter("codeType");
 			
 			String barCode = "";
 			String oldBarCode = "0";
 			
-			oldBarCodeList = queryStatsApi.getNowCode(clientnumber);
-			if(null!=oldBarCodeList&&oldBarCodeList.size()>0){
-				oldBarCode = oldBarCodeList.get(0).getBarcode();;
-				for (int i = 0; i < Integer.parseInt(printNum); i++) {
-					oldBarCode = String.format("%07d",Integer.parseInt(oldBarCode)+1);
-					barCode = clientnumber+oldBarCode;
-					resultList.add(barCode);
-				}
-			}else{
-				for (int i = 0; i < Integer.parseInt(printNum); i++) {
-					barCode = clientnumber + String.format("%07d", Integer.parseInt(oldBarCode)+1);
-					resultList.add(barCode);
-					oldBarCode = Integer.parseInt(oldBarCode)+1+"";
-				}
+			oldBarCodeList = queryStatsApi.getBaseCustomerInfo(customerid);
+			dcbi = oldBarCodeList.get(0);
+			oldBarCode = dcbi.getCurrentbarcode();;
+			for (int i = 0; i < Integer.parseInt(printNum); i++) {
+				oldBarCode = String.format("%07d",Integer.parseInt(oldBarCode)+1);
+				barCode = customerid+oldBarCode;
+				resultList.add(barCode);
 			}
 			//保存当前的最大值如数据库
-			DsfCustomerBarCode dsfCustomerBarCode = new DsfCustomerBarCode();
-			dsfCustomerBarCode.setCustomerid(clientnumber);
-			dsfCustomerBarCode.setBarcode(oldBarCode);
-			queryStatsApi.saveBarCode(dsfCustomerBarCode);
+			dcbi.setCurrentbarcode(oldBarCode);
+			queryStatsApi.saveData(dcbi, "DsfCustomerBaseInfo");
 			
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("list", resultList);

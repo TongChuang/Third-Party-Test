@@ -10,11 +10,11 @@ public class DsfCustomerBaseInfo implements java.io.Serializable {
 
 	// Fields
 
-	private BigDecimal customerid;
+	private BigDecimal id;
 	private String customername;
 	private String address;
-	private String clientnumber;
-	private BigDecimal sequence;
+	private String customerid;
+	private String currentbarcode;
 	private String customerKey;
 	private String basicinfostate ;
 
@@ -24,44 +24,31 @@ public class DsfCustomerBaseInfo implements java.io.Serializable {
 	public DsfCustomerBaseInfo() {
 	}
 
-	/** minimal constructor */
-	public DsfCustomerBaseInfo(BigDecimal customerid) {
-		this.customerid = customerid;
-	}
 
-	/** full constructor */
-	public DsfCustomerBaseInfo(BigDecimal customerid, String customername,
-			String customerKey, String address, String clientnumber,
-			BigDecimal sequence,String basicinfostate) {
-		this.customerid = customerid;
+
+	public DsfCustomerBaseInfo(BigDecimal id, String customername, String address, String customerid, String currentbarcode, String customerKey,
+			String basicinfostate) {
+		this.id = id;
 		this.customername = customername;
 		this.address = address;
-		this.clientnumber = clientnumber;
-		this.sequence = sequence;
+		this.customerid = customerid;
+		this.currentbarcode = currentbarcode;
 		this.customerKey = customerKey;
 		this.basicinfostate = basicinfostate;
 	}
 
-	// Property accessors
 
-	public BigDecimal getCustomerid() {
-		return this.customerid;
+
+	public BigDecimal getId() {
+		return id;
 	}
 
-	public String getBasicinfostate() {
-		return basicinfostate;
-	}
-
-	public void setBasicinfostate(String basicinfostate) {
-		this.basicinfostate = basicinfostate;
-	}
-
-	public void setCustomerid(BigDecimal customerid) {
-		this.customerid = customerid;
+	public void setId(BigDecimal id) {
+		this.id = id;
 	}
 
 	public String getCustomername() {
-		return this.customername;
+		return customername;
 	}
 
 	public void setCustomername(String customername) {
@@ -69,27 +56,27 @@ public class DsfCustomerBaseInfo implements java.io.Serializable {
 	}
 
 	public String getAddress() {
-		return this.address;
+		return address;
 	}
 
 	public void setAddress(String address) {
 		this.address = address;
 	}
 
-	public String getClientnumber() {
-		return this.clientnumber;
+	public String getCustomerid() {
+		return customerid;
 	}
 
-	public void setClientnumber(String clientnumber) {
-		this.clientnumber = clientnumber;
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
 	}
 
-	public BigDecimal getSequence() {
-		return this.sequence;
+	public String getCurrentbarcode() {
+		return currentbarcode;
 	}
 
-	public void setSequence(BigDecimal sequence) {
-		this.sequence = sequence;
+	public void setCurrentbarcode(String currentbarcode) {
+		this.currentbarcode = currentbarcode;
 	}
 
 	public String getCustomerKey() {
@@ -100,13 +87,14 @@ public class DsfCustomerBaseInfo implements java.io.Serializable {
 		this.customerKey = customerKey;
 	}
 
-	@Override
-	public String toString() {
-		return "DsfCustomerBaseInfo [customerid=" + customerid
-				+ ", customername=" + customername + ", address=" + address
-				+ ", clientnumber=" + clientnumber + ", sequence=" + sequence
-				+ ", customerKey=" + customerKey + ", basicinfostate="
-				+ basicinfostate + "]";
+	public String getBasicinfostate() {
+		return basicinfostate;
 	}
-	
+
+	public void setBasicinfostate(String basicinfostate) {
+		this.basicinfostate = basicinfostate;
+	}
+
+	// Property accessors
+
 }

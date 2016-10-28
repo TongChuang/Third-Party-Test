@@ -62,8 +62,8 @@
 
 		grid = $("#maingridData").ligerGrid({
 			columns : [ {
-				display : 'customerid',
-				name : 'customerid',
+				display : 'id',
+				name : 'id',
 				width : 150,
 				hide : true,
 			}, {
@@ -73,7 +73,7 @@
 				hide : true,
 			}, {
 				display : '客户编号',
-				name : 'clientnumber',
+				name : 'customerid',
 				width : 100,
 			}, {
 				display : '客户名称',
@@ -91,10 +91,10 @@
 			checkbox : false,
 			onSelectRow : function(data, rowindex, rowobj) {
 				$("#customerKey").val(data.customerKey);
-				$("#clientnumber").val(data.clientnumber);
+				$("#customerid").val(data.customerid);
 				$("#address").val(data.address);
 				$("#customername").val(data.customername);
-				$("#customerid").val(data.customerid);
+				$("#id").val(data.id);
 			},
 		});
 
@@ -193,8 +193,8 @@
 		   	$.ligerDialog.open({ height: 400, Width: 350, url: '/jsp/sysconf/sysConf.do?method=viewAddBaseCustomerInfo',title:"增加客户信息界面" });
 	}
 	function deleteBase() {
-		var customerid = $("#customerid").val();
-		if (customerid == '') {
+		var id = $("#id").val();
+		if (id == '') {
 			$.ligerDialog.warn('请先选择客户信息！');
 			return;
 		}
@@ -203,7 +203,7 @@
 				+ '的基础信息，以及该信息下的所有联系人吗?', function(yes) {
 			$.ajax({
 				url : '/jsp/sysconf/sysConf.do?method=deleteBaseCustomerInfo',
-				data : 'customerid=' + customerid,
+				data : 'id=' + id,
 				dataType : 'json',
 				type : 'post',
 				error : function(e) {
@@ -216,27 +216,26 @@
 					if (data.error != undefined) {
 						$.ligerDialog.error('修改客户基础信息失败！');
 					}
-					grid.reload();
 				}
 			});
 		});
 
 	}
 	function modifyBase() {
-		var customerid = $("#customerid").val();
+		var id = $("#id").val();
 		var customerKey = $("#customerKey").val();
 		var address = $("#address").val();
-		var clientnumber = $("#clientnumber").val();
+		var customerid = $("#customerid").val();
 		var customername = $("#customername").val();
 		var basicinfostate = $("#basicinfostate").val();
-		if (customerid == '') {
+		if (id == '') {
 			$.ligerDialog.warn('请先选择客户信息！');
 			return;
 		}
 		$.ajax({
 			url : '/jsp/sysconf/sysConf.do?method=modifyBaseCustomerInfo',
 			data : 'customerid=' + customerid + '&customerKey=' + customerKey
-					+ '&clientnumber=' + clientnumber + '&address=' + address
+					+ '&id=' + id + '&address=' + address
 					+ '&customername=' + customername + '&basicinfostate='
 					+ basicinfostate,
 			dataType : 'json',
@@ -299,7 +298,7 @@ body {
 				<div tabid="baseinfo" title="客户基础信息" lselected="true">
 					<div id="toptoolbar"></div>
 					<form name="form1" method="post" action="" id="form1">
-						<input type="hidden" id="customerid" />
+						<input type="hidden" id="id" />
 						<table cellpadding="0" cellspacing="0" class="l-table-edit">
 							<tr>
 								<td align="right" class="l-table-edit-td">客户名称:</td>
@@ -312,7 +311,7 @@ body {
 							<tr>
 								<td align="right" class="l-table-edit-td">客户号:</td>
 								<td align="left" class="l-table-edit-td"><input
-									name="clientnumber" type="text" id="clientnumber" ltype="text" />
+									name="customerid" type="text" id="customerid" ltype="text" />
 								</td>
 								<td align="left"></td>
 							</tr>

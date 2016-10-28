@@ -3,10 +3,9 @@
  */
 package queryStats;
 
-import java.util.List;
+import java.util.List;	
 
 import common.StartAPI;
-import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 
 /**
@@ -15,7 +14,7 @@ import common.datamodel.DsfCustomerBaseInfo;
  */
 public interface QueryStatsApi extends StartAPI {
 	
-	public abstract List<DsfCustomerBaseInfo> getBaseCustomerInfo() ;
-	public abstract List<DsfCustomerBarCode> getNowCode(String customerid);
-	public abstract void saveBarCode(DsfCustomerBarCode dsfCustomerBarCode);
+	public abstract List<DsfCustomerBaseInfo> getBaseCustomerInfo(String customerid) ;
+	public abstract void saveData(DsfCustomerBaseInfo dcbi,String tableName) ;
+	public abstract void saveAllData(List objectList,String tableName) ;
 }

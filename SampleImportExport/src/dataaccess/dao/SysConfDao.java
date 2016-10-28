@@ -52,22 +52,21 @@ public class SysConfDao extends HibernateDaoSupport {
 		}
 	}
 
-	public DsfCustomerBaseInfo getCustomerInfoById(String customerid) {
-		BigDecimal bigDecimal = new BigDecimal(customerid);
-		return (DsfCustomerBaseInfo) DataAccessUtil.getObjectByColum(bigDecimal, "customerid", "DsfCustomerBaseInfo", getHibernateTemplate());
+	public DsfCustomerBaseInfo getCustomerInfoById(String id) {
+		BigDecimal bigDecimal = new BigDecimal(id);
+		return (DsfCustomerBaseInfo) DataAccessUtil.getObjectById(bigDecimal, "DsfCustomerBaseInfo", getHibernateTemplate()) ;
 	}
 
-	public void deleteCustomerInfo(String customerid) {
-		DataAccessUtil.deleteObjectsByStrColum(customerid, "customerid", "DsfCustomerBaseInfo", getSession());
+	public void deleteCustomerInfo(String id) {
+		DataAccessUtil.deleteObjectsByStrColum(id, "id", "DsfCustomerBaseInfo", getSession());
 	}
 	
-	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String clientnumber){
+	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String customerid){
 		String sqlString = "";
-		if("".equals(clientnumber)){
+		if("".equals(customerid)){
 			sqlString = "from DsfCustomerBaseInfo";
 		}else{
-			//sqlString = "from DsfCustomerBaseInfo where clientnumber='"+clientnumber+"' or customerid='"+customerid+"'";
-			sqlString = "from DsfCustomerBaseInfo where clientnumber '"+clientnumber+"'";
+			sqlString = "from DsfCustomerBaseInfo where customerid '"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -78,14 +77,14 @@ public class SysConfDao extends HibernateDaoSupport {
 	/**
 	 * 检验信息
 	 */
-	public List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid){
+	public List<DsfCustomerBaseInfo> getCustomerInfoByNo(String customerid,String customername){
 		String sqlString = "";
-		if("".equals(clientnumber)&&"".equals(customerid)){
+		if("".equals(customerid)&&"".equals(customername)){
 			sqlString = "from DsfCustomerBaseInfo";
-		}else if(!"".equals(clientnumber)&&!"".equals(customerid)){
-			sqlString = "from DsfCustomerBaseInfo where clientnumber like '%"+clientnumber+"%' or customerid like'%"+customerid+"%'";
+		}else if(!"".equals(customerid)&&!"".equals(customername)){
+			sqlString = "from DsfCustomerBaseInfo where customerid like '%"+customerid+"%' or customername like'%"+customername+"%'";
 		}else {
-			sqlString = "from DsfCustomerBaseInfo where customerid ='"+customerid+"'";
+			sqlString = "from DsfCustomerBaseInfo where customername ='"+customername+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);

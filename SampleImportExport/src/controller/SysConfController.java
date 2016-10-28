@@ -815,10 +815,10 @@ public class SysConfController extends MultiActionController {
 		String resultString = "";
 		try{
 		logger.info((Object) (new StringBuilder("Begin to addTestObjective")));
-		String customerid = request.getParameter("customerid");
+		String id = request.getParameter("id");
 		String customername = request.getParameter("customername");
 		String address = request.getParameter("address");
-		String clientnumber = request.getParameter("clientnumber");
+		String customerid = request.getParameter("customerid");
 		String customerkey = request.getParameter("customerkey");
 		String basicinfostate = request.getParameter("basicinfostate");
 		//System.out.println(customerid+":"+customername+":"+address+":"+clientnumber+":"+customerkey+":"+basicinfostate);
@@ -828,7 +828,6 @@ public class SysConfController extends MultiActionController {
 		List<DsfCustomerBaseInfo> nameList =  sysConfApi.getCustomerInfoByName(customername);
 		if(null==nameList||nameList.size()>0){
 			jsonObject.put("nameExist", "名字已经存在或未填！");
-			
 			response.setContentType("application/json;charset=utf-8");     
 			response.getWriter().write(jsonObject.toString()); 
 			logger.info((Object) (new StringBuilder("End to addTestObjective")));
@@ -836,11 +835,10 @@ public class SysConfController extends MultiActionController {
 			DsfCustomerBaseInfo dcbi = new DsfCustomerBaseInfo();
 			dcbi.setAddress(address);
 			dcbi.setBasicinfostate(basicinfostate);
-			BigDecimal bigId = new BigDecimal(customerid);
-			dcbi.setCustomerid(bigId);
-			dcbi.setClientnumber(clientnumber);
+			BigDecimal bigId = new BigDecimal(id);
+			dcbi.setId(bigId);
+			dcbi.setCustomerid(customerid);
 			dcbi.setCustomername(customername);
-			System.out.println(dcbi);
 			sysConfApi.saveData(dcbi, "DsfCustomerBaseInfo");
 			
 			jsonObject.put("success", "增加检验目的成功！");
@@ -903,17 +901,17 @@ public class SysConfController extends MultiActionController {
 			List <DsfCustomerBaseInfo>cList = new ArrayList<DsfCustomerBaseInfo>();
 			JSONObject jsonObject = new JSONObject();
 			
-			String customerid = request.getParameter("customerid");
+			String id = request.getParameter("id");
 			String customerKey = request.getParameter("customerKey");
-			String clientnumber = request.getParameter("clientnumber");
+			String customerid = request.getParameter("customerid");
 			String customername = request.getParameter("customername");
 			String address = request.getParameter("address");
 			String basicinfostate = request.getParameter("basicinfostate");
 			
 			DsfCustomerBaseInfo dcbi = new DsfCustomerBaseInfo();
 			dcbi.setAddress(address);
-			dcbi.setClientnumber(clientnumber);
-			dcbi.setCustomerid(new BigDecimal(customerid));
+			dcbi.setCustomerid(customerid);
+			dcbi.setId(new BigDecimal(id));
 			dcbi.setCustomerKey(customerKey);
 			dcbi.setCustomername(customername);  
 			dcbi.setBasicinfostate(basicinfostate);

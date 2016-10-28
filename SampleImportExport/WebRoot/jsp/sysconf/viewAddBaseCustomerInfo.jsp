@@ -36,8 +36,8 @@ $(function () {
                 validate : true,
                 fields: [
                 { display: "客户名称", name: "customername", newline: true, type: "text", group: "基础信息增加", groupicon: groupicon },
-                { display: "客户号", name: "clientnumber", newline: true, type: "text", validate:{required:true,minlength:1} },
-                { display: "customerid", name: "customerid", newline: true, type: "hidden" },
+                { display: "客户号", name: "customerid", newline: true, type: "text", validate:{required:true,minlength:1} },
+                { display: "id", name: "id", newline: true, type: "hidden" },
                 { display: "客户地址", name: "address", newline: true, type: "text", validate:{required:true,minlength:1} },
                 { display: "客户Key", name: "customerKey", newline: true, type: "text", validate:{required:true,minlength:1} },
                 { display: "基础信息状态", name: "basicinfostate", newline: true, type: "text", validate:{required:true,maxlength:1} },
@@ -47,7 +47,7 @@ $(function () {
             var rs = $("#hidden_input").val();
             //alert("新增id值："+rs);
             //设置表单内容
-            form.setData({customerid:rs});
+            form.setData({id:rs});
             
 });
 

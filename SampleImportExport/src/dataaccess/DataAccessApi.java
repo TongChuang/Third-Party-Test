@@ -2,13 +2,12 @@ package dataaccess;
 
 
 
-import java.math.BigDecimal;
+import java.math.BigDecimal;	
 import java.util.List;
 import java.util.Map;
 
 import common.StartAPI;
 import common.datamodel.DsfControltestitems;
-import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfProcess;
@@ -69,30 +68,16 @@ public interface DataAccessApi
 	 * 查询客户信息
 	 * @return
 	 */
-	public abstract List<DsfCustomerBaseInfo> getCustomerInfoList(String  clientnumber);
-	
 	public abstract DsfCustomerBaseInfo getCustomerInfoById(String id);
-	
-	public abstract void deleteCustomerInfo(String customerid);
-	public abstract List<DsfCustomerBaseInfo> getBaseCustomerInfo();
-	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String clientnumber);
+	public abstract void deleteCustomerInfo(String id);
+	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String customerid);
 	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername);
-	/**
-	 * 查询客户当前条码打印到那一个数值
-	 * @return
-	 */
-	public abstract List<DsfCustomerBarCode> getNowCode(String customerid);
-	/**
-	 * 保存条码信息
-	 * @param dsfCustomerBarCode
-	 */
-	public abstract void saveBarCode(DsfCustomerBarCode dsfCustomerBarCode);
 	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state);
+	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByNo(String customerid,String customername);
 
 	/**
 	 * 检验信息
 	 */
-	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid);
 	public abstract List<DsfLYlxhdescribe> getYlxhdescribe(String customerid);
 	public abstract List<DsfLYlxhdescribe> getYlxhdescribeById(String id);
 	public abstract List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc);

@@ -30,21 +30,24 @@ transitional.dtd">
 
 <script type="text/javascript">
 	var customerData = null;
+	var maingrid ;
 	$(function() {
-
+		//光标默认第一个输入框
+		$(document).ready(function(){$('#cid').focus();});
+		
 		$("#layout1").ligerLayout({
 			rightWidth : 300
 		});
 
-		$("#maingridData").ligerGrid({
+		maingrid = $("#maingridData").ligerGrid({
 			columns : [ {
 				display : '客户ID',
-				name : 'customerid',
+				name : 'id',
 				width : 150,
 				hide : true,
 			}, {
 				display : '客户编号',
-				name : 'clientnumber',
+				name : 'customerid',
 				width : 150,
 			}, {
 				display : '客户名称',
@@ -54,7 +57,11 @@ transitional.dtd">
 				display : '客户地址',
 				name : 'address',
 				width : 200
-			}, ],
+			},  {
+				display : '已使用到编号',
+				name : 'currentbarcode',
+				width : 200
+			},],
 			data : customerData,
 			pageSize : 30,
 			width : '100%',
@@ -62,6 +69,7 @@ transitional.dtd">
 			onSelectRow : function(data, rowindex, rowobj) {
 				$("#clientnumber").val(data.clientnumber);
 				$("#customername").val(data.customername);
+				$("#currentbarcode").val(data.currentbarcode);
 			},
 		});
 	});
@@ -84,10 +92,10 @@ transitional.dtd">
 	};
 
 	function printCode() {
-		var clientnumber = $("#clientnumber").val();
+		var customerid = $("#customerid").val();
 		var printNum = $("#printNum").val();
 		var codeType = $("#codeType").val();
-		if ('' == clientnumber) {
+		if ('' == customerid) {
 			$.ligerDialog.error('请先选择客户信息！');
 			return;
 		}
@@ -98,7 +106,7 @@ transitional.dtd">
 
 		$.ajax({
 			url : '/jsp/queryStats/queryStats.do?method=printCode',
-			data : 'clientnumber=' + clientnumber + '&printNum=' + printNum
+			data : 'customerid=' + customerid + '&printNum=' + printNum
 					+ '&codeType=' + codeType,
 			dataType : 'text',
 			type : 'post',
@@ -112,6 +120,21 @@ transitional.dtd">
 				}
 			}
 		});
+	}
+	function checkEnter(){
+		var rowindex = null;
+		var cid = $("#cid").val();
+		var data = maingrid.getData();
+		for ( var i = 0; i < data.length; i++) {
+			if (data[i].currentbarcode == cid) {
+				rowindex = data.indexOf(data[i]);
+			}
+		}
+		if(null!=rowindex){
+			maingrid.select(rowindex);
+		}else{
+			$.ligerDialog.error('无该客户，请检查客户编号重新输入!');
+		}
 	}
 </script>
 
@@ -149,10 +172,18 @@ body {
 		<div position="right">
 			<table cellpadding="0" cellspacing="0" class="l-table-edit">
 				<tr>
+				<td align="left"></td>
+					<td align="left" class="l-table-edit-td" colspan="3"><input
+						style="width: 200px"  name="cid"
+						type="text" id="cid" ltype="text" placeholder="请输入客户的编号" onkeypress="if(event.keyCode==13){checkEnter()}"/>
+					</td>
+					<td align="left"></td>
+				</tr>
+				<tr>
 					<td align="right" class="l-table-edit-td">客户编号:</td>
 					<td align="left" class="l-table-edit-td"><input
-						style="width: 200px" readonly="readonly" name="clientnumber"
-						type="text" id="clientnumber" ltype="text" />
+						style="width: 200px" readonly="readonly" name="customerid"
+						type="text" id="customerid" ltype="text" />
 					</td>
 					<td align="left"></td>
 				</tr>
@@ -161,6 +192,14 @@ body {
 					<td align="left" class="l-table-edit-td"><input
 						style="width: 200px" class="textReadonly" readonly="readonly"
 						name="customername" type="text" id="customername" ltype="text" />
+					</td>
+					<td align="left"></td>
+				</tr>
+				<tr>
+					<td align="right" class="l-table-edit-td">当前已打印至:</td>
+					<td align="left" class="l-table-edit-td"><input
+						style="width: 200px" class="textReadonly" readonly="readonly"
+						name="currentbarcode" type="text" id="currentbarcode" ltype="text" />
 					</td>
 					<td align="left"></td>
 				</tr>

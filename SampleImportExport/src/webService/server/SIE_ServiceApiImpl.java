@@ -140,7 +140,6 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 						dsfcbiBaseInfo = dsfc;
 					}
 				}
-				
 
 				// 把上传的XML解析为BEAN
 				DataSet_XML dXml = new DataSet_XML();
@@ -155,10 +154,6 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 					ls.setDsfcustomerid(customerid);
 					ConversionBean.cSample(ls, sampleInfo_XML);
 					dataAccessApi.saveData(ls, "LSample");
-					// 客户表SEQ累加一
-					dsfcbiBaseInfo.setSequence(dsfcbiBaseInfo.getSequence()
-							.add(new BigDecimal("1")));
-					dataAccessApi.saveCustomerBaseInfo(dsfcbiBaseInfo);
 					// 保存Process 表
 					Process_XML prXml = new Process_XML();
 					prXml = slXml.getProcess();

@@ -3,9 +3,8 @@
  */
 package queryStats;
 
-import java.util.List;
+import java.util.List;	
 
-import common.datamodel.DsfCustomerBarCode;
 import common.datamodel.DsfCustomerBaseInfo;
 
 import dataaccess.DataAccessApi;
@@ -27,19 +26,17 @@ public class QueryStatsApiImpl implements QueryStatsApi {
 		this.dataAccessApi = dataAccessApi;
 	}
 	
-	
-	public List<DsfCustomerBaseInfo> getBaseCustomerInfo(){
-		return dataAccessApi.getBaseCustomerInfo();
+	public List<DsfCustomerBaseInfo> getBaseCustomerInfo(String customerid){
+		return dataAccessApi.getCustomerBaseInfoByCustomerId(customerid);
 	}
 	
-	public List<DsfCustomerBarCode> getNowCode(String customerid){
-		return dataAccessApi.getNowCode(customerid);
-	}
-	public void saveBarCode(DsfCustomerBarCode dsfCustomerBarCode){
-		dataAccessApi.saveBarCode(dsfCustomerBarCode);
+	public void saveData(DsfCustomerBaseInfo dcbi,String tableName){
+		dataAccessApi.saveData(dcbi, tableName);
 	}
 	
-	
+	public void saveAllData(List objectList,String tableName){
+		dataAccessApi.saveDataByList(objectList, tableName);
+	}
 
 	/*
 	 * (non-Javadoc)

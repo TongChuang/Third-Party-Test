@@ -1,6 +1,6 @@
 package controller;
 
-import java.io.File;
+import java.io.File;	
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,9 +95,9 @@ public class UpDownController extends MultiActionController {
 			
 			List resultList = new ArrayList();
 			if("0".equals(dcbiBaseInfo.getBasicinfostate())){
-				resultList = upDownApi.getLTestItemsByTestItem("", dcbiBaseInfo.getClientnumber());
+				resultList = upDownApi.getLTestItemsByTestItem("", dcbiBaseInfo.getCustomerid());
 			}else{
-				resultList = upDownApi.getDsfTestItemsByTestItem("", dcbiBaseInfo.getClientnumber());
+				resultList = upDownApi.getDsfTestItemsByTestItem("", dcbiBaseInfo.getCustomerid());
 			}
 			JSONObject jsonObject = new JSONObject();
 			String resultJsonString = PubJsonUtil.list2json(resultList);
