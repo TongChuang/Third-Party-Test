@@ -22,7 +22,7 @@ transitional.dtd">
 <script src="/resources/ligerUI/js/plugins/ligerDialog.js"
 	type="text/javascript"></script>
 <script language="javascript" src="/resources/lodop/LodopFuncs.js"></script>
-<object   id="LODOP_OB"
+<object  id="LODOP_OB"
 	classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
 	<embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
 </object>
@@ -95,29 +95,43 @@ transitional.dtd">
 		var customerid = $("#customerid").val();
 		var printNum = $("#printNum").val();
 		var codeType = $("#codeType").val();
+		var currentbarcode = $("#currentbarcode").val();
 		if ('' == customerid) {
 			$.ligerDialog.error('请先选择客户信息！');
 			return;
 		}
-		if ('' == printNum) {
+		if ('' == printNum||0==printNum) {
 			$.ligerDialog.error('请填写需要打印的数量！');
 			return;
 		}
-
-		$.ajax({
-			url : '/jsp/queryStats/queryStats.do?method=printCode',
-			data : 'customerid=' + customerid + '&printNum=' + printNum
-					+ '&codeType=' + codeType,
-			dataType : 'text',
-			type : 'post',
-			error: function (e) { alert('出现未知错误' + e); },
-			success : function(data) {
-				var barcode = JSON.parse(data); 
-				for(var i=0;i<barcode.list.length;i++){
-					for(var j=0;j<codeType;j++){
-						print(barcode.list[i]);
+		
+		var printNums="";
+		if(parseInt(printNum)>1){
+			printNums = 1 + parseInt(currentbarcode) + "至" + parseInt(printNum) + parseInt(currentbarcode);
+		}else{
+			printNums = 1 + parseInt(currentbarcode);
+		}
+		
+		$.ligerDialog.confirm('当前打印的条码为:'+printNums+';确定打印么?', function(yes) {
+			if (yes) {	
+				$.ajax({
+					url : '/jsp/queryStats/queryStats.do?method=printCode',
+					data : 'customerid=' + customerid + '&printNum=' + printNum
+							+ '&codeType=' + codeType,
+					dataType : 'text',
+					type : 'post',
+					error: function (e) { alert('出现未知错误' + e); },
+					success : function(data) {
+						var barcode = JSON.parse(data); 
+						for(var i=0;i<barcode.list.length;i++){
+							for(var j=0;j<codeType;j++){
+								print(barcode.list[i]);
+							}
+						}
 					}
-				}
+				});
+			}else{
+				return;
 			}
 		});
 	}
