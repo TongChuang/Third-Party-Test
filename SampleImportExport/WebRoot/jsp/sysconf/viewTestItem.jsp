@@ -37,8 +37,8 @@
 
 		grid = $("#customerData").ligerGrid({
 			columns : [ {
-				display : 'customerid',
-				name : 'customerid',
+				display : 'id',
+				name : 'id',
 				width : 150,
 				hide:true,
 			},{
@@ -48,7 +48,7 @@
 				hide:true,
 			},{
 				display : '客户编号',
-				name : 'clientnumber',
+				name : 'customerid',
 				width : 100,
 			}, {
 				display : '客户名称',
@@ -260,18 +260,18 @@ body {
 <body style="padding:10px">
 	<div id="layout1">
 		<div position="left" title="客户信息">
-			<input id="customerText" type="text" style="margin:5px;"/>
+			<input id="customerText" type="text" placeholder="请输入客户名称" style="margin:5px;"/>
 			<input id="cButton" type="button" value="搜索" class="l-button" onclick="customerSearch();"/>
 			<div id="customerData"></div>
 		</div>
 
 		<div position="center" title="客户检检验项目对照">			
-			<div align="right">
+			<div align="left">
 			<table>
 			<tr>
-				<td><input id="autoButton" type="button" value="自动对照相同名称的检验项目" align="left" style="width: 210px"
+				<td style="width:30%" align="right" ><input id="autoButton" type="button" value="自动对照相同名称的检验项目" style="width: 210px"
 						class="l-button" onclick="autoControlTestItems();"/></td>
-				<td><input id="ciText" type="text" style="margin:5px" /></td>
+				<td align="right"><input id="ciText" type="text" placeholder="请输入客户编号" style="margin:5px" /></td>
 				<td><input id="ciButton" type="button" value="搜索" align="right" class="l-button" onclick="controlSearch();"/></td>
 			</tr>
 			</table>

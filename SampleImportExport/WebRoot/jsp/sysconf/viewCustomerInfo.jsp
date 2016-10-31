@@ -207,7 +207,7 @@
 				dataType : 'json',
 				type : 'post',
 				error : function(e) {
-					alert('出现未知错误');
+					$.ligerDialog.error('出现未知错误');
 				},
 				success : function(data) {
 					if (data.success != undefined) {
@@ -230,10 +230,6 @@
 		var customerid = $("#customerid").val();
 		var customername = $("#customername").val();
 		var basicinfostate = $("#basicinfostate").val();
-		alert("打印修改客户信息内容：");
-		alert(customername);
-		alert(address);
-		alert(customerid);
 		if (id == '') {
 			$.ligerDialog.warn('请先选择客户信息！');
 			return;
@@ -250,11 +246,11 @@
 				$.ligerDialog.error('出现未知错误');
 			},
 			success : function(datas) {
-				if (data.success != undefined) {
+				if (datas.success != undefined) {
+				 
 					grid.loadData(datas.cjson);
 					$.ligerDialog.success('修改客户基础信息成功！');
-				}
-				if (data.error != undefined) {
+				}else if (datas.error != undefined) {
 					$.ligerDialog.error('修改客户基础信息失败！');
 				}
 				//修改页面重新加载页面

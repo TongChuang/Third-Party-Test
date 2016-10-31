@@ -62,7 +62,7 @@ function addCustomerBaseInfo(){
 		type: 'post', 
 		success:function(datas)  
 		{
-			alert(datas.success);
+			$.ligerDialog.success(datas.success);
 			if (datas.nameExist != undefined) {
 				$.ligerDialog.error('客户名字未填或已相同！');
 			}
