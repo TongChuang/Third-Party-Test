@@ -24,8 +24,6 @@ public class DsfCustomerBaseInfo implements java.io.Serializable {
 	public DsfCustomerBaseInfo() {
 	}
 
-
-
 	public DsfCustomerBaseInfo(BigDecimal id, String customername, String address, String customerid, String currentbarcode, String customerKey,
 			String basicinfostate) {
 		this.id = id;
@@ -95,6 +93,16 @@ public class DsfCustomerBaseInfo implements java.io.Serializable {
 		this.basicinfostate = basicinfostate;
 	}
 
+	@Override
+	public String toString() {
+		return "DsfCustomerBaseInfo [id=" + id + ", customername="
+				+ customername + ", address=" + address + ", customerid="
+				+ customerid + ", currentbarcode=" + currentbarcode
+				+ ", customerKey=" + customerKey + ", basicinfostate="
+				+ basicinfostate + "]";
+	}
+
 	// Property accessors
+	
 
 }

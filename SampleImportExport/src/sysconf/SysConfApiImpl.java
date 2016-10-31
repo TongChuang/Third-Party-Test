@@ -110,8 +110,8 @@ public class SysConfApiImpl
 	 * 检验信息
 	 */
 	@Override
-	public  List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid){
-		return dataAccessApi.getCustomerInfoByNo(clientnumber,customerid);
+	public  List<DsfCustomerBaseInfo> getCustomerInfoByCostomerId(String customerid){
+		return dataAccessApi.getCustomerInfoByCustomerId(customerid);
 	}
 	@Override
 	public  List<DsfLYlxhdescribe> getYlxhdescribe(String customerid){

@@ -182,8 +182,8 @@ var availableTags = null;
 		
 		grid = $("#customerData").ligerGrid({
 			columns : [ {
-				display : 'customerid',
-				name : 'customerid',
+				display : 'id',
+				name : 'id',
 				width : 150,
 				hide:true,
 			},{
@@ -193,7 +193,7 @@ var availableTags = null;
 				hide:true,
 			},{
 				display : '客户编号',
-				name : 'clientnumber',
+				name : 'customerid',
 				width : 100,
 			}, {
 				display : '客户名称',
@@ -272,7 +272,6 @@ var availableTags = null;
 			width : '100%',
 			height : '99%',
 		});	
-		var data =["java","javaee","jquery","c++","css","html","htm5","bb","ejb","c#"];  
 		 
         grid4 =  $( "#itemsSelect" ).combobox();
 		/*grid4 = $("#searchIndex").ligerComboBox(
@@ -305,15 +304,7 @@ var availableTags = null;
 		    }
 		);
 		 */ 
-		
-	    var rs ;
-        var array = new Array();
-        for(var i = 0;i<rs.length;i++){
-        	var option = {};
-        	option.id = rs[i].childNodes[1].firstChild.data;
-        	option.text = rs[i].childNodes[1].firstChild.data;
-        	array.push(option);
-        }					
+						
         grid4 =  $("#itemsSelect").ligerComboBox({ 
          	data: array, 
             	onSelected: function(newValue){
@@ -361,13 +352,13 @@ var availableTags = null;
 	
 //检验目的ajax方法
 function ajaxTestObjective(data){
-	if(data.clientnumber == "AAAAA"){
+	if(data.customerid == "AAAAA"){
 		alert("查询本地检验目的表");
 	}else{
 	$.ajax({  
 		 url: '/jsp/sysconf/sysConf.do?method=getInspectionInfo',
 		 dataType: 'json',
-		 data: "customerid=" + data.clientnumber,
+		 data: "customerid=" + data.customerid,
 		 type: 'post',  
 		 success:function(datas)  
 		 {     	 	
@@ -392,7 +383,7 @@ function ajaxTestItems(data){
 		url: '/jsp/sysconf/sysConf.do?method=getInspectionItem',
 		dataType: 'json',
 		//data: "profiletest="+data.profiletest+"&profiletest2="+data.profiletest2+"&profiletest3="+data.profiletest3,
-		data: "profiletest="+data.profiletest+"&customerid="+data.customerid,
+		data: "profiletest="+data.profiletest+"&id="+data.id,
 		type: 'post', 
 		success:function(datas)  
 		{
@@ -413,7 +404,7 @@ function addTestObjective(){
     	return; 
     }
     else{
-    	$.ligerDialog.open({ height: 400, Width: 350, url: '/jsp/sysconf/sysConf.do?method=viewAddTestObjective&clientnumber='+row.clientnumber,title:"增加界面" });
+    	$.ligerDialog.open({ height: 400, Width: 350, url: '/jsp/sysconf/sysConf.do?method=viewAddTestObjective&customerid='+row.customerid,title:"增加界面" });
     
     }
 }

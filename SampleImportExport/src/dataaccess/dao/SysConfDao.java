@@ -37,9 +37,9 @@ public class SysConfDao extends HibernateDaoSupport {
 		}
 	}
 
-	public List<DsfCustomerBaseInfo> getCustomerInfoList(String clientnumber) {
-		if (!"".equals(clientnumber)) {
-			return DataAccessUtil.getObjectsByColum(clientnumber, "clientnumber", "DsfCustomerBaseInfo", getHibernateTemplate());
+	public List<DsfCustomerBaseInfo> getCustomerInfoList(String customerid) {
+		if (!"".equals(customerid)) {
+			return DataAccessUtil.getObjectsByColum(customerid, "customerid", "DsfCustomerBaseInfo", getHibernateTemplate());
 		} else {
 			return DataAccessUtil.getAllObjects("DsfCustomerBaseInfo", getHibernateTemplate());
 		}
@@ -77,14 +77,12 @@ public class SysConfDao extends HibernateDaoSupport {
 	/**
 	 * 检验信息
 	 */
-	public List<DsfCustomerBaseInfo> getCustomerInfoByNo(String customerid,String customername){
+	public List<DsfCustomerBaseInfo> getCustomerInfoByCostomerId(String customerid){
 		String sqlString = "";
-		if("".equals(customerid)&&"".equals(customername)){
+		if("".equals(customerid)){
 			sqlString = "from DsfCustomerBaseInfo";
-		}else if(!"".equals(customerid)&&!"".equals(customername)){
-			sqlString = "from DsfCustomerBaseInfo where customerid like '%"+customerid+"%' or customername like'%"+customername+"%'";
 		}else {
-			sqlString = "from DsfCustomerBaseInfo where customername ='"+customername+"'";
+			sqlString = "from DsfCustomerBaseInfo where customerid ='"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);

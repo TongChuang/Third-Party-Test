@@ -1,6 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -9,7 +8,7 @@
 
 <link href="/resources/ligerUI/skins/Aqua/css/ligerui-all.css"
 	rel="stylesheet" type="text/css" />
-<script src="/resources/jquery/jquery-1.9.0.min.js"
+<script src="/resources/jquery/jquery-1.5.2.min.js"
 	type="text/javascript"></script>
 <script src="/resources/ligerUI/js/core/base.js" type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerLayout.js"
@@ -201,7 +200,8 @@
 		var customername = $("#customername").val();
 		$.ligerDialog.confirm('确定要删除客户:' + customername
 				+ '的基础信息，以及该信息下的所有联系人吗?', function(yes) {
-			$.ajax({
+				if(yes){
+				$.ajax({
 				url : '/jsp/sysconf/sysConf.do?method=deleteBaseCustomerInfo',
 				data : 'id=' + id,
 				dataType : 'json',
@@ -211,13 +211,15 @@
 				},
 				success : function(data) {
 					if (data.success != undefined) {
-						$.ligerDialog.success('修改客户基础信息成功！');
+						$.ligerDialog.success(data.success);
 					}
 					if (data.error != undefined) {
-						$.ligerDialog.error('修改客户基础信息失败！');
+						$.ligerDialog.error(data.error);
 					}
 				}
 			});
+				}
+			
 		});
 
 	}
@@ -228,6 +230,10 @@
 		var customerid = $("#customerid").val();
 		var customername = $("#customername").val();
 		var basicinfostate = $("#basicinfostate").val();
+		alert("打印修改客户信息内容：");
+		alert(customername);
+		alert(address);
+		alert(customerid);
 		if (id == '') {
 			$.ligerDialog.warn('请先选择客户信息！');
 			return;
@@ -243,14 +249,15 @@
 			error : function(e) {
 				$.ligerDialog.error('出现未知错误');
 			},
-			success : function(data) {
+			success : function(datas) {
 				if (data.success != undefined) {
-					grid.loadData(data.cjson);
+					grid.loadData(datas.cjson);
 					$.ligerDialog.success('修改客户基础信息成功！');
 				}
 				if (data.error != undefined) {
 					$.ligerDialog.error('修改客户基础信息失败！');
 				}
+				//修改页面重新加载页面
 			}
 		});
 	}
@@ -302,8 +309,8 @@ body {
 						<table cellpadding="0" cellspacing="0" class="l-table-edit">
 							<tr>
 								<td align="right" class="l-table-edit-td">客户名称:</td>
-								<td align="left" class="l-table-edit-td"><input
-									readonly="readonly" name="customername" type="text"
+								<td align="left" class="l-table-edit-td">
+								<input name="customername" type="text"
 									id="customername" ltype="text" />
 								</td>
 								<td align="left"></td>

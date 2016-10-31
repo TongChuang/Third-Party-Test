@@ -268,7 +268,7 @@ h4 {
 											style="width: 170px;">
 											<option value="">请选择客户</option>
 											<c:forEach items="${customerInfoList}" var="cinfo">
-												<option value="${cinfo.clientnumber}">${cinfo.customername}</option>
+												<option value="${cinfo.customerid}">${cinfo.customername}</option>
 											</c:forEach>
 										</select>
 									</div>

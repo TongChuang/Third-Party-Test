@@ -73,7 +73,7 @@ public interface DataAccessApi
 	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String customerid);
 	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername);
 	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername,String state);
-	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByNo(String customerid,String customername);
+	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByCustomerId(String customerid);
 
 	/**
 	 * 检验信息

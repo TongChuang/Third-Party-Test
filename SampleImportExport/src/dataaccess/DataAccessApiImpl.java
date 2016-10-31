@@ -176,8 +176,8 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		return sysconfDao.getCustomerInfoByCnameState(customername,state);
 	}
 	//检验信息
-		public List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid){
-			return sysconfDao.getCustomerInfoByNo(clientnumber,customerid);
+		public List<DsfCustomerBaseInfo> getCustomerInfoByCustomerId(String customerid){
+			return sysconfDao.getCustomerInfoByCostomerId(customerid);
 		}
 		public List<DsfLYlxhdescribe> getYlxhdescribe(String customerid){
 			return sysconfDao.getYlxhdescribe(customerid);

@@ -57,7 +57,7 @@
 				display : 'profiletest',
 				name : 'profiletest',
 				width : 100,
-				//hide : true,
+				hide : true,
 			}, ],
 			data : $.extend(true, {}, resultTOjson),
 			pageSize : 20,

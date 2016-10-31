@@ -33,7 +33,7 @@ public interface SysConfApi
 	 * 获取检验信息
 	 * 
 	 */
-	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByNo(String clientnumber,String customerid);
+	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByCostomerId(String customerid);
 	public abstract List<DsfLYlxhdescribe> getYlxhdescribe(String customerid);
 	public abstract List<DsfLYlxhdescribe> getYlxhdescribeById(String id);
 	public abstract List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc);
