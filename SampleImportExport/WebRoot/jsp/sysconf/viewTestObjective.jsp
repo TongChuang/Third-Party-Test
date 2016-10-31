@@ -383,7 +383,7 @@ function ajaxTestItems(data){
 		url: '/jsp/sysconf/sysConf.do?method=getInspectionItem',
 		dataType: 'json',
 		//data: "profiletest="+data.profiletest+"&profiletest2="+data.profiletest2+"&profiletest3="+data.profiletest3,
-		data: "profiletest="+data.profiletest+"&id="+data.id,
+		data: "profiletest="+data.profiletest+"&customerid="+data.customerid,
 		type: 'post', 
 		success:function(datas)  
 		{
@@ -619,13 +619,13 @@ body {
     </div>
 	<div id="layout1">
 		<div position="left" title="客户信息">
-			<input id="customerText" type="text" style="margin:5px;"/>
+			<input id="customerText" type="text" placeholder="请输入客户名称" style="margin:5px;"/>
 			<input id="cButton" type="button" value="搜索" class="l-button" onclick="customerSearch();"/>
 			<div id="customerData"></div>
 		</div>
 		
 		<div position="center" title="检验目的">
-			<input id="testText" type="text" style="margin:5px"/>
+			<input id="testText" type="text" placeholder="请输入客户编号" style="margin:5px"/>
 			<input id="tButton" type="button" value="搜索" class="l-button" onclick="testObjectiveSearch()";/>
 			<div id="toptoolbar"></div>
 			<div id="testObjective"></div>

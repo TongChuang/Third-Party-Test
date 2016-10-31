@@ -86,6 +86,7 @@ function addCustomerBaseInfo(){
 		type: 'post', 
 		success:function(datas)  
 		{
+
 			if (datas.success != undefined) {
 				window.parent.cgrid.loadData(datas.result_json);
 				parent.$.ligerDialog.success(datas.success);
