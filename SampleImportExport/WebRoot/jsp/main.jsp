@@ -203,7 +203,7 @@
 	}
 
 	function impBaseData() {
-		f_addTab("impBaseData", "基本信息导入", "/jsp/upLoadFile/viewImpBaseData.jsp");
+		f_addTab("impBaseData", "基本信息导入", "/jsp/updown/updown.do?method=viewImpBaseData");
 	}
 	function impExcel() {
 		f_addTab("impExcel", "通过Excel导入接收的标本",

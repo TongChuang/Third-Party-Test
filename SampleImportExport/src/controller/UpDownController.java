@@ -896,49 +896,12 @@ public class UpDownController extends MultiActionController {
 	public ModelAndView viewImpBaseData(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			logger.info((Object) (new StringBuilder("Begin to viewImpBaseData ")));
-			/*
-			 * MultipartHttpServletRequest multipartRequest =
-			 * (MultipartHttpServletRequest) request; MultipartFile file =
-			 * multipartRequest.getFile("uploadFile"); if (file.isEmpty()) {
-			 * throw new Exception("文件不存在！"); } String xmlString = null; //
-			 * 创建SAXReader对象 SAXReader reader = new SAXReader(); // 读取文件
-			 * 转换成Document // Document document = reader.read(new //
-			 * File("C:/Users/kewell/Desktop/a.xml")); String fileName =
-			 * file.getName(); // 根据上传的文件路径解析文件 InputStream in = null; in =
-			 * file.getInputStream(); Document document = reader.read(in); //
-			 * document转换为String字符串 xmlString = document.asXML(); //
-			 * System.out.println("document 字符串：" + xmlString);
-			 * TestObjectives_XML tObjectives_XML = XmlUtil.converyToJavaBean(
-			 * xmlString, TestObjectives_XML.class); List xmldsftiDateList = new
-			 * ArrayList();
-			 * 
-			 * List resultTOList = new ArrayList(); List resultTIlist = new
-			 * ArrayList();
-			 * 
-			 * String customerid = "";
-			 * 
-			 * for (TestObjectiveList testObjectiveList : tObjectives_XML
-			 * .getTestObjectiveLists()) { //返回页面数据需要的JSON集合
-			 * resultTOList.add(testObjectiveList.getTestObjective_XML());
-			 * 
-			 * TestObjective_XML tObjective_XML = new TestObjective_XML();
-			 * DsfLYlxhdescribe dYlxhdescribe = new DsfLYlxhdescribe();
-			 * tObjective_XML = testObjectiveList.getTestObjective_XML();
-			 * 
-			 * customerid = tObjective_XML.getCustomerid(); for
-			 * (Base_TestItemList_XML tItemList_XML : testObjectiveList
-			 * .getTestItemList_XMLs()) { //返回页面数据需要的JSON集合
-			 * resultTIlist.add(tItemList_XML.getTestItem_XML()); } }
-			 * 
-			 * 
-			 * 
-			 * String result_TOList = PubJsonUtil.list2json(resultTOList);
-			 * String result_TIlist = PubJsonUtil.list2json(resultTIlist);
-			 * modelAndView.addObject("result_TOjson", result_TOList);
-			 * modelAndView.addObject("result_TIjson", result_TIlist);
-			 * modelAndView.addObject("customerid", result_TIlist);
-			 */
+			
+			List<DsfCustomerBaseInfo> resultList = new ArrayList<DsfCustomerBaseInfo>();
+			resultList = upDownApi.getCustomerInfo();
+			
 			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewImpBaseData.jsp");
+			modelAndView.addObject("customerInfoList", resultList);
 			logger.info((Object) (new StringBuilder("End to viewImpBaseData ")));
 			return modelAndView;
 		} catch (Exception e) {
@@ -968,6 +931,8 @@ public class UpDownController extends MultiActionController {
 			if (file.isEmpty()) {
 				throw new Exception("文件不存在！");
 			}
+			String customerid_PageSelect = request.getParameter("customerid");
+			
 			String xmlString = null;
 			// 创建SAXReader对象
 			SAXReader reader = new SAXReader();
@@ -992,77 +957,83 @@ public class UpDownController extends MultiActionController {
 			List resultTIlist = new ArrayList();
 			// 当前导入的客户ID定义
 			String customerid = tObjectives_XML.getCustomerid();
+			if(customerid_PageSelect.equals(customerid)){
+				// 获取所有当前用户的已存在数据
+				List<DsfLYlxhdescribe> ylxhList = upDownApi.getYlxhdescribeByYlxh("", customerid);
+				List<DsfTestitems> dsftList = upDownApi.getDsfTestItemsByTestItem("", customerid);
+				// 查询数据库中的历史数据放入SET以防止新上来的数据会和原来的有重复的
+				Set ylxhSet = new HashSet();
+				Set tiSet = new HashSet();
 
-			// 获取所有当前用户的已存在数据
-			List<DsfLYlxhdescribe> ylxhList = upDownApi.getYlxhdescribeByYlxh("", customerid);
-			List<DsfTestitems> dsftList = upDownApi.getDsfTestItemsByTestItem("", customerid);
-			// 查询数据库中的历史数据放入SET以防止新上来的数据会和原来的有重复的
-			Set ylxhSet = new HashSet();
-			Set tiSet = new HashSet();
+				// 用来放入本次导入的数据，来验证导入的数据中是否有重复的检验项目
+				Set newTiSet = new HashSet();
+				// 用来放入当前
+				Map<String, Base_TestItem_XML> xmlTiMao = new HashMap<String, Base_TestItem_XML>();
 
-			// 用来放入本次导入的数据，来验证导入的数据中是否有重复的检验项目
-			Set newTiSet = new HashSet();
-			// 用来放入当前
-			Map<String, Base_TestItem_XML> xmlTiMao = new HashMap<String, Base_TestItem_XML>();
-
-			for (DsfLYlxhdescribe dy : ylxhList) {
-				ylxhSet.add(dy.getYlxh());
-			}
-			for (DsfTestitems dy : dsftList) {
-				tiSet.add(dy.getIndexId());
-			}
-			List testList = new ArrayList();
-			for (TestObjective_XML testObjective_XML : tObjectives_XML.getTestObjectList()) {
-				// 返回页面数据需要的JSON集合
-				resultTOList.add(testObjective_XML);
-				DsfLYlxhdescribe dYlxhdescribe = new DsfLYlxhdescribe();
-				if (!ylxhSet.contains(testObjective_XML.getYlxh())) {
-					String dsfylxhseqString = dataAccessApi.getSeqString("DSF_YLXH_SEQUENCE");
-					BeanUtils.copyProperties(dYlxhdescribe, testObjective_XML);
-					dYlxhdescribe.setCustomerid(customerid);
-					dYlxhdescribe.setId(new BigDecimal(dsfylxhseqString));
-					dsftODateList.add(dYlxhdescribe);
+				for (DsfLYlxhdescribe dy : ylxhList) {
+					ylxhSet.add(dy.getYlxh());
 				}
-			}
-
-			List dsfctiList = new ArrayList();
-			for (Base_TestItem_XML tItemList_XML : tObjectives_XML.getBase_testitemList()) {
-				if (null != tItemList_XML) {
-					if (!tiSet.contains(tItemList_XML.getTestitem())) {
-						DsfTestitems dsfTestitems = new DsfTestitems();
-						BeanUtils.copyProperties(dsfTestitems, tItemList_XML);
-						String dsftseqString = dataAccessApi.getSeqString("DSF_TESTITEMS_SEQUENCE");
-						dsfTestitems.setId(new BigDecimal(dsftseqString));
-						dsfTestitems.setIndexId(tItemList_XML.getTestitem());
-						dsfTestitems.setCustomerid(customerid);
-						if (!newTiSet.contains(dsfTestitems.getIndexId())) {
-							dsftiDateList.add(dsfTestitems);
-						}
-						newTiSet.add(dsfTestitems.getIndexId());
-						
-						//把该条记录放入List,插入对照表
-						DsfControltestitems  dsfcti = new DsfControltestitems();
-						dsfcti.setCustomerid(customerid);
-						dsfcti.setCustomeritems(tItemList_XML.getTestitem());
-						dsfcti.setCustomeritemsname(tItemList_XML.getName());
-						String dsfctiseqString = dataAccessApi.getSeqString("DSF_CONTROLTESTITEMS_SEQ");
-						dsfcti.setId(new BigDecimal(dsfctiseqString));
-						dsfctiList.add(dsfcti);
+				for (DsfTestitems dy : dsftList) {
+					tiSet.add(dy.getIndexId());
+				}
+				List testList = new ArrayList();
+				for (TestObjective_XML testObjective_XML : tObjectives_XML.getTestObjectList()) {
+					// 返回页面数据需要的JSON集合
+					resultTOList.add(testObjective_XML);
+					DsfLYlxhdescribe dYlxhdescribe = new DsfLYlxhdescribe();
+					if (!ylxhSet.contains(testObjective_XML.getYlxh())) {
+						String dsfylxhseqString = dataAccessApi.getSeqString("DSF_YLXH_SEQUENCE");
+						BeanUtils.copyProperties(dYlxhdescribe, testObjective_XML);
+						dYlxhdescribe.setCustomerid(customerid);
+						dYlxhdescribe.setId(new BigDecimal(dsfylxhseqString));
+						dsftODateList.add(dYlxhdescribe);
 					}
-					// 返回页面的JSON List数据
-					xmlTiMao.put(tItemList_XML.getTestitem(), tItemList_XML);
 				}
+
+				List dsfctiList = new ArrayList();
+				for (Base_TestItem_XML tItemList_XML : tObjectives_XML.getBase_testitemList()) {
+					if (null != tItemList_XML) {
+						if (!tiSet.contains(tItemList_XML.getTestitem())) {
+							DsfTestitems dsfTestitems = new DsfTestitems();
+							BeanUtils.copyProperties(dsfTestitems, tItemList_XML);
+							String dsftseqString = dataAccessApi.getSeqString("DSF_TESTITEMS_SEQUENCE");
+							dsfTestitems.setId(new BigDecimal(dsftseqString));
+							dsfTestitems.setIndexId(tItemList_XML.getTestitem());
+							dsfTestitems.setCustomerid(customerid);
+							if (!newTiSet.contains(dsfTestitems.getIndexId())) {
+								dsftiDateList.add(dsfTestitems);
+							}
+							newTiSet.add(dsfTestitems.getIndexId());
+							
+							//把该条记录放入List,插入对照表
+							DsfControltestitems  dsfcti = new DsfControltestitems();
+							dsfcti.setCustomerid(customerid);
+							dsfcti.setCustomeritems(tItemList_XML.getTestitem());
+							dsfcti.setCustomeritemsname(tItemList_XML.getName());
+							String dsfctiseqString = dataAccessApi.getSeqString("DSF_CONTROLTESTITEMS_SEQ");
+							dsfcti.setId(new BigDecimal(dsfctiseqString));
+							dsfctiList.add(dsfcti);
+						}
+						// 返回页面的JSON List数据
+						xmlTiMao.put(tItemList_XML.getTestitem(), tItemList_XML);
+					}
+				}
+				//对照表数据添加
+				System.out.println("对照表信息："+dsfctiList);
+				upDownApi.saveDataByList(dsfctiList, "DsfControltestitems");
+				
+				// 返回页面数据需要的JSON集合
+				for (Map.Entry entry : xmlTiMao.entrySet()) {
+					resultTIlist.add(entry.getValue());
+				}
+				upDownApi.saveDataByList(dsftiDateList, "DsfTestitems");
+				upDownApi.saveDataByList(dsftODateList, "DsfLYlxhdescribe");
+				request.setAttribute("success", "导入基础数据成功！");
+			}else {
+				request.setAttribute("error", "数据文件里的客户编号和选择的客户编号不一致！");
 			}
-			//对照表数据添加
-			System.out.println("对照表信息："+dsfctiList);
-			upDownApi.saveDataByList(dsfctiList, "DsfControltestitems");
+
 			
-			// 返回页面数据需要的JSON集合
-			for (Map.Entry entry : xmlTiMao.entrySet()) {
-				resultTIlist.add(entry.getValue());
-			}
-			upDownApi.saveDataByList(dsftiDateList, "DsfTestitems");
-			upDownApi.saveDataByList(dsftODateList, "DsfLYlxhdescribe");
 
 			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewImpBaseData.jsp");
 			String result_TOList = PubJsonUtil.list2json(resultTOList);
