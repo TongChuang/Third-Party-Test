@@ -51,7 +51,6 @@ function updateTestObjectiveButton(){
 		type: 'post', 
 		success:function(datas)  
 		{
-			alert(datas.success);
 			window.parent.grid2.loadData(datas.result_json);
         }
 	});

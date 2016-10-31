@@ -46,7 +46,6 @@ $(function () {
                 , buttons: [{ text: "保存", width: 60, click: addTestObjectiveButton }]
             });
             var rs = $("#hidden_input").val();
-            alert(rs);
             //设置表单内容
             form.setData({customerid:rs});
             

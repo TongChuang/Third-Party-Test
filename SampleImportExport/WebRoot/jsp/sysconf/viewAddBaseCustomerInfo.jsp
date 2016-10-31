@@ -26,9 +26,11 @@
 <script src="/resources/jquery-validation/jquery.validate.min.js" type="text/javascript"></script>
 <script src="/resources/jquery-validation/jquery.metadata.js" type="text/javascript"></script>
 <script src="/resources/jquery-validation/messages_cn.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerComboBox.js" type="text/javascript"></script>
 <script type="text/javascript">
 var groupicon = "/resources/ligerUI/skins/icons/communication.gif";
 var form = null;
+var basicinfostateData = [{ basicinfostate: '1', basicinfostateName: '男' }, { basicinfostate: '2', basicinfostateName: '女'}];
 $(function () {
              //创建表单结构
              form = $("#form").ligerForm({
@@ -40,21 +42,43 @@ $(function () {
                 { display: "id", name: "id", newline: true, type: "hidden" },
                 { display: "客户地址", name: "address", newline: true, type: "text", validate:{required:true,minlength:1} },
                 { display: "客户Key", name: "customerKey", newline: true, type: "text", validate:{required:true,minlength:1} },
-                { display: "基础信息状态", name: "basicinfostate", newline: true, type: "text", validate:{required:true,maxlength:1} },
-                ]
-                , buttons: [{ text: "保存", width: 60, click: addCustomerBaseInfo }]
+                //{ display: "基础信息状态", name: "basicinfostate", newline: true, type: "text", validate:{required:true,maxlength:1} ,
+                { display: "类别 ", name: "basicinfostate", newline: true, type: "select", comboboxName: "basicinfostateName", options: { valueFieldID: "basicinfostate" },
+                	 data: basicinfostateData, 
+				},
+                ], buttons: [{ text: "保存", width: 160, click: addCustomerBaseInfo }]
             });
             var rs = $("#hidden_input").val();
-            //alert("新增id值："+rs);
-            //设置表单内容
             form.setData({id:rs});
             
 });
 
+ var dialog = frameElement.dialog; //调用页面的dialog对象(ligerui对象)
+ function colseDialog(){
+	 dialog.close();//关闭dialog 
+ }
+ 
 function addCustomerBaseInfo(){
 	var data = form.getData();
-	//alert(JSON.stringify(data));
-	//alert(JSON.stringify($("#ylmc").val()));
+	if(data.customername==''){
+		$.ligerDialog.error('请输入客户名称！');
+		return;
+	}
+	if(data.customerid==''){
+		$.ligerDialog.error('请输入客户编号！');
+		return;
+	}
+	var cgridData = window.parent.cgrid.getData();
+	for(var i=0;i<cgridData.length;i++){
+		if(data.customername==cgridData[i].customername){
+			$.ligerDialog.error('客户名字已经存在，请重新填写！');
+			return;
+		}
+		if(data.customerid==cgridData[i].customerid){
+			$.ligerDialog.error('客户编号已经存在，请重新填写！');
+			return;
+		}
+	}
 	$.ajax({  
 		url: '/jsp/sysconf/sysConf.do?method=addBaseCustomerInfo',
 		dataType: 'json',
@@ -62,22 +86,19 @@ function addCustomerBaseInfo(){
 		type: 'post', 
 		success:function(datas)  
 		{
-			alert(datas.success);
-			if (datas.nameExist != undefined) {
-				$.ligerDialog.error('客户名字未填或已相同！');
-			}
 			if (datas.success != undefined) {
-				$.ligerDialog.success('修改客户基础信息成功！');
-				window.parent.grid.loadData(datas.result_json);
+				window.parent.cgrid.loadData(datas.result_json);
+				parent.$.ligerDialog.success(datas.success);
+				colseDialog();
 			}
 			if (datas.error != undefined) {
-				$.ligerDialog.error('修改客户基础信息失败！');
+				$.ligerDialog.error(datas.error);
 			}
 		
 			
         },
         error:function(datas){
-        	alert(未知错误);
+        	$.ligerDialog.error('未知错误');
         } 
 	});
 }

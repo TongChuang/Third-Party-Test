@@ -78,7 +78,7 @@
 		var pString = profiletest.split(",");//以逗号作为分隔字符串
 		for ( var i = 0; i < resultTIjson.Rows.length; i++) {
 			for(var j=0;j<pString.length;j++){
-				if(parseInt(pString[j])==parseInt(resultTIjson.Rows[i].testitem)){
+				if(pString[j]==resultTIjson.Rows[i].testitem){
 					data.Rows.push(resultTIjson.Rows[i]);
 				}
 			}
@@ -93,7 +93,7 @@
 		$(grid).css('margin', 10).ligerGrid({
 			columns : [ {
 				display : '检验项目编号',
-				name : 'indexId',
+				name : 'testitem',
 				width : 150,
 			}, {
 				display : '检验项目名称',

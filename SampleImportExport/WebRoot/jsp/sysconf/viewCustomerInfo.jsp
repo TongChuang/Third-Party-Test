@@ -34,7 +34,8 @@
 <script type="text/javascript">
 	var resultJson = null;
 	var contactJson = null;
-	var grid;
+	var ss=0;
+	var cgrid;
 	$(function() {
 		$("form").ligerForm();
 		$("#navtab").ligerTab();
@@ -59,7 +60,7 @@
 			} ]
 		});
 
-		grid = $("#maingridData").ligerGrid({
+		cgrid = $("#maingridData").ligerGrid({
 			columns : [ {
 				display : 'id',
 				name : 'id',
@@ -189,7 +190,7 @@
 	});
 
 	function addBase() {
-		   	$.ligerDialog.open({ height: 400, Width: 350, url: '/jsp/sysconf/sysConf.do?method=viewAddBaseCustomerInfo',title:"增加客户信息界面" });
+		   	$.ligerDialog.open({ height: 400, Width: 380, url: '/jsp/sysconf/sysConf.do?method=viewAddBaseCustomerInfo',title:"增加客户信息界面" });
 	}
 	function deleteBase() {
 		var id = $("#id").val();
@@ -231,9 +232,6 @@
 		var customername = $("#customername").val();
 		var basicinfostate = $("#basicinfostate").val();
 		alert("打印修改客户信息内容：");
-		alert(customername);
-		alert(address);
-		alert(customerid);
 		if (id == '') {
 			$.ligerDialog.warn('请先选择客户信息！');
 			return;
@@ -251,7 +249,7 @@
 			},
 			success : function(datas) {
 				if (data.success != undefined) {
-					grid.loadData(datas.cjson);
+					cgrid.loadData(datas.cjson);
 					$.ligerDialog.success('修改客户基础信息成功！');
 				}
 				if (data.error != undefined) {
