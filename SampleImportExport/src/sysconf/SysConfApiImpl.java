@@ -80,9 +80,6 @@ public class SysConfApiImpl
 		SIEContext.setSystemConfigTable(systemConfigTable);
 	}
 
-	public String getWebServiceUrl() {
-		return handler.getWebServiceUrl();
-	}
 	
 	public List<DsfCustomerBaseInfo> getCustomerInfoList(String  customerid){
 		return dataAccessApi.getCustomerBaseInfoByCustomerId(customerid);

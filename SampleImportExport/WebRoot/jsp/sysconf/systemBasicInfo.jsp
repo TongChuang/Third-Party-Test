@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
-<title>血站发血信息</title>
+<title></title>
 <link href="/resources/ligerUI/skins/Aqua/css/ligerui-all.css"
 	rel="stylesheet" type="text/css" />
 <script src="/resources/jquery/jquery-1.9.0.min.js"
@@ -20,19 +20,24 @@
 	type="text/javascript"></script>
 <script type="text/javascript">
 	function before() {
-		var webserviceUrl = $("#webserviceUrl").val();
-		if (webserviceUrl == "") {
-			$.ligerDialog.error('请输入血站的接口地址！');
-			return;
-		} 
-		var userId = $("#userId").val();
-		if (userId == "") {
-			$.ligerDialog.error('请输入接入用户ID！');
+		var defaultPassword = $("#defaultPassword").val();
+		if (defaultPassword == "") {
+			$.ligerDialog.error('请输入帐户默认密码！');
 			return;
 		}
-		var accessCode = $("#accessCode").val();
-		if (accessCode == "") {
-			$.ligerDialog.error('请输入接入验证码！');
+		var upftpRoot = $("#updateServerAddress").val();
+		if (upftpRoot == "") {
+			$.ligerDialog.error('请输入更新服务器地址！');
+			return;
+		}
+		var downftpRoot = $("#upftpRoot").val();
+		if (downftpRoot == "") {
+			$.ligerDialog.error('请输入ftp上传地址！');
+			return;
+		}
+		var updateServerAddress = $("#downftpRoot").val();
+		if (updateServerAddress == "") {
+			$.ligerDialog.error('请输入ftp下载地址！');
 			return;
 		}
 		document.form.submit();
@@ -63,81 +68,66 @@
 			</div>
 			<ul>
 				<li class="l-fieldcontainer l-fieldcontainer-first" fieldindex="0">
-				<li style="width:150px;text-align:right;">所属医院：</li>
-				<li id="form1|0" style="width:200px;text-align:left;"><div
-						class="l-text" style="width: 198px;">
-							<select name="hospital" id="hospital" class="textReadonly"
-							ltype="select" style="width:198px">
-								<c:forEach items="${ddList}" var="ddinfo">
-									<option value="${ddinfo.code}"
-										<c:if test="${ddinfo.code==hospital}">selected="selected"</c:if>
-									>${ddinfo.name}</option>
-								</c:forEach>
-						</select>
-						<div class="l-text-l"></div>
-						<div class="l-text-r"></div>
-					</div></li>
-				<li style="width:190px;"><span class="l-star">*(此项修改后必须重新登录！)</span></li>
+					<li style="width:150px;text-align:right;">帐户默认密码：</li>
+
+					<li id="form1|0" style="width:120px;text-align:left;"><div
+							class="l-text" style="width: 118px;">
+							<input type="text" id="defaultPassword" name="defaultPassword"
+								class="l-text-field" value="${defaultPassword}"
+								ligeruiid="defaultPassword" style="width: 118px;">
+								<div class="l-text-l"></div>
+								<div class="l-text-r"></div>
+						</div>
 				</li>
+					<li style="width:190px;"><span class="l-star">*</span>
+				</li></li>
 			</ul>
 			<ul>
 				<li class="l-fieldcontainer l-fieldcontainer-first" fieldindex="0">
-				<li style="width:150px;text-align:right;">血液中心：</li>
-				<li id="form1|0" style="width:200px;text-align:left;"><div
-						class="l-text" style="width: 198px;">
-							<select name="bloodbank" id="bloodbank" class="textReadonly"
-							ltype="select" style="width:198px">
-								<c:forEach items="${ddList}" var="ddinfo">
-									<option value="${ddinfo.code}"
-										<c:if test="${ddinfo.code==bloodbank}">selected="selected"</c:if>
-									>${ddinfo.name}</option>
-								</c:forEach>
-						</select>
-						<div class="l-text-l"></div>
-						<div class="l-text-r"></div>
-					</div></li>
-				<li style="width:40px;"><span class="l-star">*</span></li>
-				</li>
+					<li style="width:150px;text-align:right;">更新服务器地址：</li>
+
+					<li id="form1|0" style="width:300px;text-align:left;"><div
+							class="l-text" style="width: 298px;">
+							<input type="text" id="updateServerAddress"
+								name="updateServerAddress" value="${updateServerAddress}"
+								class="l-text-field" ligeruiid="updateServerAddress"
+								style="width: 298px;">
+								<div class="l-text-l"></div>
+								<div class="l-text-r"></div>
+						</div>
+				<li style="width:40px;"><span class="l-star">*</span>
+				</li></li>
 			</ul>
 			<ul>
 				<li class="l-fieldcontainer l-fieldcontainer-first" fieldindex="0">
-				<li style="width:150px;text-align:right;">血站接口地址：</li>
-				<li id="form1|0" style="width:300px;text-align:left;"><div
-						class="l-text" style="width: 298px;">
-						<input type="text" id="webserviceUrl" name="webserviceUrl" value="${weburl}"
-							class="l-text-field" ligeruiid="webserviceUrl"
-							style="width: 298px;">
-							<div class="l-text-l"></div>
-							<div class="l-text-r"></div>
-					</div></li>
-				<li style="width:40px;"><span class="l-star">*</span></li>
+					<li style="width:150px;text-align:right;">ftp上传地址：</li>
+
+					<li id="form1|0" style="width:300px;text-align:left;"><div
+							class="l-text" style="width: 298px;">
+							<input type="text" id="upftpRoot" name="upftpRoot"
+								class="l-text-field" value="${upftpRoot}" ligeruiid="upftpRoot"
+								style="width: 298px;">
+								<div class="l-text-l"></div>
+								<div class="l-text-r"></div>
+						</div>
 				</li>
+					<li style="width:40px;"><span class="l-star">*</span>
+				</li></li>
 			</ul>
 			<ul>
 				<li class="l-fieldcontainer l-fieldcontainer-first" fieldindex="0">
-				<li style="width:150px;text-align:right;">接入用户ID：</li>
-				<li id="form1|0" style="width:200px;text-align:left;"><div
-						class="l-text" style="width: 198px;">
-						<input type="text" id="userId" name="userId" class="l-text-field" value="${userid}"
-							ligeruiid="userId" style="width: 198px;">
-							<div class="l-text-l"></div>
-							<div class="l-text-r"></div>
-					</div></li>
-				<li style="width:40px;"><span class="l-star">*</span></li>
+					<li style="width:150px;text-align:right;">ftp下载地址：</li>
+					<li id="form1|0" style="width:300px;text-align:left;"><div
+							class="l-text" style="width: 298px;">
+							<input type="text" id="downftpRoot" name="downftpRoot"
+								class="l-text-field" value="${downftpRoot}"
+								ligeruiid="downftpRoot" style="width: 298px;">
+								<div class="l-text-l"></div>
+								<div class="l-text-r"></div>
+						</div>
 				</li>
-			</ul>
-			<ul>
-				<li class="l-fieldcontainer l-fieldcontainer-first" fieldindex="0">
-				<li style="width:150px;text-align:right;">接入验证码：</li>
-				<li id="form1|0" style="width:200px;text-align:left;"><div
-						class="l-text" style="width: 198px;">
-						<input type="text" id="accessCode" name="accessCode" value="${accesscode}"
-							class="l-text-field" ligeruiid="accessCode" style="width: 198px;">
-						<div class="l-text-l"></div>
-						<div class="l-text-r"></div>
-					</div></li>
-				<li style="width:40px;"><span class="l-star">*</span></li>
-				</li>
+					<li style="width:40px;"><span class="l-star">*</span>
+				</li></li>
 			</ul>
 			<ul>
 				<br />
@@ -145,15 +135,14 @@
 			<ul>
 				<li class="l-fieldcontainer l-fieldcontainer-first" fieldindex="0">
 					<li style="width:150px;text-align:right;"></li>
-				<li><div class="l-button" ligeruiid="Button1000"
-						onclick="before()" style="width: 120px;">
-						<div class="l-button-l"></div>
-						<div class="l-button-r"></div>
-						<span>保存数据</span>
-					</div>
-				</li>
-				<li style="width:40px;"><span class="l-star"></span></li>
-				</li>
+					<li><div class="l-button" ligeruiid="Button1000"
+							onclick="before()" style="width: 120px;">
+							<div class="l-button-l"></div>
+							<div class="l-button-r"></div>
+							<span>保存数据</span>
+						</div></li>
+					<li style="width:40px;"><span class="l-star"></span>
+				</li></li>
 			</ul>
 
 			</li>
