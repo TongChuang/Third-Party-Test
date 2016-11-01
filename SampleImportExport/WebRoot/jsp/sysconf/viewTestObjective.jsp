@@ -170,8 +170,7 @@ var availableTags = null;
 			rightWidth : 300,
 		});
 		$("#toptoolbar").ligerToolBar({ items: [
-                {
-                    text: '新增检验目的', click: addTestObjective, icon:'add'},
+                { text: '新增检验目的', click: addTestObjective, icon:'add'},
                 { line:true },
                 { text: '修改检验目的', click: modifyTestObjective },
                  { line:true },

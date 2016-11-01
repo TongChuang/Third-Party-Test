@@ -27,15 +27,15 @@ public class QueryStatsApiImpl implements QueryStatsApi {
 	}
 	
 	public List<DsfCustomerBaseInfo> getBaseCustomerInfo(String customerid){
-		return dataAccessApi.getCustomerBaseInfoByCustomerId(customerid);
+		return dataAccessApi.getCustomerBaseInfoByCustomerId_querystats(customerid);
 	}
 	
 	public void saveData(DsfCustomerBaseInfo dcbi,String tableName){
-		dataAccessApi.saveData(dcbi, tableName);
+		dataAccessApi.saveData_querystats(dcbi, tableName);
 	}
 	
 	public void saveAllData(List objectList,String tableName){
-		dataAccessApi.saveDataByList(objectList, tableName);
+		dataAccessApi.saveDataByList_querystats(objectList, tableName);
 	}
 
 	/*

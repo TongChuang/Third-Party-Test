@@ -40,12 +40,6 @@ public class SysConfHandler {
 
 	
 
-	public String getWebServiceUrl() {
-		SystemConfigSetting setting = (SystemConfigSetting)SIEContext.getSystemConfigTable().getConfigs().get(0);
-		String webserviceUrl = "";
-		webserviceUrl = setting.getWebserviceUrl();
-		return webserviceUrl;
-	}
 	
 	
 
