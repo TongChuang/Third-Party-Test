@@ -86,6 +86,7 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	public void saveCustomerBaseInfo(DsfCustomerBaseInfo dsfc){
 		securityDao.saveCustomerBaseInfo(dsfc);
 	}
+	
 	public List<DsfCustomerBaseInfo> getCustomerInfo(){
 		return	updownDao.getCustomerInfo();
 	}
@@ -143,6 +144,10 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		return updownDao.getSamplesByBarCode( barcode);
 	}
 	
+	public DsfCustomerBaseInfo getCustomerInfoById_updown(String id){
+		return updownDao.getCustomerInfoById(id);
+	}
+	
 	//webservice
 	public boolean checkDsfUserInfo(String customerid,String customerKey){
 		return updownDao.checkDsfUserInfo(customerid,customerKey);
@@ -154,6 +159,11 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	
 	public List<LTestresult> getLTestresultByNo(String sampleno){
 		return updownDao.getLTestresultByNo(sampleno);
+	}
+	
+	//
+	public void saveCustomerBaseInfo_sysconf(DsfCustomerBaseInfo dsfc){
+		sysconfDao.saveCustomerBaseInfo(dsfc);
 	}
 	
 	public List<DsfCustomerBaseInfo> getCustomerInfoList(String clientnumber){
@@ -232,6 +242,10 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		public List<LTestitem> getTestItemsByIndexId(String indexId){
 			return sysconfDao.getTestItemsByIndexId(indexId);
 		}
+		//
+		public void saveData_sysconf(Object t,String tableName){
+			sysconfDao.saveData(t,tableName);
+		}
 		/**
 		 * 前处理
 		 */
@@ -248,7 +262,24 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 			return updownDao.getInspectionSectionByYLXH(ylxh,customerid);
 		}
 
-	public List<LabUser> getUserInfo(String username){
-		return updownDao.getUserInfo(username);
+	    public List<LabUser> getUserInfo(String username){
+		    return updownDao.getUserInfo(username);
+	    }
+	    //
+	    public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_updown(String clientnumber){
+			return updownDao.getCustomerBaseInfoByCustomerId(clientnumber);
+		}
+	
+	/**
+	 * queryStats
+	 */
+	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_querystats(String clientnumber){
+		return queryStatsDao.getCustomerBaseInfoByCustomerId(clientnumber);
+	}
+	public void saveData_querystats(Object t,String tableName){
+		queryStatsDao.saveData(t,tableName);
+	}
+	public void saveDataByList_querystats(List <Object>objectList,String tableName){
+		queryStatsDao.saveDataByList(objectList,tableName);
 	}
 }

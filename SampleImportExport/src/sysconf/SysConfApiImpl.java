@@ -97,7 +97,7 @@ public class SysConfApiImpl
 		return dataAccessApi.getCustomerInfoByName(customername);
 	}
 	public void saveCustomerInfo(DsfCustomerBaseInfo dcbi){
-		dataAccessApi.saveCustomerBaseInfo(dcbi);
+		dataAccessApi.saveCustomerBaseInfo_sysconf(dcbi);
 	}
 	public void deleteCustomerInfo(String customerid){
 		dataAccessApi.deleteCustomerInfo(customerid);
@@ -180,9 +180,11 @@ public class SysConfApiImpl
 	public void saveAll(List<DsfControltestitems> dcttList){
 		dataAccessApi.saveAll(dcttList);
 	}
+	
+	//
 	@Override
 	public void saveData(Object t,String tableName){
-		dataAccessApi.saveData(t,tableName);
+		dataAccessApi.saveData_sysconf(t,tableName);
 	}
 	@Override
 	public List<LTestitem> getTestItemsByIndexId(String indexId){
