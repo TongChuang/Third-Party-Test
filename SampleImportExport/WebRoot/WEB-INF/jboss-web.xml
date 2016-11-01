@@ -2,5 +2,5 @@
 <!DOCTYPE jboss-web>
 <jboss-web>
 	<context-root>/</context-root>
-	<virtual-host>127.0.0.1</virtual-host> 
+	<virtual-host>114.55.224.100</virtual-host> 
 </jboss-web> 

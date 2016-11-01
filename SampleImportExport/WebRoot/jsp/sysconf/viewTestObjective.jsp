@@ -253,7 +253,6 @@ var availableTags = null;
 			height : '99%',
 			checkbox : false,
 			onSelectRow : function(data, rowindex, rowobj) {
-				//alert("选中的是："+data.ylmc);		
 				ajaxTestItems(data);
 			},
 		});
@@ -363,13 +362,7 @@ function ajaxTestObjective(data){
 		 success:function(datas)  
 		 {     	 	
 			grid2.loadData(datas.result_json);
-			/*
-			testObjectiveJson = JSON.stringify(datas.result_json);   
-			alert(testObjectiveJson);
-			alert(JSON.stringify(customerJson));
-			*/
 			testObjectiveJson = datas.result_json;
-			     	
 		 },
 		 error:function(){
 			alert(4);

@@ -53,8 +53,6 @@ $(function () {
 
 function addTestObjectiveButton(){
 	var data = form.getData();
-	alert(JSON.stringify(data));
-	alert(JSON.stringify($("#ylmc").val()));
 	$.ajax({  
 		url: '/jsp/sysconf/sysConf.do?method=addTestObjective',
 		dataType: 'json',
@@ -62,7 +60,7 @@ function addTestObjectiveButton(){
 		type: 'post', 
 		success:function(datas)  
 		{
-			alert(datas.success);
+			$.ligerDialog.success(datas.success);
 			window.parent.grid2.loadData(datas.result_json);
         }
 	});
