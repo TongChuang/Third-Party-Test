@@ -5,7 +5,7 @@ package webService.server.help;
 
 import common.datamodel.DsfTestitems;
 import common.datamodel.DsfProcess;
-import common.datamodel.LSample;
+import common.datamodel.DsfSampleInfo;
 import common.webmodel.SampleInfo_XML;
 import common.webmodel.TestItem_XML;
 
@@ -15,7 +15,7 @@ import common.webmodel.TestItem_XML;
  */
 public class ConversionBean {
 
-	public static LSample cSample(LSample ls,SampleInfo_XML sXml) {
+	public static DsfSampleInfo cSample(DsfSampleInfo ls,SampleInfo_XML sXml) {
 		ls.setAge(sXml.getAge());
 		ls.setAgeunit(sXml.getAgeunit());
 		ls.setBirthday(sXml.getBirthday());

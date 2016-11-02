@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="common.datamodel.LTestresult" table="L_TESTRESULT"
+	<class name="common.datamodel.DsfTestResult" table="DSF_TEST_RESULT"
 		schema="LAB">
 		<composite-id>
 			<key-property name="sampleno" column="SAMPLENO" type="java.lang.String"></key-property>

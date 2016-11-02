@@ -5,10 +5,10 @@ package common.datamodel;
 import java.math.BigDecimal;
 
 /**
- * LSample entity. @author MyEclipse Persistence Tools
+ * DsfSampleInfo entity. @author MyEclipse Persistence Tools
  */
 
-public class LSample implements java.io.Serializable {
+public class DsfSampleInfo implements java.io.Serializable {
 
 	// Fields
 	private BigDecimal id;
@@ -41,11 +41,11 @@ public class LSample implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public LSample() {
+	public DsfSampleInfo() {
 	}
 
 	/** full constructor */
-	public LSample(BigDecimal id, String age, String birthday, Long cycle,
+	public DsfSampleInfo(BigDecimal id, String age, String birthday, Long cycle,
 			String departBed, String diagnostic, Long hasimages,
 			String hossection, String inspectionname, Long iswriteback,
 			Long modifyflag, String patientid, String patientblh,
@@ -291,7 +291,7 @@ public class LSample implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "LSample [id=" + id + ", age=" + age + ", birthday=" + birthday
+		return "DsfSampleInfo [id=" + id + ", age=" + age + ", birthday=" + birthday
 				+ ", cycle=" + cycle + ", departBed=" + departBed
 				+ ", diagnostic=" + diagnostic + ", hasimages=" + hasimages
 				+ ", hossection=" + hossection + ", inspectionname="

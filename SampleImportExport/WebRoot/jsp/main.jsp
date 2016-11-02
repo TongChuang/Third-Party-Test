@@ -137,7 +137,10 @@
 		items : [ {
 			text : '查询/导出标本检验结果',
 			click : expResultData
-		}, ]
+		},{
+			text : '查询标本信息',
+			click : querySampleData
+		} ]
 	};
 
 	var menu3 = {
@@ -216,6 +219,10 @@
 	function expResultData() {
 		f_addTab("expResultData", "查询/导出标本检验结果",
 				"/jsp/updown/updown.do?method=viewDownLoadPage");
+	}
+	function querySampleData(){
+		f_addTab("querySampleData", "查询样本信息",
+				"/jsp/updown/updown.do?method=viewSampleInfoPage");
 	}
 	function cxtj() {
 		f_addTab("cxtj", "查询统计",

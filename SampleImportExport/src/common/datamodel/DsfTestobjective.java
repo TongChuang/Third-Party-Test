@@ -4,10 +4,10 @@ package common.datamodel;
 import java.math.BigDecimal;
 
 /**
- * DsfLYlxhdescribe entity. @author MyEclipse Persistence Tools
+ * DsfTestobjective entity. @author MyEclipse Persistence Tools
  */
 
-public class DsfLYlxhdescribe implements java.io.Serializable {
+public class DsfTestobjective implements java.io.Serializable {
 
 	// Fields
 	private BigDecimal id;
@@ -23,14 +23,14 @@ public class DsfLYlxhdescribe implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public DsfLYlxhdescribe() {
+	public DsfTestobjective() {
 	}
 
 	public BigDecimal getId() {
 		return this.id;
 	}
 
-	public DsfLYlxhdescribe(BigDecimal id, String ylxh, String profiletest,
+	public DsfTestobjective(BigDecimal id, String ylxh, String profiletest,
 			String profiletest2, String profiletest3, String ylmc,
 			String customerid, String inspectionsection,
 			String professionalgroup, String serialnumber) {
@@ -46,7 +46,7 @@ public class DsfLYlxhdescribe implements java.io.Serializable {
 		this.professionalgroup = professionalgroup;
 	}
 
-	public DsfLYlxhdescribe(BigDecimal id, String ylxh, 
+	public DsfTestobjective(BigDecimal id, String ylxh, 
 			String profiletest, String profiletest2, String profiletest3,
 			String ylmc, String customerid) {
 		super();
@@ -131,7 +131,7 @@ public class DsfLYlxhdescribe implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "DsfLYlxhdescribe [id=" + id + ", ylxh=" + ylxh
+		return "DsfTestobjective [id=" + id + ", ylxh=" + ylxh
 				+ ", profiletest=" + profiletest + ", profiletest2="
 				+ profiletest2 + ", profiletest3=" + profiletest3 + ", ylmc="
 				+ ylmc + ", customerid=" + customerid + ", inspectionsection="

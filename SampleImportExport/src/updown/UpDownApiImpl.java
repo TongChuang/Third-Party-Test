@@ -54,16 +54,16 @@ public class UpDownApiImpl implements UpDownApi {
 		dataAccessApi.saveDataByList(objectList,tableName);
 	}
 	
-	public List<LTestresult> queryExpData(String beginTime,String endTime,String customerid){
+	public List<DsfTestResult> queryExpData(String beginTime,String endTime,String customerid){
 		return dataAccessApi.queryExpData(beginTime,endTime,customerid);
 	}
-	public List<LSample> getSampleByTime(String beginTime,String endTime,String customerid){
+	public List<DsfSampleInfo> getSampleByTime(String beginTime,String endTime,String customerid){
 		return dataAccessApi.getSampleByTime(beginTime,endTime,customerid);
 	}
 	public List getExpSampleNoData(String beginTime,String endTime,String customerid){
 		return dataAccessApi.getExpSampleNoData(beginTime,endTime,customerid); 
 	}
-	public List <DsfLYlxhdescribe> getYlxhdescribeByYlxh(String ylxh,String customerid){
+	public List <DsfTestobjective> getYlxhdescribeByYlxh(String ylxh,String customerid){
 		return dataAccessApi.getYlxhdescribeByYlxh(ylxh,customerid);
 	}
 	
@@ -77,7 +77,7 @@ public class UpDownApiImpl implements UpDownApi {
 	public Map<String, String> getConversionTestItem(String key){
 		return dataAccessApi.getConversionTestItem(key);
 	}
-	public List<LSample> getSampleNoByLSample(List samplenoList){
+	public List<DsfSampleInfo> getSampleNoByLSample(List samplenoList){
 		return dataAccessApi.getSampleNoByLSample(samplenoList);
 	}
 	public DsfProcess getLProcessByLSampleId(BigDecimal sampleno){
@@ -87,10 +87,10 @@ public class UpDownApiImpl implements UpDownApi {
 		return dataAccessApi.getDsfTestitemsById(sampleno);
 	}
 	
-	public LSample getSampleByBarCode(String barcode){
+	public DsfSampleInfo getSampleByBarCode(String barcode){
 		return dataAccessApi.getSampleByBarCode( barcode);
 	}
-	public List<LSample> getSamplesByBarCode(String barcode){
+	public List<DsfSampleInfo> getSamplesByBarCode(String barcode){
 		return dataAccessApi.getSamplesByBarCode( barcode);
 	}
 	public List getCustomerInfo(String cid){
@@ -99,13 +99,16 @@ public class UpDownApiImpl implements UpDownApi {
 	public DsfCustomerBaseInfo getCustomerInfoById(String customerid){
 		return dataAccessApi.getCustomerInfoById(customerid);
 	}
-	public List<LTestresult> getLTestresultByNo(String sampleno){
+	public List<DsfTestResult> getLTestresultByNo(String sampleno){
 		return dataAccessApi.getLTestresultByNo(sampleno);
 	}
-	public List<DsfLYlxhdescribe> getDsfTestObjectiveById(String customerid){
+	public List<DsfProcess> getSampleTime(String sampleno){
+		return dataAccessApi.getSampleTime(sampleno);
+	}
+	public List<DsfTestobjective> getDsfTestObjectiveById(String customerid){
 		return dataAccessApi.getDsfTestObjectiveById(customerid);
 	}
-	public void saveAllSerialNumber(List<DsfLYlxhdescribe> dydList){
+	public void saveAllSerialNumber(List<DsfTestobjective> dydList){
 		dataAccessApi.saveAllSerialNumber(dydList);
 	}
 	public int getSeralNumber(String dateAndSection){

@@ -18,10 +18,10 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import sysconf.SysConfApi;
 
 import common.SIEContext;
-import common.datamodel.DsfControltestitems;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfTestitems;
+import common.datamodel.DsfTestobjective;
 import common.datamodel.LTestitem;
 import common.datamodel.LTestobjective;
 import common.util.CommonUtil;
@@ -104,7 +104,7 @@ public class SysConfController extends MultiActionController {
 			logger.info((Object) (new StringBuilder("Begin to getInspectionInfo")));
 			String customerid = request.getParameter("customerid");
 			// System.out.println("参数获取2："+customerid);
-			List<DsfLYlxhdescribe> resultYList = new ArrayList<DsfLYlxhdescribe>();
+			List<DsfTestobjective> resultYList = new ArrayList<DsfTestobjective>();
 			resultYList = sysConfApi.getYlxhdescribe(customerid);
 
 			resultJson = PubJsonUtil.list2json(resultYList);
@@ -136,7 +136,7 @@ public class SysConfController extends MultiActionController {
 			logger.info((Object) (new StringBuilder("Begin to getInspectionInfoByNo")));
 			String nameorid = request.getParameter("nameorid");
 
-			List<DsfLYlxhdescribe> resultYList = new ArrayList<DsfLYlxhdescribe>();
+			List<DsfTestobjective> resultYList = new ArrayList<DsfTestobjective>();
 			resultYList = sysConfApi.getYlxhdescribeByNo(nameorid, nameorid);
 			resultJson = PubJsonUtil.list2json(resultYList);
 			// System.out.println(resultJson);
@@ -163,10 +163,10 @@ public class SysConfController extends MultiActionController {
 		String resultJson = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to viewAddTestObjective")));
-			String clientnumber = request.getParameter("clientnumber");
-			// System.out.println("客户编号:"+clientnumber);
+			String customerid = request.getParameter("customerid");
+			// System.out.println("客户编号:"+customerid);
 			ModelAndView modelAndView = new ModelAndView("viewAddTestObjective.jsp");
-			modelAndView.addObject("customerid", clientnumber);
+			modelAndView.addObject("customerid", customerid);
 			logger.info((Object) (new StringBuilder("End to viewTestObjective ")));
 			return modelAndView;
 		} catch (Exception e) {
@@ -212,7 +212,7 @@ public class SysConfController extends MultiActionController {
 			System.out.println(id + ":" + customerid + ":" + ylxh + ":" + ylmc + ":" + profiletest + ":" + professionalgroup + ":"
 					+ inspectionsection);
 			BigDecimal idBig = new BigDecimal(id);
-			DsfLYlxhdescribe lYlxhdescribe = new DsfLYlxhdescribe();
+			DsfTestobjective lYlxhdescribe = new DsfTestobjective();
 			lYlxhdescribe.setId(idBig);
 			lYlxhdescribe.setCustomerid(customerid);
 			lYlxhdescribe.setYlxh(ylxh);
@@ -227,7 +227,7 @@ public class SysConfController extends MultiActionController {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("success", "增加检验目的成功！");
 
-			List<DsfLYlxhdescribe> resultYList = sysConfApi.getYlxhdescribe(customerid);
+			List<DsfTestobjective> resultYList = sysConfApi.getYlxhdescribe(customerid);
 			resultString = PubJsonUtil.list2json(resultYList);
 			// System.out.println(resultString);
 			jsonObject.put("result_json", resultString);
@@ -281,9 +281,9 @@ public class SysConfController extends MultiActionController {
 			 * rs.setYlxh(ylxh);
 			 */
 			ModelAndView modelAndView = new ModelAndView("viewUpdateTestObjective.jsp");
-			DsfLYlxhdescribe rs = new DsfLYlxhdescribe();
+			DsfTestobjective rs = new DsfTestobjective();
 			System.out.println("id:" + id);
-			List<DsfLYlxhdescribe> resultList = sysConfApi.getYlxhdescribeById(id);
+			List<DsfTestobjective> resultList = sysConfApi.getYlxhdescribeById(id);
 			System.out.println("返回结果2：" + resultList);
 			if (null != resultList && resultList.size() > 0) {
 				rs = resultList.get(0);
@@ -323,7 +323,7 @@ public class SysConfController extends MultiActionController {
 			System.out.println(id + ":" + customerid + ":" + ylxh + ":" + ylmc + ":" + profiletest + ":" + professionalgroup + ":"
 					+ inspectionsection);
 			BigDecimal idBig = new BigDecimal(id);
-			DsfLYlxhdescribe lYlxhdescribe = new DsfLYlxhdescribe();
+			DsfTestobjective lYlxhdescribe = new DsfTestobjective();
 			lYlxhdescribe.setId(idBig);
 			lYlxhdescribe.setCustomerid(customerid);
 			lYlxhdescribe.setYlxh(ylxh);
@@ -339,7 +339,7 @@ public class SysConfController extends MultiActionController {
 
 			jsonObject.put("success", "修改检验目的成功！");
 
-			List<DsfLYlxhdescribe> resultYList = sysConfApi.getYlxhdescribe(customerid);
+			List<DsfTestobjective> resultYList = sysConfApi.getYlxhdescribe(customerid);
 			resultString = PubJsonUtil.list2json(resultYList);
 			System.out.println(resultString);
 			jsonObject.put("result_json", resultString);
@@ -372,7 +372,7 @@ public class SysConfController extends MultiActionController {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("success", "删除数据成功！");
 
-			List<DsfLYlxhdescribe> resultYList = new ArrayList<DsfLYlxhdescribe>();
+			List<DsfTestobjective> resultYList = new ArrayList<DsfTestobjective>();
 			resultYList = sysConfApi.getYlxhdescribe(customerid);
 			resultJson = PubJsonUtil.list2json(resultYList);
 			jsonObject.put("result_json", resultJson);
@@ -476,7 +476,7 @@ public class SysConfController extends MultiActionController {
 			String ylxh = request.getParameter("ylxh");
 			String profiletest = request.getParameter("profiletest");
 			// System.out.println("第三方客户id:"+customerid+"项目编号:"+indexId+" 医疗序号:"+ylxh+" 项目编号主要:"+profiletest);
-			DsfLYlxhdescribe testItems = new DsfLYlxhdescribe();
+			DsfTestobjective testItems = new DsfTestobjective();
 			// 根据医疗序号修改profileTest字段
 			String indexIds = profiletest + indexId.trim() + ",";
 			sysConfApi.saveTestObjective(ylxh, indexIds);
@@ -503,7 +503,7 @@ public class SysConfController extends MultiActionController {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("result_json", resultJson);
 
-			List<DsfLYlxhdescribe> resultYList = new ArrayList<DsfLYlxhdescribe>();
+			List<DsfTestobjective> resultYList = new ArrayList<DsfTestobjective>();
 			resultYList = sysConfApi.getYlxhdescribe(customerid);
 			resultJson = PubJsonUtil.list2json(resultYList);
 			jsonObject.put("result_json2", resultJson);
@@ -557,7 +557,7 @@ public class SysConfController extends MultiActionController {
 			logger.info((Object) (new StringBuilder("Begin to getControltestitems")));
 			String customerid = request.getParameter("customerid");
 			System.out.println(customerid);
-			List<DsfControltestitems> resultCList = new ArrayList<DsfControltestitems>();
+			List<DsfInspectionItemControl> resultCList = new ArrayList<DsfInspectionItemControl>();
 			resultCList = sysConfApi.getControltestitems(customerid);
 
 			resultJson = PubJsonUtil.list2json(resultCList);
@@ -586,7 +586,7 @@ public class SysConfController extends MultiActionController {
 		try {
 			logger.info((Object) (new StringBuilder("Begin to getControltestitemsByNo")));
 			String nameorid = request.getParameter("nameorid");
-			List<DsfControltestitems> resultCList = new ArrayList<DsfControltestitems>();
+			List<DsfInspectionItemControl> resultCList = new ArrayList<DsfInspectionItemControl>();
 			resultCList = sysConfApi.getControltestitemsByNo(nameorid, nameorid);
 
 			resultJson = PubJsonUtil.list2json(resultCList);
@@ -617,7 +617,7 @@ public class SysConfController extends MultiActionController {
 			// 需要选中
 			String customerid = request.getParameter("customerid");
 			// 获取第三方检验项目
-			List<DsfControltestitems> resultCList = new ArrayList<DsfControltestitems>();
+			List<DsfInspectionItemControl> resultCList = new ArrayList<DsfInspectionItemControl>();
 			// 根据customerid获取检验项目
 			resultCList = sysConfApi.getControltestitems(customerid);
 			List<LTestitem> resultTList = new ArrayList<LTestitem>();
@@ -629,7 +629,7 @@ public class SysConfController extends MultiActionController {
 
 			List<LTestobjective> resultOList = new ArrayList<LTestobjective>();
 
-			List<DsfControltestitems> dcttList = new ArrayList<DsfControltestitems>();
+			List<DsfInspectionItemControl> dcttList = new ArrayList<DsfInspectionItemControl>();
 
 			Map<String, LTestitem> map = new HashMap<String, LTestitem>();
 
@@ -639,12 +639,12 @@ public class SysConfController extends MultiActionController {
 
 			List<String> resultLList = new ArrayList<String>();
 			if (null != resultCList) {
-				for (DsfControltestitems resultControltestitems : resultCList) {
+				for (DsfInspectionItemControl resultControltestitems : resultCList) {
 					if (null != resultTList) {
 						// for(LTestitem iTestitem:resultTList ){
 						// if(resultControltestitems.getCustomeritemsname().trim().equals(iTestitem.getName().trim())){
 						if (null != map.get(resultControltestitems.getCustomeritemsname())) {
-							DsfControltestitems dctt = new DsfControltestitems();
+							DsfInspectionItemControl dctt = new DsfInspectionItemControl();
 							dctt.setCustomerid(customerid);
 							dctt.setCustomeritems(resultControltestitems.getCustomeritems());
 							dctt.setCustomeritemsname(resultControltestitems.getCustomeritemsname());
@@ -662,7 +662,7 @@ public class SysConfController extends MultiActionController {
 				sysConfApi.saveAll(dcttList);
 			}
 
-			List<DsfControltestitems> results = sysConfApi.getControltestitems(customerid);
+			List<DsfInspectionItemControl> results = sysConfApi.getControltestitems(customerid);
 			resultJson = PubJsonUtil.list2json(results);
 			System.out.println(resultJson);
 
@@ -694,7 +694,7 @@ public class SysConfController extends MultiActionController {
 			System.out.println("id:" + id + "customerid:" + customerid);
 			// 根据id可以获取选中行唯一的对照表信息
 			BigDecimal bigId = new BigDecimal(id);
-			List<DsfControltestitems> dctiList = sysConfApi.getControltestitemsById(bigId);
+			List<DsfInspectionItemControl> dctiList = sysConfApi.getControltestitemsById(bigId);
 			System.out.println(dctiList);
 			//
 			List<LTestitem> ltocList = sysConfApi.getTestItemsByIndexId(indexId);
@@ -799,7 +799,7 @@ public class SysConfController extends MultiActionController {
 		String resultString = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to addTestObjective")));
-			
+			System.out.println(dcbi);
 			JSONObject jsonObject = new JSONObject();
 			sysConfApi.saveData(dcbi, "DsfCustomerBaseInfo");
 			jsonObject.put("success", "增加客户信息成功！");
@@ -814,7 +814,7 @@ public class SysConfController extends MultiActionController {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("error", "搜索数据失败，出现错误！");
+				jsonObject.put("error", "增加客户信息失败，出现错误！");
 				response.setContentType("application/json;charset=utf-8");
 				response.getWriter().write(jsonObject.toString());
 			} catch (IOException e1) {
@@ -824,14 +824,18 @@ public class SysConfController extends MultiActionController {
 	}
 
 	public void deleteBaseCustomerInfo(HttpServletRequest request, HttpServletResponse response) {
+		String resultString = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to deleteBaseCustomerInfo ")));
 			String id = request.getParameter("id");
 
 			sysConfApi.deleteCustomerInfo(id);
-
+			
+			List<DsfCustomerBaseInfo> dcbiList = sysConfApi.getCustomerInfoByCostomerId("");
+			resultString = PubJsonUtil.list2json(dcbiList);
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("success", "删除客户信息成功！");
+			jsonObject.put("result_json", resultString);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
 			logger.info((Object) (new StringBuilder("End to deleteBaseCustomerInfo ")));

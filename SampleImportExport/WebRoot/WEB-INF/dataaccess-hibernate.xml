@@ -37,14 +37,13 @@
 				<value>common/datamodel/LabUser.hbm.xml</value>
 				<value>common/datamodel/DsfTestitems.hbm.xml</value>
 				<value>common/datamodel/DsfCustomerBaseInfo.hbm.xml</value>
-				<value>common/datamodel/DsfLYlxhdescribe.hbm.xml</value>
+				<value>common/datamodel/DsfTestobjective.hbm.xml</value>
 				<value>common/datamodel/DsfProcess.hbm.xml</value>
-				<value>common/datamodel/LSample.hbm.xml</value>
-				<value>common/datamodel/LTestresult.hbm.xml</value>
-				<value>common/datamodel/DsfControltestitems.hbm.xml</value>
+				<value>common/datamodel/DsfSampleInfo.hbm.xml</value>
+				<value>common/datamodel/DsfTestResult.hbm.xml</value>
+				<value>common/datamodel/DsfInspectionItemControl.hbm.xml</value>
 				<value>common/datamodel/LTestitem.hbm.xml</value>
 				<value>common/datamodel/LTestobjective.hbm.xml</value>
-				
 			</list>
 		</property>
 		<!-- 定义Hibernate的SessionFactory的属性 -->

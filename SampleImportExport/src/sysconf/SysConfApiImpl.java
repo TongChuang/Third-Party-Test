@@ -9,9 +9,9 @@ import sysconf.xml.XmlWriter;
 import sysconf.xml.XmlWriterImpl;
 
 import common.SIEContext;
-import common.datamodel.DsfControltestitems;
+import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LTestitem;
 import common.util.CommonUtil;
@@ -114,22 +114,22 @@ public class SysConfApiImpl
 		return dataAccessApi.getCustomerInfoByCustomerId(customerid);
 	}
 	@Override
-	public  List<DsfLYlxhdescribe> getYlxhdescribe(String customerid){
+	public  List<DsfTestobjective> getYlxhdescribe(String customerid){
 		return dataAccessApi.getYlxhdescribe(customerid);
 	}
-	public List<DsfLYlxhdescribe> getYlxhdescribeById(String id){
+	public List<DsfTestobjective> getYlxhdescribeById(String id){
 		return dataAccessApi.getYlxhdescribeById(id);
 	}
 	@Override
-	public  List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc){
+	public  List<DsfTestobjective> getYlxhdescribeByNo(String ylxh,String ylmc){
 		return dataAccessApi.getYlxhdescribeByNo(ylxh,ylmc);
 	}
 	@Override
-	public  void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+	public  void updateYlxhdescribe(DsfTestobjective lYlxhdescribe){
 		dataAccessApi.updateYlxhdescribe(lYlxhdescribe );
 	}
 	@Override
-	public  void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+	public  void addYlxhdescribe(DsfTestobjective lYlxhdescribe){
 		dataAccessApi.addYlxhdescribe(lYlxhdescribe);
 	}
 	@Override
@@ -156,15 +156,15 @@ public class SysConfApiImpl
 	 * 检验项目对照
 	 */
 	@Override
-	public List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname){
+	public List<DsfInspectionItemControl> getControltestitemsByNo(String customeritems,String customeritemsname){
 		return dataAccessApi.getControltestitemsByNo(customeritems,customeritemsname);
 	}
 	@Override
-	public List<DsfControltestitems> getControltestitems(String customerid){
+	public List<DsfInspectionItemControl> getControltestitems(String customerid){
 		return dataAccessApi.getControltestitems(customerid);
 	}
 	@Override
-	public List<DsfControltestitems> getControltestitemsById(BigDecimal id){
+	public List<DsfInspectionItemControl> getControltestitemsById(BigDecimal id){
 		return dataAccessApi.getControltestitemsById(id);
 	}
 	@Override
@@ -177,7 +177,7 @@ public class SysConfApiImpl
 	}
 	
 	@Override
-	public void saveAll(List<DsfControltestitems> dcttList){
+	public void saveAll(List<DsfInspectionItemControl> dcttList){
 		dataAccessApi.saveAll(dcttList);
 	}
 	@Override

@@ -5,10 +5,10 @@ import java.util.Date;
 // default package
 
 /**
- * LTestresultId entity. @author MyEclipse Persistence Tools
+ * DsfTestResult entity. @author MyEclipse Persistence Tools
  */
 
-public class LTestresult implements java.io.Serializable {
+public class DsfTestResult implements java.io.Serializable {
 
 	// Fields
 
@@ -26,10 +26,10 @@ public class LTestresult implements java.io.Serializable {
 	private String customerid;
 	private String dsfbarcode;
 
-	public LTestresult() {
+	public DsfTestResult() {
 	}
 
-	public LTestresult(String sampleno, String testid, Date measuretime,
+	public DsfTestResult(String sampleno, String testid, Date measuretime,
 			String operator, String refhi, String reflo, String sampletype,
 			String testresult, String unit, String testname, String method,
 			String customerid, String dsfbarcode) {

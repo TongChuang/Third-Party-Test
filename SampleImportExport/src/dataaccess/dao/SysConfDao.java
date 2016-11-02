@@ -9,9 +9,9 @@ import org.hibernate.Query;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import common.datamodel.DsfControltestitems;
+import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LTestitem;
 
@@ -90,12 +90,12 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}	
 	}
-	public List<DsfLYlxhdescribe> getYlxhdescribe(String customerid){
+	public List<DsfTestobjective> getYlxhdescribe(String customerid){
 		String sqlString = "";
 		if("".equals(customerid)){
 			return null;
 		}else{
-			sqlString = "from DsfLYlxhdescribe where customerid='"+customerid+"'";
+			sqlString = "from DsfTestobjective where customerid='"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -103,12 +103,12 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}
 	}
-	public List<DsfLYlxhdescribe> getYlxhdescribeById(String id){
+	public List<DsfTestobjective> getYlxhdescribeById(String id){
 		String sqlString = "";
 		if("".equals(id)){
 			return null;
 		}else{
-			sqlString = "from DsfLYlxhdescribe where id="+id;
+			sqlString = "from DsfTestobjective where id="+id;
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -116,12 +116,12 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}
 	}
-	public List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc){
+	public List<DsfTestobjective> getYlxhdescribeByNo(String ylxh,String ylmc){
 		String sqlString = "";
 		if("".equals(ylxh)||"".equals(ylmc)){
-			sqlString = "from DsfLYlxhdescribe";
+			sqlString = "from DsfTestobjective";
 		}else{
-			sqlString = "from DsfLYlxhdescribe where ylxh like '%"+ylxh+"%' or ylmc like '%"+ylmc+"%'";
+			sqlString = "from DsfTestobjective where ylxh like '%"+ylxh+"%' or ylmc like '%"+ylmc+"%'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -129,12 +129,12 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}
 	}
-	public void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+	public void updateYlxhdescribe(DsfTestobjective lYlxhdescribe){
 		String sqlString = "";
 		if("".equals(lYlxhdescribe)){
 			
 		}else{
-			sqlString = "from DsfLYlxhdescribe";
+			sqlString = "from DsfTestobjective";
 		}
 		try {
 			getHibernateTemplate().update(lYlxhdescribe);
@@ -143,10 +143,10 @@ public class SysConfDao extends HibernateDaoSupport {
 		}
 	}
 	public void deleteYlxhdescribe(BigDecimal id){
-		DataAccessUtil.deleteObjectsByStrColum(id, "id", "DsfLYlxhdescribe", getSession());
+		DataAccessUtil.deleteObjectsByStrColum(id, "id", "DsfTestobjective", getSession());
 	}
-	public void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
-		DataAccessUtil.saveOrUpdate(lYlxhdescribe, "DsfLYlxhdescribe", getHibernateTemplate());
+	public void addYlxhdescribe(DsfTestobjective lYlxhdescribe){
+		DataAccessUtil.saveOrUpdate(lYlxhdescribe, "DsfTestobjective", getHibernateTemplate());
 	}
 	public List<DsfTestitems> getTestItemsByNo(String proList,String customerid){
 		String sqlString = "";
@@ -172,7 +172,7 @@ public class SysConfDao extends HibernateDaoSupport {
 	public void saveTestObjective(String ylxh, String profiletest){
 		String hql = "";
 		try {
-			hql = "update DsfLYlxhdescribe yl set yl.profiletest = '"+profiletest+"' where yl.ylxh = '"+ylxh+"'";
+			hql = "update DsfTestobjective yl set yl.profiletest = '"+profiletest+"' where yl.ylxh = '"+ylxh+"'";
 			Query query = getSession().createQuery(hql);
 			query.executeUpdate();
 		} catch (DataAccessException e) {
@@ -184,12 +184,12 @@ public class SysConfDao extends HibernateDaoSupport {
 	/**
 	 * 检验项目对照
 	 */
-	public List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname){
+	public List<DsfInspectionItemControl> getControltestitemsByNo(String customeritems,String customeritemsname){
 		String sqlString = "";
 		if("".equals(customeritems)||"".equals(customeritemsname)){
-			sqlString = "from DsfControltestitems where customeritems like '%"+customeritems+"%' or customeritemsname like'%"+customeritemsname+"%'";
+			sqlString = "from DsfInspectionItemControl where customeritems like '%"+customeritems+"%' or customeritemsname like'%"+customeritemsname+"%'";
 		}else{
-			sqlString = "from DsfControltestitems";
+			sqlString = "from DsfInspectionItemControl";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -197,12 +197,12 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}		
 	}
-	public List<DsfControltestitems> getControltestitemsById(BigDecimal id){
+	public List<DsfInspectionItemControl> getControltestitemsById(BigDecimal id){
 		String sqlString = "";
 		if("".equals(id)){
 			
 		}else{
-			sqlString = "from DsfControltestitems where id = "+id;
+			sqlString = "from DsfInspectionItemControl where id = "+id;
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -210,10 +210,10 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}		
 	}
-	public List<DsfControltestitems> getControltestitems(String customerid){
+	public List<DsfInspectionItemControl> getControltestitems(String customerid){
 		String sqlString = "";
 		if(!"".equals(customerid)){
-			sqlString = "from DsfControltestitems where customerid='"+customerid+"'";
+			sqlString = "from DsfInspectionItemControl where customerid='"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -250,8 +250,8 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}
 	}
-	public void saveAll(List<DsfControltestitems> dcttList){
-		DataAccessUtil.saveOrUpdateAll(((Collection) (dcttList)), "DsfControltestitems", getHibernateTemplate(), "update");
+	public void saveAll(List<DsfInspectionItemControl> dcttList){
+		DataAccessUtil.saveOrUpdateAll(((Collection) (dcttList)), "DsfInspectionItemControl", getHibernateTemplate(), "update");
 
 	}
 }

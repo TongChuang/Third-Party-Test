@@ -6,7 +6,7 @@ import java.math.BigDecimal;
  * DsfControltestitems entity. @author MyEclipse Persistence Tools
  */
 
-public class DsfControltestitems implements java.io.Serializable {
+public class DsfInspectionItemControl implements java.io.Serializable {
 
 	// Fields
 
@@ -20,16 +20,16 @@ public class DsfControltestitems implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public DsfControltestitems() {
+	public DsfInspectionItemControl() {
 	}
 
 	/** minimal constructor */
-	public DsfControltestitems(BigDecimal id) {
+	public DsfInspectionItemControl(BigDecimal id) {
 		this.id = id;
 	}
 
 	/** full constructor */
-	public DsfControltestitems(BigDecimal id, String customerid,
+	public DsfInspectionItemControl(BigDecimal id, String customerid,
 			String localitems, String customeritems, String customeritemsname,
 			String localitemsname) {
 		this.id = id;
