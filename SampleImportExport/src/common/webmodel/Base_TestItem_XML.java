@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlType;
 public class Base_TestItem_XML {
 	private String testitem;
 	private String name;
-	private String customerid;
 
 	public Base_TestItem_XML() {
 	}
@@ -39,19 +38,6 @@ public class Base_TestItem_XML {
 		this.name = name;
 	}
 	
-	public String getCustomerid() {
-		return customerid;
-	}
-
-	public void setCustomerid(String customerid) {
-		this.customerid = customerid;
-	}
-
-	@Override
-	public String toString() {
-		return "Base_TestItem_XML [testitem=" + testitem + ", name=" + name
-				+ ", customerid=" + customerid + "]";
-	}
 
 	
 }

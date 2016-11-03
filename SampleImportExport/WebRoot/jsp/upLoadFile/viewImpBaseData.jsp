@@ -31,10 +31,10 @@
 		});
 		f_initGrid();
 
-		var msg = $("#msg").val();
+		var error = $("#error").val();
 		var success = $("#success").val();
-		if (msg != '' && msg != null) {
-			$.ligerDialog.error(msg);
+		if (error != '' && error != null) {
+			$.ligerDialog.error(error);
 		}
 		if (success != '' && msg != null) {
 			$.ligerDialog.success(success);
@@ -142,7 +142,12 @@
 	}
 	/* 提交导入的文件 */
 	function onSubminForm() {
-		document.form1.action = "/jsp/updown/updown.do?method=ImpBaseDataInfo";
+		var customerid = $("#customerid").val();
+		if(customerid==''){
+			$.ligerDialog.error('请先选择客户');
+			return ;
+		}
+		document.form1.action = "/jsp/updown/updown.do?method=ImpBaseDataInfo&customerid="+customerid;
 		document.form1.submit();
 	}
 </script>
@@ -195,7 +200,8 @@ h4 {
 
 </head>
 <body style="padding:10px">
-
+<input type="hidden" id="success" value="${success}"/>
+<input type="hidden" id="error" value="${error}"/>
 	<div id="layout1">
 		<div position="left" title="上传导入的文件">
 			<table cellpadding="0" cellspacing="0" class="l-table-edit">
@@ -225,6 +231,20 @@ h4 {
 		<!-- 详细信息 -->
 
 		<div position="center" title="数据来源，客户${customerid==null?'请先导入数据':customerid}，检验目的，检验项目，内容如下">
+			<table cellpadding="0" cellspacing="0" class="l-table-edit"
+					style="margin-top:10px">
+					<tr>
+						<td align="left" class="l-table-edit-td">
+						 	<select id="customerid" name="customerid" style="width: 200px;">
+								<option value="">请选择客户</option>
+								<c:forEach items="${customerInfoList}" var="cinfo">
+									<option value="${cinfo.customerid}">${cinfo.customername}</option>
+								</c:forEach>
+							</select>
+						</td>
+						<td align="left" style="width: 60px;"></td>
+					</tr>
+				</table>
 			<div id="maingrid" style="margin-top:10px"></div>
 			<br />
 		</div>

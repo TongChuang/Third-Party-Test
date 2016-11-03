@@ -80,9 +80,6 @@ public class SysConfApiImpl
 		SIEContext.setSystemConfigTable(systemConfigTable);
 	}
 
-	public String getWebServiceUrl() {
-		return handler.getWebServiceUrl();
-	}
 	
 	public List<DsfCustomerBaseInfo> getCustomerInfoList(String  customerid){
 		return dataAccessApi.getCustomerBaseInfoByCustomerId(customerid);
@@ -97,7 +94,7 @@ public class SysConfApiImpl
 		return dataAccessApi.getCustomerInfoByName(customername);
 	}
 	public void saveCustomerInfo(DsfCustomerBaseInfo dcbi){
-		dataAccessApi.saveCustomerBaseInfo(dcbi);
+		dataAccessApi.saveCustomerBaseInfo_sysconf(dcbi);
 	}
 	public void deleteCustomerInfo(String customerid){
 		dataAccessApi.deleteCustomerInfo(customerid);
@@ -180,9 +177,11 @@ public class SysConfApiImpl
 	public void saveAll(List<DsfInspectionItemControl> dcttList){
 		dataAccessApi.saveAll(dcttList);
 	}
+	
+	//
 	@Override
 	public void saveData(Object t,String tableName){
-		dataAccessApi.saveData(t,tableName);
+		dataAccessApi.saveData_sysconf(t,tableName);
 	}
 	@Override
 	public List<LTestitem> getTestItemsByIndexId(String indexId){

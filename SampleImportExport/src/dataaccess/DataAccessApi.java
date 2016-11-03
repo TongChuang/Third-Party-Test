@@ -39,9 +39,15 @@ public interface DataAccessApi
 	public abstract List <DsfTestobjective> getYlxhdescribeByYlxh(String ylxh,String customerid);
 	public abstract List<DsfTestitems> getDsfTestItemsByTestItem(String dTestitems,String customerid);
 	public abstract List<LTestitem> getLTestItemsByTestItem(String testitems,String customerid);
+
 	public abstract List<DsfTestResult> getLTestresultByNo(String sampleno);
 	public abstract List<DsfProcess> getSampleTime(String sampleno);
 	public abstract List<DsfSampleInfo> getSampleByTime(String beginTime,String endTime,String customerid);
+	//
+	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_updown(String customerid);
+	//
+	public abstract DsfCustomerBaseInfo getCustomerInfoById_updown(String id);
+
 	/**
 	 * 如果KEY等于local就是本地转为客户的，否则就是客户的转为本地的
 	 * @param key
@@ -65,6 +71,8 @@ public interface DataAccessApi
 	 */
 	public abstract List<DsfTestResult> getTestResultsByWebService(DsfTestResult ltr);
 	
+	//
+	public void saveCustomerBaseInfo_sysconf(DsfCustomerBaseInfo dsfc);
 	/**
 	 * 查询客户信息
 	 * @return
@@ -99,6 +107,8 @@ public interface DataAccessApi
 	public abstract List<LTestitem> getLocalTestItemsByNo(String customerid);
 	public abstract void saveAll(List<DsfInspectionItemControl> dcttList);
 	public abstract List<LTestitem> getTestItemsByIndexId(String indexId);
+	//
+	public abstract void saveData_sysconf(Object t,String tableName);
 	/**
 	 * 前处理
 	 */
@@ -109,5 +119,11 @@ public interface DataAccessApi
 
 	
 	public abstract List<LabUser> getUserInfo(String username);
-
+	
+	/**
+	 * queryStats
+	 */
+	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_querystats(String customerid);
+	public abstract void saveData_querystats(Object t,String tableName);
+	public abstract void saveDataByList_querystats(List <Object>objectList,String tableName);
 }

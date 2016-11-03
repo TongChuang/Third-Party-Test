@@ -227,7 +227,11 @@ public class CommonUtil {
 
 	public static Logger getLogger() {
 		if (logger == null) {
+<<<<<<< HEAD
 			PropertyConfigurator.configureAndWatch("log4j.properties");
+=======
+			//PropertyConfigurator.configure("D:\\log4j.properties");
+>>>>>>> origin/master
 			logger = Logger.getLogger("");
 		}
 		return logger;

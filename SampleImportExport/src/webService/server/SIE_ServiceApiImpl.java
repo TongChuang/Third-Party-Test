@@ -54,6 +54,7 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 		return dataAccessApi;
 	}
 
+	/*获取检验结果*/
 	@WebMethod
 	public String getTestResults(
 			@WebParam(name = "customerid") String customerid,

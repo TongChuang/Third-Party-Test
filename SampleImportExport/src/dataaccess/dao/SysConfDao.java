@@ -254,4 +254,13 @@ public class SysConfDao extends HibernateDaoSupport {
 		DataAccessUtil.saveOrUpdateAll(((Collection) (dcttList)), "DsfInspectionItemControl", getHibernateTemplate(), "update");
 
 	}
+	
+	//
+	public void saveData(Object t,String tableName){
+		DataAccessUtil.saveOrUpdate(t, tableName, getHibernateTemplate());
+	}
+	//
+	public void saveCustomerBaseInfo(DsfCustomerBaseInfo dsfc){
+		DataAccessUtil.saveOrUpdate(dsfc, "DsfCustomerBaseInfo", getHibernateTemplate());
+	}
 }

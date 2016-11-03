@@ -5,6 +5,5 @@
 		<update-server-address>http://localhost/AutoUpdate/version/ver.txt</update-server-address>
 		<upftpRoot>ftp://test:test@localhost</upftpRoot>
 		<downftpRoot>ftp://test:test@localhost</downftpRoot>
-		<webserviceUrl></webserviceUrl>
 	</configs>
 </system-config-table>

@@ -164,7 +164,7 @@ public class SysConfController extends MultiActionController {
 		try {
 			logger.info((Object) (new StringBuilder("Begin to viewAddTestObjective")));
 			String customerid = request.getParameter("customerid");
-			// System.out.println("客户编号:"+customerid);
+			 System.out.println("客户编号:"+customerid);
 			ModelAndView modelAndView = new ModelAndView("viewAddTestObjective.jsp");
 			modelAndView.addObject("customerid", customerid);
 			logger.info((Object) (new StringBuilder("End to viewTestObjective ")));
@@ -935,7 +935,6 @@ public class SysConfController extends MultiActionController {
 			request.setAttribute("upftpRoot", sysConfig.getUpftpRoot());
 			request.setAttribute("downftpRoot", sysConfig.getDownftpRoot());
 			request.setAttribute("updateServerAddress", sysConfig.getUpdateServerAddress());
-			request.setAttribute("webserviceUrl", sysConfig.getWebserviceUrl());
 
 			String msg = request.getParameter("msg");
 			request.setAttribute("msg", msg);
@@ -970,17 +969,12 @@ public class SysConfController extends MultiActionController {
 			if (request.getParameter("updateServerAddress") != null) {
 				updateServerAddress = request.getParameter("updateServerAddress");
 			}
-			String webserviceUrl = ((SystemConfigSetting) SIEContext.getSystemConfigTable().getConfigs().get(0)).getWebserviceUrl();
-			if (request.getParameter("webserviceUrl") != null) {
-				webserviceUrl = request.getParameter("webserviceUrl");
-			}
 
 			SystemConfigSetting config = new SystemConfigSetting();
 			config.setDefaultPassword(defaultPassword);
 			config.setUpftpRoot(upftpRoot);
 			config.setDownftpRoot(downftpRoot);
 			config.setUpdateServerAddress(updateServerAddress);
-			config.setWebserviceUrl(webserviceUrl);
 
 			try {
 				sysConfApi.updateSystemConfig(config);
