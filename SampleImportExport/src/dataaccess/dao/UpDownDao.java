@@ -282,23 +282,4 @@ public class UpDownDao extends HibernateDaoSupport {
 			return getHibernateTemplate().find(sql.toString());
 		}
 	}
-	
-	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String customerid){
-		String sqlString = "";
-		if("".equals(customerid)){
-			sqlString = "from DsfCustomerBaseInfo";
-		}else{
-			sqlString = "from DsfCustomerBaseInfo where customerid '"+customerid+"'";
-		}
-		try {
-			return getHibernateTemplate().find(sqlString);
-		} catch (DataAccessException e) {
-			return null;
-		}	
-	}
-	
-	public DsfCustomerBaseInfo getCustomerInfoById(String id) {
-		BigDecimal bigDecimal = new BigDecimal(id);
-		return (DsfCustomerBaseInfo) DataAccessUtil.getObjectById(bigDecimal, "DsfCustomerBaseInfo", getHibernateTemplate()) ;
-	}
 }

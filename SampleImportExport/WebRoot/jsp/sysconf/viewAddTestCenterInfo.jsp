@@ -26,6 +26,7 @@
 <script src="/resources/jquery-validation/jquery.validate.min.js" type="text/javascript"></script>
 <script src="/resources/jquery-validation/jquery.metadata.js" type="text/javascript"></script>
 <script src="/resources/jquery-validation/messages_cn.js" type="text/javascript"></script>
+<script src="/resources/ligerUI/js/plugins/ligerComboBox.js" type="text/javascript"></script>
 <script type="text/javascript">
 var groupicon = "/resources/ligerUI/skins/icons/communication.gif";
 var form = null;
@@ -35,42 +36,63 @@ $(function () {
                 inputWidth: 170, labelWidth: 90, space: 40,
                 validate : true,
                 fields: [
-                { display: "客户编号", name: "customerid", newline: true, readonly: true, type: "text", group: "检验目的增加", groupicon: groupicon },
-                { display: "id", name: "id", newline: true, type: "hidden" },
-                { display: "医疗序号", name: "ylxh", newline: true, type: "digits", validate:{required:true,minlength:5} },
-                { display: "医疗名称", name: "ylmc", id:"ylmc", newline: true, type: "text", validate:{required:true,minlength:1} },
-                { display: "项目编号", name: "profiletest", newline: true, type: "text", validate:{required:true,minlength:1} },
-                { display: "专业组", name: "professionalgroup", newline: true, type: "text", validate:{required:true,minlength:1} }, 
-                { display: "检验段", name: "inspectionsection", newline: true, type: "text", validate:{required:true,minlength:1} }, 
-                ]
-                , buttons: [{ text: "保存", width: 60, click: addTestObjectiveButton }]
+                { display: "检验单位名称", name: "name", newline: true, type: "text", group: "检验单位增加", groupicon: groupicon,validate:{required:true,minlength:1} },
+                { display: "地址", name: "address", newline: true, type: "text", validate:{required:true,minlength:1} },
+                { display: "联系电话", name: "phone", newline: true, type: "text" },
+                ], buttons: [{ text: "保存", width: 160, click: addTestCenterInfo }]
             });
-            var rs = $("#hidden_input").val();
-            //设置表单内容
-            form.setData({customerid:rs});
-            
 });
 
-function addTestObjectiveButton(){
+ var dialog = frameElement.dialog; //调用页面的dialog对象(ligerui对象)
+ function colseDialog(){
+	 dialog.close();//关闭dialog 
+ }
+ 
+function addTestCenterInfo(){
 	var data = form.getData();
-	alert(JSON.stringify(data));
-	alert(JSON.stringify($("#ylmc").val()));
+	if(data.name==''){
+		$.ligerDialog.error('请输入检验单位名称！');
+		return;
+	}
+	if(data.address==''){
+		$.ligerDialog.error('请输入地址！');
+		return;
+	}
+
+	var cgridData = window.parent.grid.getData();
+	for(var i=0;i<cgridData.length;i++){
+		if(data.name==cgridData[i].name){
+			$.ligerDialog.error('检验单位已经存在，请重新填写！');
+			return;
+		}
+	}
 	$.ajax({  
-		url: '/jsp/sysconf/sysConf.do?method=addTestObjective',
+		url: '/jsp/sysconf/sysConf.do?method=addTestCenterInfo',
 		dataType: 'json',
 		data: form.getData(),
 		type: 'post', 
 		success:function(datas)  
 		{
-			alert(datas.success);
-			window.parent.grid2.loadData(datas.result_json);
-        }
+
+			if (datas.success != undefined) {
+				window.parent.grid.loadData(datas.resultjson);
+				parent.$.ligerDialog.success(datas.success);
+				colseDialog();
+			}
+			if (datas.error != undefined) {
+				$.ligerDialog.error(datas.error);
+			}
+		
+			
+        },
+        error:function(datas){
+        	$.ligerDialog.error('未知错误');
+        } 
 	});
 }
 </script>
 </head>
 <body style="padding:10px">
 	<div id="form"></div>
-	<input id="hidden_input" type="hidden" name="customerid" value="${customerid}"/>
 </body>
 </html>

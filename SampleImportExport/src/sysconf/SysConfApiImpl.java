@@ -14,6 +14,7 @@ import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LTestitem;
+import common.datamodel.DsfTestCenterInfo;
 import common.util.CommonUtil;
 import common.xmlmodel.SystemConfigSetting;
 import common.xmlmodel.SystemConfigTable;
@@ -94,7 +95,7 @@ public class SysConfApiImpl
 		return dataAccessApi.getCustomerInfoByName(customername);
 	}
 	public void saveCustomerInfo(DsfCustomerBaseInfo dcbi){
-		dataAccessApi.saveCustomerBaseInfo_sysconf(dcbi);
+		dataAccessApi.saveCustomerBaseInfo(dcbi);
 	}
 	public void deleteCustomerInfo(String customerid){
 		dataAccessApi.deleteCustomerInfo(customerid);
@@ -177,14 +178,24 @@ public class SysConfApiImpl
 	public void saveAll(List<DsfControltestitems> dcttList){
 		dataAccessApi.saveAll(dcttList);
 	}
-	
-	//
 	@Override
 	public void saveData(Object t,String tableName){
-		dataAccessApi.saveData_sysconf(t,tableName);
+		dataAccessApi.saveData(t,tableName);
 	}
 	@Override
 	public List<LTestitem> getTestItemsByIndexId(String indexId){
 		return dataAccessApi.getTestItemsByIndexId(indexId);
+	}
+	public List<DsfTestCenterInfo> getTestCenterInfoList(){
+		return dataAccessApi.getTestCenterInfoList();
+	}
+	public void deleteTestCenterInfo(BigDecimal id){
+		dataAccessApi.deleteTestCenterInfo(id);
+	}
+	public void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo){
+		dataAccessApi.updateDsfTestCenterInfo(dsftestcenterinfo );
+	}
+	public DsfTestCenterInfo getTestCenterInfoById(String id){
+		return dataAccessApi.getTestCenterInfoById(id);
 	}
 }
