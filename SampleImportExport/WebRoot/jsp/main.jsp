@@ -123,7 +123,7 @@
 			click : pretreatment
 		}, {
 			line : true
-		},{
+		}, {
 			text : '通过Excel导入接收的标本',
 			click : impExcel
 		}, {
@@ -180,30 +180,50 @@
 				text : '基础折扣设置',
 				click : baseDiscount
 			}, ]
-		} ]
+		}, {
+			text : '检验单位信息设置',
+			click : testCenter
+		} , {
+			text : '系统账号管理',
+			click : labuser
+		}]
 	}
-	
-	function manualEntry(){
-		f_addTab("manualEntry", "手工录入标本信息", "/jsp/updown/updown.do?method=viewManualEntry");
+
+	function manualEntry() {
+		f_addTab("manualEntry", "手工录入标本信息",
+				"/jsp/updown/updown.do?method=viewManualEntry");
 	}
-	function pretreatment(){
-		f_addTab("pretreatment", "前处理标本信息", "/jsp/updown/updown.do?method=viewPretreatment");
+	function pretreatment() {
+		f_addTab("pretreatment", "前处理标本信息",
+				"/jsp/updown/updown.do?method=viewPretreatment");
 	}
 	function baseDiscount() {
 		f_addTab("baseDiscount", "基础折扣", "");
 	}
+	function testCenter() {
+		f_addTab("testCenter", "检验单位信息设置",
+				"/jsp/sysconf/sysConf.do?method=viewTestCenter");
+	}
 	function cinfo() {
-		f_addTab("cinfo", "客户信息", "/jsp/sysconf/sysConf.do?method=viewCustomerInfo");
+		f_addTab("cinfo", "客户信息",
+				"/jsp/sysconf/sysConf.do?method=viewCustomerInfo");
 	}
 	function inspectionInfo() {
-		f_addTab("inspectionInfo", "检验信息设置", "/jsp/sysconf/sysConf.do?method=viewTestObjective");
+		f_addTab("inspectionInfo", "检验信息设置",
+				"/jsp/sysconf/sysConf.do?method=viewTestObjective");
+	}
+	function labuser() {
+		f_addTab("labuser", "系统账号管理",
+				"/jsp/sysconf/sysConf.do?method=viewTestObjective");
 	}
 	function inspectionItemControl() {
-		f_addTab("inspectionItemControl", "检验项目对照", "/jsp/sysconf/sysConf.do?method=viewTestItem");
+		f_addTab("inspectionItemControl", "检验项目对照",
+				"/jsp/sysconf/sysConf.do?method=viewTestItem");
 	}
 
 	function impBaseData() {
-		f_addTab("impBaseData", "基本信息导入", "/jsp/updown/updown.do?method=viewImpBaseData");
+		f_addTab("impBaseData", "基本信息导入",
+				"/jsp/updown/updown.do?method=viewImpBaseData");
 	}
 	function impExcel() {
 		f_addTab("impExcel", "通过Excel导入接收的标本",

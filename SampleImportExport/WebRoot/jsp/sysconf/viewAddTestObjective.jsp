@@ -35,7 +35,7 @@ $(function () {
                 inputWidth: 170, labelWidth: 90, space: 40,
                 validate : true,
                 fields: [
-                { display: "客户编号", name: "customerid", newline: true, type: "text", group: "检验目的增加", groupicon: groupicon },
+                { display: "客户编号", name: "customerid", newline: true, readonly: true, type: "text", group: "检验目的增加", groupicon: groupicon },
                 { display: "id", name: "id", newline: true, type: "hidden" },
                 { display: "医疗序号", name: "ylxh", newline: true, type: "digits", validate:{required:true,minlength:5} },
                 { display: "医疗名称", name: "ylmc", id:"ylmc", newline: true, type: "text", validate:{required:true,minlength:1} },

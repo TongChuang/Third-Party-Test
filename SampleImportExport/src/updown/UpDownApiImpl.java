@@ -94,10 +94,10 @@ public class UpDownApiImpl implements UpDownApi {
 		return dataAccessApi.getSamplesByBarCode( barcode);
 	}
 	public List getCustomerInfo(String cid){
-		return dataAccessApi.getCustomerBaseInfoByCustomerId_updown(cid);
+		return dataAccessApi.getCustomerBaseInfoByCustomerId(cid);
 	}
 	public DsfCustomerBaseInfo getCustomerInfoById(String customerid){
-		return dataAccessApi.getCustomerInfoById_updown(customerid);
+		return dataAccessApi.getCustomerInfoById(customerid);
 	}
 	public List<LTestresult> getLTestresultByNo(String sampleno){
 		return dataAccessApi.getLTestresultByNo(sampleno);
