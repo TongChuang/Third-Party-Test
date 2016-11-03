@@ -29,6 +29,7 @@
 <script type="text/javascript">
 var groupicon = "/resources/ligerUI/skins/icons/communication.gif";
 var form = null;
+var dialog = frameElement.dialog;
 $(function () {
              //创建表单结构
              form = $("#form").ligerForm({
@@ -50,11 +51,11 @@ $(function () {
             form.setData({customerid:rs});
             
 });
-
+function colseDialog(){
+ 	dialog.close();//关闭dialog 
+}
 function addTestObjectiveButton(){
 	var data = form.getData();
-	alert(JSON.stringify(data));
-	alert(JSON.stringify($("#ylmc").val()));
 	$.ajax({  
 		url: '/jsp/sysconf/sysConf.do?method=addTestObjective',
 		dataType: 'json',
@@ -62,8 +63,11 @@ function addTestObjectiveButton(){
 		type: 'post', 
 		success:function(datas)  
 		{
-			alert(datas.success);
-			window.parent.grid2.loadData(datas.result_json);
+			if (datas.success != undefined) {
+				window.parent.grid2.loadData(datas.result_json);
+				parent.$.ligerDialog.success(datas.success);
+				colseDialog();
+			}
         }
 	});
 }

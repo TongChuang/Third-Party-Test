@@ -18,11 +18,11 @@ import org.apache.commons.beanutils.BeanUtils;
 import webService.server.help.ConversionBean;
 
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfTestitems;
 import common.datamodel.DsfProcess;
-import common.datamodel.LSample;
-import common.datamodel.LTestresult;
+import common.datamodel.DsfSampleInfo;
+import common.datamodel.DsfTestResult;
 import common.util.DateUtil;
 import common.util.XmlUtil;
 import common.webmodel.Base_TestItem_XML;
@@ -54,13 +54,14 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 		return dataAccessApi;
 	}
 
+	/*获取检验结果*/
 	@WebMethod
 	public String getTestResults(
 			@WebParam(name = "customerid") String customerid,
 			@WebParam(name = "customerKey") String customerKey,
 			@WebParam(name = "testItems") String testItems,
 			@WebParam(name = "dsfbarcode") String dsfbarcode) {
-		List<LTestresult> trList = new ArrayList<LTestresult>();
+		List<DsfTestResult> trList = new ArrayList<DsfTestResult>();
 		ReturnErrorXml rXml = new ReturnErrorXml();
 		Map<String, String> initMap = new HashMap<String, String>();
 		try {
@@ -77,7 +78,7 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 			boolean flag = dataAccessApi.checkDsfUserInfo(customerid,
 					customerKey);
 			if (flag) {
-				LTestresult ltr = new LTestresult();
+				DsfTestResult ltr = new DsfTestResult();
 				ltr.setCustomerid(customerid);
 				ltr.setTestid(testItems);
 				ltr.setDsfbarcode(dsfbarcode);
@@ -87,7 +88,7 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 					rXml.setMsg("没有查询到结果");
 					rXml.setContent("当前条件查无结果，请更换查询条件再次查询");
 				} else {
-					for (LTestresult lTestresult : trList) {
+					for (DsfTestResult lTestresult : trList) {
 						lTestresult.setTestid(initMap.get(lTestresult
 								.getTestid()));
 					}
@@ -146,7 +147,7 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 				dXml = XmlUtil.converyToJavaBean(xmlData, DataSet_XML.class);
 				for (SampleInfoList_XML slXml : dXml.getsXmlList()) {
 					SampleInfo_XML sampleInfo_XML = new SampleInfo_XML();
-					LSample ls = new LSample();
+					DsfSampleInfo ls = new DsfSampleInfo();
 					sampleInfo_XML = slXml.getSampleInfo();
 					String pseqString = dataAccessApi
 							.getSeqString("SAMPLE_SEQUENCE");
@@ -185,10 +186,10 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 						profiletest.append(tXml.getTestitem());
 					}
 					// 检验目的判断
-					List<DsfLYlxhdescribe> ylxhList = dataAccessApi
+					List<DsfTestobjective> ylxhList = dataAccessApi
 							.getYlxhdescribeByYlxh(ls.getYlxh(), customerid);
 					if (null == ylxhList || ylxhList.size() < 1) {
-						DsfLYlxhdescribe dsfYlxhdescribe = new DsfLYlxhdescribe();
+						DsfTestobjective dsfYlxhdescribe = new DsfTestobjective();
 						dsfYlxhdescribe.setYlmc(ls.getInspectionname());
 						dsfYlxhdescribe.setYlxh(ls.getYlxh());
 						String dsfylxhseqString = dataAccessApi
@@ -244,12 +245,12 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 			// 判断客户是否合法
 			if (flag) {
 				// 获取所有当前用户的已存在数据
-				List<DsfLYlxhdescribe> ylxhList = dataAccessApi.getYlxhdescribeByYlxh("", customerid);
+				List<DsfTestobjective> ylxhList = dataAccessApi.getYlxhdescribeByYlxh("", customerid);
 				List<DsfTestitems> dsftList = dataAccessApi.getDsfTestItemsByTestItem("", customerid);
 				// 查询数据库中的历史数据放入SET以防止新上来的数据会和原来的有重复的
 				Set ylxhSet = new HashSet();
 				Set tiSet = new HashSet();
-				for (DsfLYlxhdescribe dy : ylxhList) {
+				for (DsfTestobjective dy : ylxhList) {
 					ylxhSet.add(dy.getYlxh());
 				}
 				for (DsfTestitems dy : dsftList) {
@@ -268,7 +269,7 @@ public class SIE_ServiceApiImpl implements SIE_ServiceApi {
 				for (TestObjective_XML testObjective_XML : testObjectives_XML
 						.getTestObjectList()) {
 					if (!ylxhSet.contains(testObjective_XML.getYlxh())) {
-						DsfLYlxhdescribe dYlxhdescribe = new DsfLYlxhdescribe();
+						DsfTestobjective dYlxhdescribe = new DsfTestobjective();
 						String dsfylxhseqString = dataAccessApi
 								.getSeqString("DSF_YLXH_SEQUENCE");
 						BeanUtils.copyProperties(dYlxhdescribe,

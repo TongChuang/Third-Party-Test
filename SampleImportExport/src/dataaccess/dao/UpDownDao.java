@@ -12,15 +12,15 @@ import org.hibernate.Query;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import common.datamodel.DsfControltestitems;
+import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfProcess;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LSample;
+import common.datamodel.DsfSampleInfo;
 import common.datamodel.LTestitem;
 import common.datamodel.LTestobjective;
-import common.datamodel.LTestresult;
+import common.datamodel.DsfTestResult;
 
 
 import common.datamodel.LabUser;
@@ -39,42 +39,42 @@ public class UpDownDao extends HibernateDaoSupport {
 		DataAccessUtil.saveOrUpdateAll(objectList, tableName, getHibernateTemplate(), tableName);
 	}
 	//根据LProcrss查询的SampleId去查询Sample信息
-	public List<LSample> getLSample(String beginTime,String endTime){
+	public List<DsfSampleInfo> getLSample(String beginTime,String endTime){
 		String sqlString = "";
 		if("".equals(beginTime)||"".equals(endTime)){
-			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.sampleno";
+			sqlString = "select {s.*} from DSF_PROCESS p ,DSF_SAMPLE_INFO s where p.sample_id = s.sampleno";
 		}else{
 			//sqlString = "select  from LProcess p join LSample s on p.sample_id = s.id where p.executetime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
-			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.sampleno "+
+			sqlString = "select {s.*} from DSF_PROCESS p ,DSF_SAMPLE_INFO s where p.sample_id = s.sampleno "+
 					"and p.collectiontime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
 		}
 		try {
-			return  getSession().createSQLQuery(sqlString).addEntity("s",LSample.class).list();
+			return  getSession().createSQLQuery(sqlString).addEntity("s",DsfSampleInfo.class).list();
 		} catch (DataAccessException e) {
 			return ((List) (new Vector()));
 		}
 	}
-	public List<LSample> getSampleByTime(String beginTime,String endTime,String customerid){
+	public List<DsfSampleInfo> getSampleByTime(String beginTime,String endTime,String customerid){
 		String sqlString = "";
 		if("".equals(beginTime)||"".equals(endTime)||null!=customerid){
-			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.id and s.dsfcustomerid='"+customerid+"'";
+			sqlString = "select {s.*} from DSF_PROCESS p ,DSF_SAMPLE_INFO s where p.sample_id = s.id and s.dsfcustomerid='"+customerid+"'";
 		}else{
 			//sqlString = "select  from LProcess p join LSample s on p.sample_id = s.id where p.executetime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
-			sqlString = "select {s.*} from DSF_PROCESS p ,L_SAMPLE s where p.sample_id = s.id and s.dsfcustomerid='"+customerid+"'"+
+			sqlString = "select {s.*} from DSF_PROCESS p ,DSF_SAMPLE_INFO s where p.sample_id = s.id and s.dsfcustomerid='"+customerid+"'"+
 					"and p.collectiontime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss')";
 		}
 		try {
-			return  getSession().createSQLQuery(sqlString).addEntity("s",LSample.class).list();
+			return  getSession().createSQLQuery(sqlString).addEntity("s",DsfSampleInfo.class).list();
 		} catch (DataAccessException e) {
 			return ((List) (new Vector()));
 		}
 	}
-	public List<LTestresult> queryExpData(String beginTime,String endTime,String customerid){
+	public List<DsfTestResult> queryExpData(String beginTime,String endTime,String customerid){
 		String sqlString = "";
 		if("".equals(beginTime)||"".equals(endTime)){
-			sqlString = "from LTestresult where customerid='"+customerid+"' order by measuretime desc";
+			sqlString = "from DsfTestResult where customerid='"+customerid+"' order by measuretime desc";
 		}else{
-			sqlString = "from LTestresult where customerid='"+customerid+"' and measuretime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss') order by measuretime desc";
+			sqlString = "from DsfTestResult where customerid='"+customerid+"' and measuretime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss') order by measuretime desc";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -82,10 +82,23 @@ public class UpDownDao extends HibernateDaoSupport {
 			return ((List) (new Vector()));
 		}
 	}
-	public List<LTestresult> getLTestresultByNo(String sampleno){
+	public List<DsfTestResult> getLTestresultByNo(String sampleno){
 		String sqlString = "";
 		if(null!=sampleno){
-			sqlString = "from LTestresult where sampleno='"+sampleno+"'";
+			sqlString = "from DsfTestResult where sampleno='"+sampleno+"'";
+		}
+		try {
+			return getHibernateTemplate().find(sqlString);
+		} catch (DataAccessException e) {
+			return null;
+		}
+	}
+	public List<DsfProcess> getSampleTime(String sampleno){
+		String sqlString = "";
+		if(sampleno==""){
+			sqlString = "from DsfProcess";
+		}else{
+			sqlString = "from DsfProcess where sampleId='"+sampleno+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -96,9 +109,9 @@ public class UpDownDao extends HibernateDaoSupport {
 	public List getExpSampleNoData(String beginTime,String endTime,String customerid){
 		String sqlString = "";
 		if("".equals(beginTime)||"".equals(endTime)){
-			sqlString = "select distinct sampleno from LTestresult where customerid='"+customerid+"' order by sampleno desc";
+			sqlString = "select distinct sampleno from DsfTestResult where customerid='"+customerid+"' order by sampleno desc";
 		}else{
-			sqlString = "select distinct sampleno LTestresult where customerid='"+customerid+"' and measuretime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss') order by sampleno desc";
+			sqlString = "select distinct sampleno DsfTestResult where customerid='"+customerid+"' and measuretime between to_date('"+beginTime+"','yyyy-MM-dd HH24:mi:ss') and to_date('"+endTime+"','yyyy-MM-dd HH24:mi:ss') order by sampleno desc";
 		}
 		try {
 			Query query = getSession().createQuery(sqlString);
@@ -108,8 +121,8 @@ public class UpDownDao extends HibernateDaoSupport {
 		}
 	}
 	
-	public List <DsfLYlxhdescribe> getYlxhdescribeByYlxh(String ylxh,String customerid){
-		String sql ="from DsfLYlxhdescribe where customerid='"+customerid+"'";
+	public List <DsfTestobjective> getYlxhdescribeByYlxh(String ylxh,String customerid){
+		String sql ="from DsfTestobjective where customerid='"+customerid+"'";
 		if(!"".equals(ylxh)){
 			sql +=" and  ylxh='"+ylxh+"' ";
 		}
@@ -143,11 +156,11 @@ public class UpDownDao extends HibernateDaoSupport {
 		}
 	}
 	public Map<String, String> getLocal2CustomerConversionTestItem(){
-		List <DsfControltestitems> ctiList = new ArrayList<DsfControltestitems>();
+		List <DsfInspectionItemControl> ctiList = new ArrayList<DsfInspectionItemControl>();
 		Map <String,String>initMap = new HashMap<String, String>();
-		ctiList = DataAccessUtil.getAllObjects("DsfControltestitems", getHibernateTemplate());
+		ctiList = DataAccessUtil.getAllObjects("DsfInspectionItemControl", getHibernateTemplate());
 		if(ctiList!=null&&ctiList.size()>0){
-			for (DsfControltestitems cti:ctiList) {
+			for (DsfInspectionItemControl cti:ctiList) {
 				initMap.put(cti.getLocalitems(), cti.getCustomeritems());
 			}
 		}
@@ -155,27 +168,27 @@ public class UpDownDao extends HibernateDaoSupport {
 	}
 	
 	public Map<String, String> getCustomer2LocalConversionTestItem(){
-		List <DsfControltestitems> ctiList = new ArrayList<DsfControltestitems>();
+		List <DsfInspectionItemControl> ctiList = new ArrayList<DsfInspectionItemControl>();
 		Map <String,String>initMap = new HashMap<String, String>();
-		ctiList = DataAccessUtil.getAllObjects("DsfControltestitems", getHibernateTemplate());
+		ctiList = DataAccessUtil.getAllObjects("DsfInspectionItemControl", getHibernateTemplate());
 		if(ctiList!=null&&ctiList.size()>0){
-			for (DsfControltestitems cti:ctiList) {
+			for (DsfInspectionItemControl cti:ctiList) {
 				initMap.put(cti.getCustomeritems(),cti.getLocalitems());
 			}
 		}
 		return initMap;
 	}
 	
-	public List<LSample> getSampleNoByLSample(List samplenoList){
-		return DataAccessUtil.getObjectsByColumWithIn(samplenoList, "sampleno", "LSample", getSession());
+	public List<DsfSampleInfo> getSampleNoByLSample(List samplenoList){
+		return DataAccessUtil.getObjectsByColumWithIn(samplenoList, "sampleno", "DSF_SAMPLE_INFO", getSession());
 	}
-	public LSample getSampleByBarCode(String barcode){
-		return (LSample) DataAccessUtil.getObjectByColum(barcode, "localbarcode", "LSample", getHibernateTemplate());
+	public DsfSampleInfo getSampleByBarCode(String barcode){
+		return (DsfSampleInfo) DataAccessUtil.getObjectByColum(barcode, "localbarcode", "DSF_SAMPLE_INFO", getHibernateTemplate());
 	}
-	public List<LSample> getSamplesByBarCode(String barcode){
+	public List<DsfSampleInfo> getSamplesByBarCode(String barcode){
 		String sqlString = "";
 		if(null!=barcode){
-			sqlString = "from LSample where localbarcode = '"+barcode+"' order by id desc";
+			sqlString = "from DSF_SAMPLE_INFO where localbarcode = '"+barcode+"' order by id desc";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -215,8 +228,8 @@ public class UpDownDao extends HibernateDaoSupport {
 		}	
 	}
 	
-	public List<LTestresult> getTestResultsByWebService(LTestresult ltr){
-		StringBuffer sql = new StringBuffer("from LTestresult where customerid ='"+ltr.getCustomerid()+"' ");
+	public List<DsfTestResult> getTestResultsByWebService(DsfTestResult ltr){
+		StringBuffer sql = new StringBuffer("from DsfTestResult where customerid ='"+ltr.getCustomerid()+"' ");
 		if(null!=ltr.getDsfbarcode()){
 			sql.append(" and dsfbarcode='"+ltr.getDsfbarcode()+"' ");
 		}
@@ -232,10 +245,10 @@ public class UpDownDao extends HibernateDaoSupport {
 	/**
 	 * 前处理
 	 */
-	public List<DsfLYlxhdescribe> getDsfTestObjectiveById(String customerid){
+	public List<DsfTestobjective> getDsfTestObjectiveById(String customerid){
 		String sqlString = "";
 		if(null!=customerid){
-			sqlString = "from DsfLYlxhdescribe where customerid = '"+customerid+"' order by id desc";
+			sqlString = "from DsfTestobjective where customerid = '"+customerid+"' order by id desc";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -248,10 +261,10 @@ public class UpDownDao extends HibernateDaoSupport {
 		/*
 		String[] strings1= {"SUBSTR(serialnumber,1,11)"};
 		String[] strings2= {dateAndSection};
-		return DataAccessUtil.cntByStrCols("DsfLYlxhdescribe", strings1, strings2, getSession());*/
+		return DataAccessUtil.cntByStrCols("DsfTestobjective", strings1, strings2, getSession());*/
 		String sqlString = "";
 		if(null!=dateAndSection){
-			 sqlString = "select count(*) from L_Sample where SUBSTR(sampleno,1,11) = '"+dateAndSection+"'";
+			 sqlString = "select count(*) from DSF_SAMPLE_INFO where SUBSTR(sampleno,1,11) = '"+dateAndSection+"'";
 		}
 		try {
 			return Integer.parseInt(getSession().createSQLQuery(sqlString).list().get(0).toString());
@@ -259,13 +272,13 @@ public class UpDownDao extends HibernateDaoSupport {
 			return -1;
 		}	
 	}
-	public void saveAllSerialNumber(List<DsfLYlxhdescribe> dydList){
-		DataAccessUtil.saveOrUpdateAll(((Collection) (dydList)), "DsfLYlxhdescribe", getHibernateTemplate(), "update");
+	public void saveAllSerialNumber(List<DsfTestobjective> dydList){
+		DataAccessUtil.saveOrUpdateAll(((Collection) (dydList)), "DsfTestobjective", getHibernateTemplate(), "update");
 	}
 	public List<String> getInspectionSectionByYLXH(String ylxh,String customerid){
 		String sqlString = "";
 		if(null!=ylxh){
-			sqlString = "from LSample where ylxh = '"+ylxh+"' and customerid = '"+customerid+"' order by id desc";
+			sqlString = "from DSF_SAMPLE_INFO where ylxh = '"+ylxh+"' and customerid = '"+customerid+"' order by id desc";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);

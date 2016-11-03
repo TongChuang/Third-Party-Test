@@ -37,10 +37,10 @@
 	var ss=0;
 	var cgrid;
 	$(function() {
-		$("form").ligerForm();
+		//$("form").ligerForm();
 		$("#navtab").ligerTab();
 		$("#layout").ligerLayout({
-			leftWidth : 300
+			leftWidth : 600
 		});
 		$("#toptoolbar").ligerToolBar({
 			items : [ {
@@ -83,7 +83,11 @@
 				display : '客户地址',
 				name : 'address',
 				width : 260
-			}, ],
+			}, {
+				display : '是否有数据',
+				name : 'basicinfostate',
+				width : 260
+			},],
 			data : resultJson,
 			pageSize : 30,
 			width : '99%',
@@ -95,6 +99,7 @@
 				$("#address").val(data.address);
 				$("#customername").val(data.customername);
 				$("#id").val(data.id);
+				$("#basicinfostate").val(data.basicinfostate);
 			},
 		});
 
@@ -212,6 +217,7 @@
 				},
 				success : function(data) {
 					if (data.success != undefined) {
+						cgrid.loadData(data.result_json);
 						$.ligerDialog.success(data.success);
 					}
 					if (data.error != undefined) {
@@ -248,10 +254,9 @@
 				$.ligerDialog.error('出现未知错误');
 			},
 			success : function(datas) {
-
-				if (data.success != undefined) {
+				if (datas.success != undefined) {
 					cgrid.loadData(datas.cjson);
-					$.ligerDialog.success(data.success);
+					$.ligerDialog.success(datas.success);
 				}else if (datas.error != undefined) {
 					$.ligerDialog.error(datas.error);
 				}
@@ -294,11 +299,11 @@ body {
 <body>
 	<div id="layout">
 
-		<div position="left" id="leftlayout1">
+		<div position="left" title="客户基本信息" id="leftlayout1">
 			<div id="maingridData" style="margin: 0; padding: 0"></div>
 		</div>
 
-		<div position="center" title="">
+		<div position="center" title="客户基本信息详情">
 			<div id="navtab" style="overflow:hidden; border:1px solid #A3C0E8; ">
 				<div tabid="baseinfo" title="客户基础信息" lselected="true">
 					<div id="toptoolbar"></div>
@@ -330,7 +335,7 @@ body {
 							<tr>
 								<td align="right" class="l-table-edit-td">webService验证KEY:</td>
 								<td align="left" class="l-table-edit-td" style="width: 400px"><input
-									style="width: 400px" name="customerKey" type="text"
+									name="customerKey" type="text"
 									id="customerKey" ltype="text" placeholder="webService验证KEY" />
 								</td>
 								<td align="left"></td>
@@ -338,7 +343,7 @@ body {
 							<tr>
 								<td align="right" class="l-table-edit-td">是否有检验项目数据:</td>
 								<td align="left" class="l-table-edit-td" style="width: 400px"><select
-									name="basicinfostate" id="basicinfostate" ltype="select">
+									name="basicinfostate" id="basicinfostate" ltype="select" >
 										<option value="1">有数据</option>
 										<option value="0">无数据</option>
 								</select>

@@ -19,8 +19,8 @@
 	type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerToolBar.js"
 	type="text/javascript">
-	
 </script>
+<script src="/resources/ligerUI/js/plugins/ligerDialog.js" type="text/javascript"></script>	
 <script type="text/javascript">
 	var controlJson = null;
 	var customerJson = null;
@@ -65,7 +65,8 @@
 			height : '99%',
 			checkbox : false,
 			onSelectRow : function(data, rowindex, rowobj) {
-				alert("选中的是："+data.customername);	
+				//alert("选中的是："+data.customername);	
+				//$.ligerDialog.success("选中的是："+data.customername);
 				ajaxControltestitems(data);
 			},
 		});
@@ -105,8 +106,6 @@
 			height : '99%',
 			checkbox : false,
 			onSelectRow : function(data, rowindex, rowobj) {
-				alert("选中的是：" + data.ylmc);
-				alert(111);
 				ajaxTestItems(data);
 			},
 		});
@@ -144,7 +143,7 @@
 	function controlSearch(){
 		var row = grid.getSelectedRow();
 	    if (!row) { 
-	    	alert('客户信息行未选中'); return; 
+	    	$.ligerDialog.warn('客户信息行未选中'); return; 
 	    }
 		grid2.options.data = $.extend(true, {}, controlJson);
 	    grid2.loadData(control_getWhere());
@@ -162,12 +161,12 @@
 	function autoControlTestItems(){
 		var row = grid.getSelectedRow();
 	    if (!row) { 
-	    	alert('客户信息行未选中'); return; 
+	    	$.ligerDialog.warn('客户信息行未选中'); return; 
 	    }
 	    $.ajax({  	
 			url: '/jsp/sysconf/sysConf.do?method=autoControlTestItems',
 			dataType: 'json',
-			data: "customerid=" + row.clientnumber,
+			data: "customerid=" + row.customerid,
 			type: 'post',  
 			success:function(datas)  
 			{     
@@ -175,17 +174,16 @@
 				controlJson = datas.result_json;
 			},
 			error:function(){
-			alert(4);
+				$.ligerDialog.error('未知错误');
 			}
 		});	 
 	}
 	//ajax显示同步表
 	function ajaxControltestitems(data){
-	alert(1);
 	$.ajax({  	
 		 url: '/jsp/sysconf/sysConf.do?method=getControltestitems',
 		 dataType: 'json',
-		 data: "customerid=" + data.clientnumber,
+		 data: "customerid=" + data.customerid,
 		 type: 'post',  
 		 success:function(datas)  
 		 {     
@@ -193,7 +191,7 @@
 			controlJson = datas.result_json;
 		 },
 		 error:function(){
-			alert(4);
+			$.ligerDialog.error('未知错误');
 		 }
 	});	
 	}
@@ -214,7 +212,8 @@
 		var indexId = $('#itemsSelect option:selected').val();
 		var row = grid2.getSelectedRow();
 		if(!row){
-			alert("请选择需要添加的行");
+			//alert("请选择需要添加的行");
+			$.ligerDialog.warn("请选择需要添加的行");
 			return;
 		}
 		$.ajax({  

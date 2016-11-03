@@ -20,13 +20,17 @@
 	type="text/javascript"></script>
 <script src="/resources/My97DatePicker/WdatePicker.js"
 	type="text/javascript"></script>
-
-<style type="text/css">
+<script src="/resources/ligerUI/js/plugins/ligerForm.js" 
+	type="text/javascript"></script>
+<style type="text/css">        
 body {
 	padding: 10px;
 	margin: 0;
 }
-
+.l-table-edit {}
+.l-table-edit-td{ padding:8px;}
+.l-button-submit,.l-button-test{width:80px; float:left; margin-left:10px; padding-bottom:2px;}
+.l-verify-tip{ left:230px; top:120px;}
 #layout1 {
 	width: 100%;
 	margin: 40px;
@@ -45,17 +49,22 @@ h4 {
 </style>
 <script type="text/javascript">
 	var sampleResultJson = null;
-	var testResultJson = null;
+	var sampleTimeJson = null;
 	var grid = null;
 	var grid2 = null;
 	$(function() {
 		$("#layout1").ligerLayout({
-			isLeftCollapse : true
+			isLeftCollapse : true,
+			rightWidth : 250,
 		});
 		grid = $("#maingridData").ligerGrid({
 			columns : [
 			//当前状态，开始为空的，扫码后修改值为1
 			{
+				display : 'id',
+				name : 'id',
+				width : 150
+			},{
 				display : '病人名称',
 				name : 'patientname',
 				width : 150,
@@ -119,10 +128,6 @@ h4 {
 				display : '样本类型',
 				name : 'sampletype',
 				width : 100,
-			},{
-				display : '样本流水号',
-				name : 'sampleno',
-				width : 100,
 			}, {
 				display : '生理周期',
 				name : 'cycle',
@@ -131,37 +136,36 @@ h4 {
 				display : '年龄单位',
 				name : 'ageunit',
 				width : 100,
-			}, ],
+			}, {
+				display : '样本状态',
+				name : 'samplestatus',
+				width : 100,
+			}],
 			data : sampleResultJson,
 			pageSize : 30,
 			width : '99%',
 			height : '99%',
 			checkbox : false,
-			onSelectRow : function(data, rowindex, rowobj) {
-				//alert("选中的是："+data.ylmc);		
-				ajaxTestResult(data);
+			onSelectRow : function(data, rowindex, rowobj) {	
+				ajaxSampleTime(data);
 			},
 		});
-		grid2 = $("#maingridResult").ligerGrid({
-			columns :[{
-				display : '检验结果名称',
-				name : 'testname',
-				width : 100,
-			}, {
-				display : '检验结果',
-				name : 'testresult',
-				width : 100,
-			}, {
-				display : '单位',
-				name : 'unit',
-				width : 100,
-			},],
-			data : testResultJson,
-			pageSize : 30,
-			width : '99%',
-			height : '99%',
-			checkbox : false,
-		});
+		
+		 grid2 = $("#mainForm").ligerForm({
+                inputWidth: 170, labelWidth: 90, space: 40,
+                validate : true,
+                fields: [
+                { display: "采集时间", name: "collectiontime", newline: true, type: "text" },
+                { display: "采集人", name: "collectionpersonnel", newline: true, type: "text" },
+                { display: "录入时间", name: "inputtime", newline: true, type: "text" },
+                { display: "录入人", name: "inputpersonnel", newline: true, type: "text" },
+                { display: "打印时间", name: "printtime", newline: true, type: "text" }, 
+                { display: "打印人", name: "printingstaff", newline: true, type: "text" },
+                { display: "前处理时间", name: "preprocessingtime", newline: true, type: "text" }, 
+                { display: "前处理人", name: "prehandlingpersonnel", newline: true, type: "text" }
+                ]
+            });
+          
 	});
 
 	function query() {
@@ -180,54 +184,31 @@ h4 {
 			return;
 		}
 		if (flag) {
-			document.form1.action = "/jsp/updown/updown.do?method=queryExpData";
+			document.form1.action = '/jsp/updown/updown.do?method=getSampleInfo';
 			document.form1.submit();
 		} else {
 			$.ligerDialog.error("起止时间不能单个为空");
 		}
 	}
-
-	function expDate(type) {
-		var beginTime = $("#beginTime").val();
-		var endTime = $("#endTime").val();
-		var customerid = $("#customerid").val();
-
-		var flag = false;
-		if (beginTime == '' && endTime == '') {
-			flag = true;
-		}
-		if (beginTime != '' && endTime != '') {
-			flag = true;
-		}
-		if (customerid == '') {
-			$.ligerDialog.error("请选择客户");
-			return;
-		}
-		if (flag) {
-			var m = $.ligerDialog.open({
-				height : 200,
-				url : '/jsp/updown/updown.do?method=exportResult&beginTime='
-						+ beginTime + '&endTime=' + endTime + '&customerid='
-						+ customerid + '&type=' + type
-			});
-			setTimeout(function() {
-				m.close();
-			}, 3000);
-		} else {
-			$.ligerDialog.error("起止时间不能单个为空");
-		}
-	}
 	//检验结果ajax方法
-	function ajaxTestResult(data){
+	function ajaxSampleTime(data){
 		$.ajax({  
-			url: '/jsp/updown/updown.do?method=getQueryResult',
+			url: '/jsp/updown/updown.do?method=getProcessResult',
 			dataType: 'json',
-			data: "sampleno="+data.sampleno,
+			data: "id="+data.id,
 			type: 'post', 
 			success:function(datas)  
 			{
-				grid2.loadData(datas.result_json);
-				testItemJson = datas.result_json;
+				$("#collectiontime").val(datas.result_json[0].collectiontime);
+				$("#printtime").val(datas.result_json[0].printtime);
+				$("#collectiontime").val(datas.result_json[0].collectiontime);
+				$("#collectionpersonnel").val(datas.result_json[0].collectionpersonnel);
+				$("#printtime").val(datas.result_json[0].printtime);
+				$("#printingstaff").val(datas.result_json[0].printingstaff);
+				$("#inputtime").val(datas.result_json[0].inputtime);
+				$("#inputpersonnel").val(datas.result_json[0].inputpersonnel);
+				$("#preprocessingtime").val(datas.result_json[0].preprocessingtime);
+				$("#prehandlingpersonnel").val(datas.result_json[0].printtimedatas.result_json[0].prehandlingpersonnel);
 	        }
 		});
 	}
@@ -287,31 +268,89 @@ h4 {
 										<span>查询结果</span>
 									</div></li>
 								<li>
-									<div style="width: 40px;"></div></li>
-								<li>
-									<div class="l-button" ligeruiid="expExcel" id="expExcel"
-										onclick="expDate('excel')" style="width: 100px;">
-										<div class="l-button-l"></div>
-										<div class="l-button-r"></div>
-										<span>Excel结果导出</span>
-									</div></li>
-								<li>
-									<div style="width: 40px;"></div></li>
-								<li>
-									<div class="l-button" ligeruiid="expXml" id="expXml"
-										onclick="expDate('xml')" style="width: 100px;">
-										<div class="l-button-l"></div>
-										<div class="l-button-r"></div>
-										<span>XML结果导出</span>
-									</div></li>
-							</ul></li>
+							</ul>
+						</li>
 					</ul>
 					<div class="l-clear"></div>
 			</form>
 			<div id="maingridData" style="margin: 0; padding: 0"></div>
 		</div>
-		<div position="right"  title="检验结果">
-			<div id="maingridResult" style="margin: 0; padding: 0"></div>
+		<div position="right"  title="检验时间详情">	
+			
+			<table cellpadding="0" cellspacing="0" class="l-table-edit" >
+				<tr>
+					<td style="width:30%" class="l-table-edit-td" align="right" >采集时间:</td><td align="right">
+						<div class="l-text" style="width: 165px;">
+							<input id="collectiontime" name="collectiontime" style="width: 164px;border:0px" type="text" readonly="readonly">
+							<div class="l-text-l"></div>
+							<div class="l-text-r"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:30%" class="l-table-edit-td" align="right" >采集人:</td><td align="right">
+						<div class="l-text" style="width: 165px;">
+							<input id="collectionpersonnel" name="collectionpersonnel" style="width: 164px;border:0px" type="text" readonly="readonly">
+							<div class="l-text-l"></div>
+							<div class="l-text-r"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:30%" class="l-table-edit-td" align="right" >录入时间:</td><td align="right">
+						<div class="l-text" style="width: 165px;">
+							<input id="inputtime" name="inputtime" style="width: 164px;border:0px" type="text" readonly="readonly">
+							<div class="l-text-l"></div>
+							<div class="l-text-r"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:30%" class="l-table-edit-td" align="right" >录入人:</td><td align="right">
+						<div class="l-text" style="width: 165px;">
+							<input id="inputpersonnel" name="inputpersonnel" style="width: 164px;border:0px" type="text" readonly="readonly">
+							<div class="l-text-l"></div>
+							<div class="l-text-r"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:30%" class="l-table-edit-td" align="right" >处理时间:</td><td align="right">
+						<div class="l-text" style="width: 165px;">
+							<input id="preprocessingtime" name="preprocessingtime" style="width: 164px;border:0px" type="text" readonly="readonly">
+							<div class="l-text-l"></div>
+							<div class="l-text-r"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:30%" class="l-table-edit-td" align="right" >前处理人:</td><td align="right">
+						<div class="l-text" style="width: 165px;">
+							<input id="prehandlingpersonnel" name="prehandlingpersonnel" style="width: 164px;border:0px" type="text" readonly="readonly">
+							<div class="l-text-l"></div>
+							<div class="l-text-r"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:30%" class="l-table-edit-td" align="right" >打印时间:</td><td align="right">
+						<div class="l-text" style="width: 165px;">
+							<input id="printtime" name="printtime" style="width: 164px;border:0px" type="text" readonly="readonly">
+							<div class="l-text-l"></div>
+							<div class="l-text-r"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:30%" class="l-table-edit-td" align="right" >打印人:</td><td align="right">
+						<div class="l-text" style="width: 165px;">
+							<input id="printingstaff" name="printingstaff" style="width: 164px;border:0px" type="text" readonly="readonly">
+							<div class="l-text-l"></div>
+							<div class="l-text-r"></div>
+						</div>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 </body>

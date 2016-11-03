@@ -253,7 +253,6 @@ var availableTags = null;
 			height : '99%',
 			checkbox : false,
 			onSelectRow : function(data, rowindex, rowobj) {
-				//alert("选中的是："+data.ylmc);		
 				ajaxTestItems(data);
 			},
 		});
@@ -272,49 +271,6 @@ var availableTags = null;
 			width : '100%',
 			height : '99%',
 		});	
-		 
-        grid4 =  $( "#itemsSelect" ).combobox();
-		/*grid4 = $("#searchIndex").ligerComboBox(
-		    {
-		    	
-		        url: '/jsp/sysconf/sysConf.do?method=addTestItemsSearch',
-		        valueField: 'indexId',
-		        textField: 'name', 
-		        selectBoxWidth: 200,
-		        autocomplete: function (e)
-	            {	
-	            	alert(1);
-	                alert(e.key);
-	                e.show();
-	            },
-                keySupport: true,
-		        width: 200
-		       
-		        data: autocompleteJson, 
-		        valueField: 'indexId',
-		        textField: 'name', 
-		        autocomplete: true,
-            	onSelected: function(newValue){
-            		alert(newValue);
-            	},
-            	emptyText: '<所有事件类型>',
-            	isMultiSelect: false,
-            	highLight:true,
-            	Width: 280
-		    }
-		);
-		 */ 
-						
-        grid4 =  $("#itemsSelect").ligerComboBox({ 
-         	data: array, 
-            	onSelected: function(newValue){
-            		alert(newValue);
-            	},
-            	emptyText: '<所有事件类型>',
-            	isMultiSelect: false,
-            	highLight:true,
-            	Width: 280
-        });
         
 	});
 	function customerSearch(){
@@ -363,13 +319,7 @@ function ajaxTestObjective(data){
 		 success:function(datas)  
 		 {     	 	
 			grid2.loadData(datas.result_json);
-			/*
-			testObjectiveJson = JSON.stringify(datas.result_json);   
-			alert(testObjectiveJson);
-			alert(JSON.stringify(customerJson));
-			*/
 			testObjectiveJson = datas.result_json;
-			     	
 		 },
 		 error:function(){
 			alert(4);
@@ -400,7 +350,7 @@ function addTestObjective(){
 	
 	var row = grid.getSelectedRow();
     if (!row) { 
-    	alert('客户信息未选中'); 
+    	$.ligerDialog.warn('客户信息行未选中');
     	return; 
     }
     else{
@@ -414,11 +364,11 @@ function modifyTestObjective(){
 	//1$.ligerWindow.show({ target: $("#updateTestObjective").clone(), width: 300, height: 400, title:"修改界面" });
 	var row = grid2.getSelectedRow();
     if (!row) { 
-    	alert('请选择需要修改的检验目的行'); 
+    	$.ligerDialog.warn('请选择需要修改的检验目的行');
     	return; 
     }
     else{
-    	alert(row.ylmc+':'+row.professionalgroup+':'+row.inspectionsection);
+    	//$.ligerDialog.success(row.ylmc+':'+row.professionalgroup+':'+row.inspectionsection);
     	//访问控制器之前打印可以显示中文，到了控制器就编乱码了
     	//$.ligerDialog.open({ height: 400, Width: 350,url: '/jsp/sysconf/sysConf.do?method=viewUpdateTestObjective&id='+row.id+'&ylxh='+row.ylxh+'&ylmc='+row.ylmc+'&customerid='+row.customerid+'&profiletest='+row.profiletest+'&professionalgroup='+row.professionalgroup+'&inspectionsection='+row.inspectionsection,title:"修改界面" });
     	$.ligerDialog.open({ height: 400, Width: 350,url: '/jsp/sysconf/sysConf.do?method=viewUpdateTestObjective&id='+row.id,title:"修改界面" });
@@ -428,7 +378,7 @@ function modifyTestObjective(){
 function deleteTestObjective(){
 	var row = grid2.getSelectedRow();
     if (!row) { 
-      alert('请选择需要删除的行'); 
+      $.ligerDialog.warn('请选择需要删除的检验目的行');
       return; 
     }
     else{
@@ -443,10 +393,10 @@ function deleteTestObjective(){
 			{
 				grid2.loadData(datas.result_json);
 				testObjectiveJson = datas.result_json;
-				alert(datas.success);
+				$.ligerDialog.success(datas.success);
 	        },
 	        error:function(){
-	        	alert("删除失败！");
+	        	$.ligerDialog.success('删除失败!');
 	        }
 	      	});
 		} 
@@ -456,11 +406,11 @@ function deleteTestObjective(){
 function itemsAdd(){
 	  var indexId = $('#itemsSelect option:selected').val();
       var row = grid2.getSelectedRow();
-      if (!row) { alert('检验目的行未选中'); return; }
+      if (!row) { $.ligerDialog.warn('检验目的行未选中'); return; }
       //alert(row.profiletest.indexOf(indexId)+"测试用");
       //可以减少后台更新
       if(-1 != row.profiletest.indexOf(indexId)){
-      	alert("该检验项目已经存在！");
+      	$.ligerDialog.error("该检验项目已经存在！");
       	return;
       }
  	  $.ajax({  
@@ -476,7 +426,7 @@ function itemsAdd(){
 			//grid2.loadData(datas.result_json2);
 			//testObjectiveJson = datas.result_json2;
 			//更新行 --行更新当前行数据,行状态还会存在
-            if (!row) { alert('请选择行'); return; }
+            if (!row) { $.ligerDialog.warn('请选择行'); return; }
             grid2.updateCell('profiletest',row.profiletest+indexId+',',row);
         }
 	  });     

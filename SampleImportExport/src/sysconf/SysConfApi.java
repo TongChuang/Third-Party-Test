@@ -5,9 +5,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import common.StartAPI;
-import common.datamodel.DsfControltestitems;
+import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LTestitem;
 import common.datamodel.DsfTestCenterInfo;
@@ -34,11 +34,11 @@ public interface SysConfApi
 	 * 
 	 */
 	public abstract List<DsfCustomerBaseInfo> getCustomerInfoByCostomerId(String customerid);
-	public abstract List<DsfLYlxhdescribe> getYlxhdescribe(String customerid);
-	public abstract List<DsfLYlxhdescribe> getYlxhdescribeById(String id);
-	public abstract List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc);
-	public abstract void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
-	public abstract void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe);
+	public abstract List<DsfTestobjective> getYlxhdescribe(String customerid);
+	public abstract List<DsfTestobjective> getYlxhdescribeById(String id);
+	public abstract List<DsfTestobjective> getYlxhdescribeByNo(String ylxh,String ylmc);
+	public abstract void updateYlxhdescribe(DsfTestobjective lYlxhdescribe);
+	public abstract void addYlxhdescribe(DsfTestobjective lYlxhdescribe);
 	public abstract void deleteYlxhdescribe(BigDecimal id);
 	public abstract List<DsfTestitems> getTestItemsByNo(String proList, String customerid);
 	public abstract List<DsfTestitems> getTestItems();
@@ -48,11 +48,11 @@ public interface SysConfApi
 	 * 检验项目对照
 	 * 
 	 */
-	public abstract List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname);
-	public abstract List<DsfControltestitems> getControltestitems(String customerid);
-	public abstract List<DsfControltestitems> getControltestitemsById(BigDecimal id);
+	public abstract List<DsfInspectionItemControl> getControltestitemsByNo(String customeritems,String customeritemsname);
+	public abstract List<DsfInspectionItemControl> getControltestitems(String customerid);
+	public abstract List<DsfInspectionItemControl> getControltestitemsById(BigDecimal id);
 	public abstract List<LTestitem> getLocalTestItems();
-	public abstract void saveAll(List<DsfControltestitems> dcttList);
+	public abstract void saveAll(List<DsfInspectionItemControl> dcttList);
 	public abstract List<LTestitem> getLocalTestItemsByNo(String customerid);
 	public abstract void saveData(Object t,String tableName);
 	public abstract List<LTestitem> getTestItemsByIndexId(String indexId);

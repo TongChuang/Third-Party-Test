@@ -42,13 +42,13 @@ import com.sun.org.apache.commons.beanutils.BeanUtils;
 import updown.UpDownApi;
 
 import common.SIEBeanFactory;
-import common.datamodel.DsfControltestitems;
+import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfProcess;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LSample;
-import common.datamodel.LTestresult;
+import common.datamodel.DsfSampleInfo;
+import common.datamodel.DsfTestResult;
 import common.datamodel.LabUser;
 import common.util.CommonUtil;
 import common.util.DateUtil;
@@ -119,15 +119,15 @@ public class UpDownController extends MultiActionController {
 			//System.out.println("扫描枪的扫描号码:"+barcode);
 			String customerid = barcode.substring(0, 5);
 			//根据本地条码号获取样本信息
-			LSample lSample = null;
-			List<LSample> lsList = upDownApi.getSamplesByBarCode(barcode);
+			DsfSampleInfo lSample = null;
+			List<DsfSampleInfo> lsList = upDownApi.getSamplesByBarCode(barcode);
 			System.out.println("根据本地条码号获取样本信息"+lsList);
 			if(null!=lsList&&lsList.size()>0){
 				lSample = lsList.get(0);
 			}
 			System.out.println("根据条码查询样本信息："+lSample);
 			//根据客户id获取Dsf检验目的
-			List<DsfLYlxhdescribe> lYlxhdescribeList = upDownApi.getDsfTestObjectiveById(customerid);
+			List<DsfTestobjective> lYlxhdescribeList = upDownApi.getDsfTestObjectiveById(customerid);
 			lYlxhdescribeList = upDownApi.getDsfTestObjectiveById(customerid);
 			//流水值
 			int num = 0;
@@ -136,9 +136,9 @@ public class UpDownController extends MultiActionController {
 			//获取当天yyyyMMdd格式的日期字符串
 			String dateString = DateUtil.getFolerDate(new Date());
 			JSONArray jsonArray = new JSONArray();
-			for(LSample ls: lsList){
+			for(DsfSampleInfo ls: lsList){
 				JSONObject jo = new JSONObject();
-				for(DsfLYlxhdescribe ly :lYlxhdescribeList){
+				for(DsfTestobjective ly :lYlxhdescribeList){
 					if(ls.getYlxh().equals(ly.getYlxh())){
 						//重新组织json
 						jo.put("ylxh", ly.getYlxh());
@@ -195,7 +195,7 @@ public class UpDownController extends MultiActionController {
 		}
 	}
 	
-	public ModelAndView addManualEntry(HttpServletRequest request, HttpServletResponse response,LSample lSample) {
+	public ModelAndView addManualEntry(HttpServletRequest request, HttpServletResponse response,DsfSampleInfo lSample) {
 		try {
 			logger.info((Object) (new StringBuilder("Begin to addManualEntry ")));
 			String collectionpersonnel = request.getParameter("collectionpersonnel");
@@ -229,10 +229,12 @@ public class UpDownController extends MultiActionController {
 		    String dsfSampSeq = dataAccessApi.getSeqString("DSF_YLXH_SEQUENCE");    
 		    lSample.setId(new BigDecimal(dsfSampSeq));
 		    lSample.setAgeunit(CommonUtil.getUTFtoISOEncode(lSample.getAgeunit()));
-		    upDownApi.saveData(lSample, "LSample");
+		    upDownApi.saveData(lSample, "DsfSampleInfo");
 		    
 		    //保存时间，采集时间，采集人，录入时间录入人
+		    String dsfProcessSeq = dataAccessApi.getSeqString("DSF_PROCESS_SEQUENCE"); 
 		    DsfProcess dsfProcess = new DsfProcess();
+		    dsfProcess.setId(new BigDecimal(dsfSampSeq));
 		    dsfProcess.setCollectionpersonnel(collectionpersonnel);
 		    dsfProcess.setCollectiontime(DateUtil.parseLongDate(collectiontime));
 		    dsfProcess.setInputpersonnel(request.getSession().getAttribute("userName").toString());
@@ -292,9 +294,6 @@ public class UpDownController extends MultiActionController {
 	public ModelAndView viewPretreatment(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			logger.info((Object) (new StringBuilder("Begin to viewPretreatment ")));
-			
-			
-			
 			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewPretreatment.jsp");
 			modelAndView.addObject("pic","/resources/images/no-pic.jpg");
 			logger.info((Object) (new StringBuilder("End to viewPretreatment ")));
@@ -528,15 +527,15 @@ public class UpDownController extends MultiActionController {
 			JSONArray pjsonArray = JSONArray.fromObject(pjson.substring(8, pjson.length() - 1));
 			JSONArray tjsonArray = JSONArray.fromObject(tjson.substring(8, tjson.length() - 1));
 			for (int i = 0; i < sjsonArray.size(); i++) {
-				LSample ls = new LSample();
-				ls = PubJsonUtil.jsonToBean(sjsonArray.get(i).toString(), LSample.class);
+				DsfSampleInfo ls = new DsfSampleInfo();
+				ls = PubJsonUtil.jsonToBean(sjsonArray.get(i).toString(), DsfSampleInfo.class);
 				String []ylxhStrings = ls.getYlxh().split(",");
 				for(int x=0;x<ylxhStrings.length;x++){
 					String pseqString = dataAccessApi.getSeqString("SAMPLE_SEQUENCE");
 					ls.setId(new BigDecimal(pseqString));
 					ls.setYlxh(ylxhStrings[x]);
 					ls.setDsfcustomerid(customerid);
-					upDownApi.saveData(ls, "LSample");
+					upDownApi.saveData(ls, "DsfSampleInfo");
 				}
 
 				for (int j = 0; j < pjsonArray.size(); j++) {
@@ -554,17 +553,17 @@ public class UpDownController extends MultiActionController {
 				// 检查基础表中检验目的是否存在，已存在不添加，不存在新增
 				String ylxh = ls.getYlxh();
 				
-				List<DsfLYlxhdescribe> ylxhList = upDownApi.getYlxhdescribeByYlxh(ylxh, customerid);
+				List<DsfTestobjective> ylxhList = upDownApi.getYlxhdescribeByYlxh(ylxh, customerid);
 				if (null != ylxh && ylxhList.size() > 0) {
 
 				} else {
-					DsfLYlxhdescribe dsfYlxhdescribe = new DsfLYlxhdescribe();
+					DsfTestobjective dsfYlxhdescribe = new DsfTestobjective();
 					dsfYlxhdescribe.setYlmc(ls.getInspectionname());
 					dsfYlxhdescribe.setYlxh(ls.getYlxh());
 					String dsfylxhseqString = dataAccessApi.getSeqString("DSF_YLXH_SEQUENCE");
 					dsfYlxhdescribe.setId(new BigDecimal(dsfylxhseqString));
 					
-					List dsfctiList = new ArrayList<DsfControltestitems>();
+					List dsfctiList = new ArrayList<DsfInspectionItemControl>();
 
 					StringBuffer profiletest = new StringBuffer();
 					for (int k = 0; k < tjsonArray.size(); k++) {
@@ -585,7 +584,7 @@ public class UpDownController extends MultiActionController {
 								upDownApi.saveData(dTestitems, "DsfTestitems");
 								
 								//把该条记录放入List,插入对照表
-								DsfControltestitems  dsfcti = new DsfControltestitems();
+								DsfInspectionItemControl  dsfcti = new DsfInspectionItemControl();
 								dsfcti.setCustomerid(customerid);
 								dsfcti.setCustomeritems(tXml.getTestitem());
 								dsfcti.setCustomeritemsname(tXml.getName());
@@ -599,9 +598,9 @@ public class UpDownController extends MultiActionController {
 					}
 					//保存检验目的
 					dsfYlxhdescribe.setProfiletest(profiletest.toString());
-					upDownApi.saveData(dsfYlxhdescribe, "DsfLYlxhdescribe");
+					upDownApi.saveData(dsfYlxhdescribe, "DsfTestobjective");
 					//对照表数据添加
-					upDownApi.saveDataByList(dsfctiList, "DsfControltestitems");
+					upDownApi.saveDataByList(dsfctiList, "DsfInspectionItemControl");
 				}
 			}
 			
@@ -645,8 +644,28 @@ public class UpDownController extends MultiActionController {
 
 	}
 	
+	public ModelAndView viewSampleInfoPage(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			logger.info((Object) (new StringBuilder("Begin to viewSampleInfoPage")));
+			List<DsfCustomerBaseInfo> resultList = new ArrayList<DsfCustomerBaseInfo>();
+			resultList = upDownApi.getCustomerInfo();
+
+			logger.info((Object) (new StringBuilder("End to viewSampleInfoPage")));
+			ModelAndView modelAndView = new ModelAndView("/jsp/downLoadFile/viewSampleInfoPage.jsp");
+			modelAndView.addObject("customerInfoList", resultList);
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+			return null;
+		}
+	}
 	public ModelAndView queryExpData(HttpServletRequest request, HttpServletResponse response) {
-		List<LSample> resutlList = new ArrayList<LSample>();
+		List<DsfSampleInfo> resutlList = new ArrayList<DsfSampleInfo>();
 		String resultString = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to queryExpData")));
@@ -676,8 +695,76 @@ public class UpDownController extends MultiActionController {
 			return null;
 		}
 	}
+	public ModelAndView getSampleInfo(HttpServletRequest request, HttpServletResponse response) {
+		List<DsfSampleInfo> resutlList = new ArrayList<DsfSampleInfo>();
+		String resultString = "";
+		try {
+			logger.info((Object) (new StringBuilder("Begin to getSampleInfo")));
+			String beginTime = request.getParameter("beginTime");
+			String endTime = request.getParameter("endTime");
+			String customerid = request.getParameter("customerid");
+
+			resutlList = upDownApi.getSampleByTime(beginTime, endTime, customerid);
+			
+			resultString = PubJsonUtil.list2json(resutlList);
+			//System.out.println("根据时间查询:"+resultString);
+			List<DsfCustomerBaseInfo> resultCList = new ArrayList<DsfCustomerBaseInfo>();
+			resultCList = upDownApi.getCustomerInfo();
+
+			logger.info((Object) (new StringBuilder("End to getSampleInfo")));
+			ModelAndView modelAndView = new ModelAndView("/jsp/downLoadFile/viewSampleInfoPage.jsp");
+			modelAndView.addObject("result_json", resultString);
+			modelAndView.addObject("customerInfoList", resultCList);
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+			return null;
+		}
+	}
+	public void getProcessResult(HttpServletRequest request, HttpServletResponse response) {
+		List<DsfProcess> resutlList = new ArrayList<DsfProcess>();
+		String resultString = "";
+		try {
+			logger.info((Object) (new StringBuilder("Begin to getProcessResult")));
+			String id = request.getParameter("id");
+			System.out.println("样本编号："+id);
+			resutlList = upDownApi.getSampleTime(id);
+			JSONObject jsonObject = new JSONObject();
+			JSONArray jsonArray = new JSONArray();
+			for (DsfProcess dsfProcess : resutlList) {
+				JSONObject jo = new JSONObject();
+				jo.put("collectiontime", dsfProcess.getCollectiontime()==null?"":dsfProcess.getCollectiontime().toString());
+				jo.put("collectionpersonnel", dsfProcess.getCollectionpersonnel());
+				jo.put("printtime", dsfProcess.getPrinttime()==null?"":dsfProcess.getPrinttime().toString());
+				jo.put("printingstaff", dsfProcess.getPrintingstaff());
+				jo.put("inputtime", dsfProcess.getInputtime()==null?"":dsfProcess.getInputtime().toString());
+				jo.put("inputpersonnel", dsfProcess.getInputpersonnel());
+				jo.put("preprocessingtime", dsfProcess.getPreprocessingtime()==null?"":dsfProcess.getPreprocessingtime().toString());
+				jo.put("prehandlingpersonnel", dsfProcess.getPrehandlingpersonnel());
+				jsonArray.add(jo);
+			}
+			//resultString = "{Rows:"+jsonArray.toString()+"}";
+			resultString = jsonArray.toString();
+			jsonObject.put("result_json", resultString);
+			response.setContentType("application/json;charset=utf-8");     
+			response.getWriter().write(jsonObject.toString()); 
+			logger.info((Object) (new StringBuilder("End to getProcessResult")));
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+		}
+	}
 	public void getQueryResult(HttpServletRequest request, HttpServletResponse response) {
-		List<LTestresult> resutlList = new ArrayList<LTestresult>();
+		List<DsfTestResult> resutlList = new ArrayList<DsfTestResult>();
 		String resultString = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to queryExpData")));
@@ -705,7 +792,7 @@ public class UpDownController extends MultiActionController {
 	// ！！！！！！！！！！！！！哪种状态是已经有结果的？！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 	public ModelAndView exportResult(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> initMap = new HashMap<String, String>();
-		List<LTestresult> resultList = new ArrayList<LTestresult>();
+		List<DsfTestResult> resultList = new ArrayList<DsfTestResult>();
 		List sampleNoresultList = new ArrayList<String>();
 		ModelAndView modelAndView = new ModelAndView("/jsp/downLoadFile/downLoadFilePage.jsp");
 		try {
@@ -729,7 +816,7 @@ public class UpDownController extends MultiActionController {
 					List<TestItem_XML> testItem_XMLs = new ArrayList<TestItem_XML>();
 					SampleInfoList_XML sList_XML = new SampleInfoList_XML();
 					// 以下是当前同一个sampleno的信息
-					for (LTestresult lTestresult : resultList) {
+					for (DsfTestResult lTestresult : resultList) {
 						if (sampleNoresultList.get(i).equals(lTestresult.getSampleno())) {
 							System.out.println(sampleNoresultList.get(i));
 							lTestresult.setTestid(initMap.get(lTestresult.getTestid()));
@@ -749,10 +836,10 @@ public class UpDownController extends MultiActionController {
 					// 把检验项目放入LIST
 					sList_XML.setTestItem_XMLs(testItem_XMLs);
 					// 下面开始放入原来客户导入的数据
-					List<LSample> sList = new ArrayList<LSample>();
+					List<DsfSampleInfo> sList = new ArrayList<DsfSampleInfo>();
 					List<DsfTestitems> tList = new ArrayList<DsfTestitems>();
 					sList = upDownApi.getSampleNoByLSample(sampleNoresultList);
-					for (LSample lSample : sList) {
+					for (DsfSampleInfo lSample : sList) {
 						if (sampleNoresultList.get(i).equals(lSample.getSampleno())) {
 							SampleInfo_XML sXml = new SampleInfo_XML();
 							BeanUtils.copyProperties(sXml, lSample);
@@ -959,34 +1046,34 @@ public class UpDownController extends MultiActionController {
 			String customerid = tObjectives_XML.getCustomerid();
 			if(customerid_PageSelect.equals(customerid)){
 				// 获取所有当前用户的已存在数据
-				List<DsfLYlxhdescribe> ylxhList = upDownApi.getYlxhdescribeByYlxh("", customerid);
+				List<DsfTestobjective> ylxhList = upDownApi.getYlxhdescribeByYlxh("", customerid);
 				List<DsfTestitems> dsftList = upDownApi.getDsfTestItemsByTestItem("", customerid);
 				// 查询数据库中的历史数据放入SET以防止新上来的数据会和原来的有重复的
 				Set ylxhSet = new HashSet();
 				Set tiSet = new HashSet();
 
-				// 用来放入本次导入的数据，来验证导入的数据中是否有重复的检验项目
-				Set newTiSet = new HashSet();
-				// 用来放入当前
-				Map<String, Base_TestItem_XML> xmlTiMao = new HashMap<String, Base_TestItem_XML>();
+//用来放入本次导入的数据，来验证导入的数据中是否有重复的检验项目
+			Set newTiSet = new HashSet();
+			// 用来放入当前
+			Map<String, Base_TestItem_XML> xmlTiMao = new HashMap<String, Base_TestItem_XML>();
 
-				for (DsfLYlxhdescribe dy : ylxhList) {
-					ylxhSet.add(dy.getYlxh());
-				}
-				for (DsfTestitems dy : dsftList) {
-					tiSet.add(dy.getIndexId());
-				}
-				List testList = new ArrayList();
-				for (TestObjective_XML testObjective_XML : tObjectives_XML.getTestObjectList()) {
-					// 返回页面数据需要的JSON集合
-					resultTOList.add(testObjective_XML);
-					DsfLYlxhdescribe dYlxhdescribe = new DsfLYlxhdescribe();
-					if (!ylxhSet.contains(testObjective_XML.getYlxh())) {
-						String dsfylxhseqString = dataAccessApi.getSeqString("DSF_YLXH_SEQUENCE");
-						BeanUtils.copyProperties(dYlxhdescribe, testObjective_XML);
-						dYlxhdescribe.setCustomerid(customerid);
-						dYlxhdescribe.setId(new BigDecimal(dsfylxhseqString));
-						dsftODateList.add(dYlxhdescribe);
+			for (DsfTestobjective dy : ylxhList) {
+				ylxhSet.add(dy.getYlxh());
+			}
+			for (DsfTestitems dy : dsftList) {
+				tiSet.add(dy.getIndexId());
+			}
+			List testList = new ArrayList();
+			for (TestObjective_XML testObjective_XML : tObjectives_XML.getTestObjectList()) {
+				// 返回页面数据需要的JSON集合
+				resultTOList.add(testObjective_XML);
+				DsfTestobjective dYlxhdescribe = new DsfTestobjective();
+				if (!ylxhSet.contains(testObjective_XML.getYlxh())) {
+					String dsfylxhseqString = dataAccessApi.getSeqString("DSF_YLXH_SEQUENCE");
+					BeanUtils.copyProperties(dYlxhdescribe, testObjective_XML);
+					dYlxhdescribe.setCustomerid(customerid);
+					dYlxhdescribe.setId(new BigDecimal(dsfylxhseqString));
+					dsftODateList.add(dYlxhdescribe);
 					}
 				}
 
@@ -1006,7 +1093,7 @@ public class UpDownController extends MultiActionController {
 							newTiSet.add(dsfTestitems.getIndexId());
 							
 							//把该条记录放入List,插入对照表
-							DsfControltestitems  dsfcti = new DsfControltestitems();
+							DsfInspectionItemControl  dsfcti = new DsfInspectionItemControl();
 							dsfcti.setCustomerid(customerid);
 							dsfcti.setCustomeritems(tItemList_XML.getTestitem());
 							dsfcti.setCustomeritemsname(tItemList_XML.getName());
@@ -1014,26 +1101,25 @@ public class UpDownController extends MultiActionController {
 							dsfcti.setId(new BigDecimal(dsfctiseqString));
 							dsfctiList.add(dsfcti);
 						}
+
 						// 返回页面的JSON List数据
 						xmlTiMao.put(tItemList_XML.getTestitem(), tItemList_XML);
 					}
 				}
 				//对照表数据添加
 				System.out.println("对照表信息："+dsfctiList);
-				upDownApi.saveDataByList(dsfctiList, "DsfControltestitems");
+				upDownApi.saveDataByList(dsfctiList, "DsfInspectionItemControl");
 				
 				// 返回页面数据需要的JSON集合
 				for (Map.Entry entry : xmlTiMao.entrySet()) {
 					resultTIlist.add(entry.getValue());
 				}
 				upDownApi.saveDataByList(dsftiDateList, "DsfTestitems");
-				upDownApi.saveDataByList(dsftODateList, "DsfLYlxhdescribe");
+				upDownApi.saveDataByList(dsftODateList, "DsfTestobjective");
 				request.setAttribute("success", "导入基础数据成功！");
 			}else {
 				request.setAttribute("error", "数据文件里的客户编号和选择的客户编号不一致！");
 			}
-
-			
 
 			ModelAndView modelAndView = new ModelAndView("/jsp/upLoadFile/viewImpBaseData.jsp");
 			String result_TOList = PubJsonUtil.list2json(resultTOList);

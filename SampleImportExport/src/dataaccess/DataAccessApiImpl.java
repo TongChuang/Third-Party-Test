@@ -6,15 +6,15 @@ import java.util.Map;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import common.datamodel.DsfControltestitems;
+import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfLYlxhdescribe;
+import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfProcess;
 import common.datamodel.DsfTestitems;
-import common.datamodel.LSample;
+import common.datamodel.DsfSampleInfo;
 import common.datamodel.LTestitem;
 import common.datamodel.LTestobjective;
-import common.datamodel.LTestresult;
+import common.datamodel.DsfTestResult;
 import common.datamodel.LabUser;
 import common.datamodel.DsfTestCenterInfo;
 
@@ -98,18 +98,18 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		updownDao.saveDataByList(objectList,tableName);
 	}
 	
-	public List<LTestresult> queryExpData(String beginTime,String endTime,String customerid){
+	public List<DsfTestResult> queryExpData(String beginTime,String endTime,String customerid){
 		return updownDao.queryExpData(beginTime,endTime,customerid);
 	}
 	
-	public List<LSample> getSampleByTime(String beginTime,String endTime,String customerid){
+	public List<DsfSampleInfo> getSampleByTime(String beginTime,String endTime,String customerid){
 		return updownDao.getSampleByTime(beginTime,endTime,customerid);
 	}
 	
 	public List getExpSampleNoData(String beginTime,String endTime,String customerid){
 		return updownDao.getExpSampleNoData(beginTime,endTime,customerid);
 	}
-	public List <DsfLYlxhdescribe> getYlxhdescribeByYlxh(String ylxh,String customerid){
+	public List <DsfTestobjective> getYlxhdescribeByYlxh(String ylxh,String customerid){
 		return updownDao.getYlxhdescribeByYlxh(ylxh,customerid);
 	}
 	
@@ -128,7 +128,7 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		}
 	}
 	
-	public List<LSample> getSampleNoByLSample(List samplenoList){
+	public List<DsfSampleInfo> getSampleNoByLSample(List samplenoList){
 		return updownDao.getSampleNoByLSample(samplenoList);
 	}
 	public DsfProcess getLProcessByLSampleId(BigDecimal sampleno){
@@ -137,10 +137,10 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	public DsfTestitems getDsfTestitemsById(BigDecimal sampleno){
 		return updownDao.getDsfTestitemsById(sampleno);
 	}
-	public LSample getSampleByBarCode(String barcode){
+	public DsfSampleInfo getSampleByBarCode(String barcode){
 		return updownDao.getSampleByBarCode(barcode);
 	}
-	public List<LSample> getSamplesByBarCode(String barcode){
+	public List<DsfSampleInfo> getSamplesByBarCode(String barcode){
 		return updownDao.getSamplesByBarCode( barcode);
 	}
 	
@@ -149,14 +149,20 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		return updownDao.checkDsfUserInfo(customerid,customerKey);
 	}
 	
-	public List<LTestresult> getTestResultsByWebService(LTestresult ltr){
+	public List<DsfTestResult> getTestResultsByWebService(DsfTestResult ltr){
 		return updownDao.getTestResultsByWebService(ltr);
 	}
 	
-	public List<LTestresult> getLTestresultByNo(String sampleno){
+	public List<DsfTestResult> getLTestresultByNo(String sampleno){
 		return updownDao.getLTestresultByNo(sampleno);
 	}
+	public List<DsfProcess> getSampleTime(String sampleno){
+		return updownDao.getSampleTime(sampleno);
+	}
 	
+	public void saveCustomerBaseInfo_sysconf(DsfCustomerBaseInfo dsfc){
+		sysconfDao.saveCustomerBaseInfo(dsfc);
+	}
 	public List<DsfCustomerBaseInfo> getCustomerInfoList(String clientnumber){
 		return sysconfDao.getCustomerInfoList(clientnumber);
 	}
@@ -180,19 +186,19 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		public List<DsfCustomerBaseInfo> getCustomerInfoByCustomerId(String customerid){
 			return sysconfDao.getCustomerInfoByCostomerId(customerid);
 		}
-		public List<DsfLYlxhdescribe> getYlxhdescribe(String customerid){
+		public List<DsfTestobjective> getYlxhdescribe(String customerid){
 			return sysconfDao.getYlxhdescribe(customerid);
 		}
-		public List<DsfLYlxhdescribe> getYlxhdescribeById(String id){
+		public List<DsfTestobjective> getYlxhdescribeById(String id){
 			return sysconfDao.getYlxhdescribeById(id);
 		}
-		public List<DsfLYlxhdescribe> getYlxhdescribeByNo(String ylxh,String ylmc){
+		public List<DsfTestobjective> getYlxhdescribeByNo(String ylxh,String ylmc){
 			return sysconfDao.getYlxhdescribeByNo(ylxh,ylmc);
 		}
-		public void updateYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+		public void updateYlxhdescribe(DsfTestobjective lYlxhdescribe){
 			sysconfDao.updateYlxhdescribe(lYlxhdescribe);
 		}
-		public void addYlxhdescribe(DsfLYlxhdescribe lYlxhdescribe){
+		public void addYlxhdescribe(DsfTestobjective lYlxhdescribe){
 			sysconfDao.addYlxhdescribe(lYlxhdescribe);
 		}
 		public void deleteYlxhdescribe(BigDecimal id){
@@ -211,13 +217,13 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 			return sysconfDao.getSequence(seqName);
 		}
 		//检验项目对照
-		public List<DsfControltestitems> getControltestitemsByNo(String customeritems,String customeritemsname){
+		public List<DsfInspectionItemControl> getControltestitemsByNo(String customeritems,String customeritemsname){
 			return sysconfDao.getControltestitemsByNo(customeritems,customeritemsname);
 		}
-		public List<DsfControltestitems> getControltestitems(String customerid){
+		public List<DsfInspectionItemControl> getControltestitems(String customerid){
 			return sysconfDao.getControltestitems(customerid);
 		}
-		public List<DsfControltestitems> getControltestitemsById(BigDecimal id){
+		public List<DsfInspectionItemControl> getControltestitemsById(BigDecimal id){
 			return sysconfDao.getControltestitemsById(id);
 		}
 		public List<LTestitem> getLocalTestItems(){
@@ -226,7 +232,7 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		public List<LTestitem> getLocalTestItemsByNo(String customerid){
 			return sysconfDao.getLocalTestItemsByNo(customerid);
 		}
-		public void saveAll(List<DsfControltestitems> dcttList){
+		public void saveAll(List<DsfInspectionItemControl> dcttList){
 			sysconfDao.saveAll(dcttList);
 		}
 
@@ -236,13 +242,13 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		/**
 		 * 前处理
 		 */
-		public List<DsfLYlxhdescribe> getDsfTestObjectiveById(String customerid){
+		public List<DsfTestobjective> getDsfTestObjectiveById(String customerid){
 			return updownDao.getDsfTestObjectiveById(customerid);
 		}
 		public int getSeralNumber(String dateAndSection){
 			return updownDao.getSeralNumber(dateAndSection);
 		}
-		public void saveAllSerialNumber(List<DsfLYlxhdescribe> dydList){
+		public void saveAllSerialNumber(List<DsfTestobjective> dydList){
 			updownDao.saveAllSerialNumber(dydList);
 		}
 		public List<String> getInspectionSectionByYLXH(String ylxh,String customerid){
@@ -264,5 +270,18 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	}
 	public  DsfTestCenterInfo getTestCenterInfoById(String id){
 		return sysconfDao.getTestCenterInfoById(id);
+	}
+
+	@Override
+	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_updown(
+			String customerid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DsfCustomerBaseInfo getCustomerInfoById_updown(String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

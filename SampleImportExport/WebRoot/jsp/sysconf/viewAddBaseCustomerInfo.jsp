@@ -31,6 +31,10 @@
 var groupicon = "/resources/ligerUI/skins/icons/communication.gif";
 var form = null;
 var basicinfostateData = [{ basicinfostate: '1', basicinfostateName: '男' }, { basicinfostate: '2', basicinfostateName: '女'}];
+var area_data = [
+           { id: '1', value: '1', text: '有数据' },
+           { id: '0', value: '0', text: '无数据' }
+       ];
 $(function () {
              //创建表单结构
              form = $("#form").ligerForm({
@@ -43,8 +47,7 @@ $(function () {
                 { display: "客户地址", name: "address", newline: true, type: "text", validate:{required:true,minlength:1} },
                 { display: "客户Key", name: "customerKey", newline: true, type: "text", validate:{required:true,minlength:1} },
                 //{ display: "基础信息状态", name: "basicinfostate", newline: true, type: "text", validate:{required:true,maxlength:1} ,
-                { display: "类别 ", name: "basicinfostate", newline: true, type: "select", comboboxName: "basicinfostateName", options: { valueFieldID: "basicinfostate" },
-                	 data: basicinfostateData, 
+                { display: "类别 ", name: "basicinfostate", newline: true, type: "select",  editor: {data:area_data}
 				},
                 ], buttons: [{ text: "保存", width: 160, click: addCustomerBaseInfo }]
             });
