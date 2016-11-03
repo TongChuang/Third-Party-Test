@@ -10,7 +10,6 @@ import common.datamodel.DsfCustomerBaseInfo;
 import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LTestitem;
-import common.datamodel.DsfTestCenterInfo;
 import common.xmlmodel.SystemConfigSetting;
 
 public interface SysConfApi
@@ -56,10 +55,4 @@ public interface SysConfApi
 	public abstract List<LTestitem> getLocalTestItemsByNo(String customerid);
 	public abstract void saveData(Object t,String tableName);
 	public abstract List<LTestitem> getTestItemsByIndexId(String indexId);
-	
-	/*检验单位信息*/
-	public abstract List<DsfTestCenterInfo> getTestCenterInfoList();
-	public abstract void deleteTestCenterInfo(BigDecimal id);
-	public abstract void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo);
-	public abstract DsfTestCenterInfo getTestCenterInfoById(String id);
 }

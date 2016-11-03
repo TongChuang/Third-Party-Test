@@ -24,7 +24,6 @@ import common.datamodel.DsfLYlxhdescribe;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LTestitem;
 import common.datamodel.LTestobjective;
-import common.datamodel.DsfTestCenterInfo;
 import common.util.CommonUtil;
 import common.util.PubJsonUtil;
 import common.xmlmodel.SystemConfigSetting;
@@ -39,14 +38,14 @@ public class SysConfController extends MultiActionController {
 		this.sysConfApi = sysConfApi;
 	}
 
-	public ModelAndView viewTestItem(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView viewTestItem(HttpServletRequest request, HttpServletResponse response) {
 		List<DsfCustomerBaseInfo> cinfoList = null;
 		List<LTestitem> tinfoList = null;
 		try {
 			logger.info((Object) (new StringBuilder("Begin to viewTestItem ")));
 			cinfoList = sysConfApi.getCustomerInfoList("");
 			String resultJson = PubJsonUtil.list2json(cinfoList);
+
 			tinfoList = sysConfApi.getLocalTestItems();
 			ModelAndView modelAndView = new ModelAndView("viewTestItem.jsp");
 			modelAndView.addObject("customer_json", resultJson);
@@ -65,14 +64,12 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 检验目的信息基础页面
-	public ModelAndView viewTestObjective(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView viewTestObjective(HttpServletRequest request, HttpServletResponse response) {
 		List<DsfCustomerBaseInfo> cinfoList = null;
 		List<DsfTestitems> iinfoList = null;
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to viewTestObjective ")));
+			logger.info((Object) (new StringBuilder("Begin to viewTestObjective ")));
 			cinfoList = sysConfApi.getCustomerInfoList("");
 			resultJson = PubJsonUtil.list2json(cinfoList);
 			System.out.println("执行了。。。。？");
@@ -80,8 +77,7 @@ public class SysConfController extends MultiActionController {
 			System.out.println("客户基本信息:" + resultJson);
 
 			iinfoList = sysConfApi.getTestItems();
-			ModelAndView modelAndView = new ModelAndView(
-					"viewTestObjective.jsp");
+			ModelAndView modelAndView = new ModelAndView("viewTestObjective.jsp");
 			modelAndView.addObject("customer_json", resultJson);
 			modelAndView.addObject("items_list", iinfoList);
 			resultJson = PubJsonUtil.list2json(iinfoList);
@@ -102,12 +98,10 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 选中ajax展现检验信息
-	public void getInspectionInfo(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void getInspectionInfo(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to getInspectionInfo")));
+			logger.info((Object) (new StringBuilder("Begin to getInspectionInfo")));
 			String customerid = request.getParameter("customerid");
 			// System.out.println("参数获取2："+customerid);
 			List<DsfLYlxhdescribe> resultYList = new ArrayList<DsfLYlxhdescribe>();
@@ -136,12 +130,10 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 根据医疗名称和医疗序号搜索检验信息
-	public void getTestOjectivefoByNo(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void getTestOjectivefoByNo(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to getInspectionInfoByNo")));
+			logger.info((Object) (new StringBuilder("Begin to getInspectionInfoByNo")));
 			String nameorid = request.getParameter("nameorid");
 
 			List<DsfLYlxhdescribe> resultYList = new ArrayList<DsfLYlxhdescribe>();
@@ -152,8 +144,7 @@ public class SysConfController extends MultiActionController {
 			jsonObject.put("result_json", resultJson);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to getInspectionInfoByNo")));
+			logger.info((Object) (new StringBuilder("End to getInspectionInfoByNo")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -168,16 +159,13 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 增加检验目的页面显示
-	public ModelAndView viewAddTestObjective(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView viewAddTestObjective(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to viewAddTestObjective")));
+			logger.info((Object) (new StringBuilder("Begin to viewAddTestObjective")));
 			String clientnumber = request.getParameter("clientnumber");
 			// System.out.println("客户编号:"+clientnumber);
-			ModelAndView modelAndView = new ModelAndView(
-					"viewAddTestObjective.jsp");
+			ModelAndView modelAndView = new ModelAndView("viewAddTestObjective.jsp");
 			modelAndView.addObject("customerid", clientnumber);
 			logger.info((Object) (new StringBuilder("End to viewTestObjective ")));
 			return modelAndView;
@@ -196,8 +184,7 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 检验目的增加
-	public void addTestObjective(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void addTestObjective(HttpServletRequest request, HttpServletResponse response) {
 		String resultString = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to addTestObjective")));
@@ -218,14 +205,11 @@ public class SysConfController extends MultiActionController {
 			String ylxh = request.getParameter("ylxh");
 			String ylmc = request.getParameter("ylmc");
 			String profiletest = request.getParameter("profiletest");
-			String professionalgroup = request
-					.getParameter("professionalgroup");
-			String inspectionsection = request
-					.getParameter("inspectionsection");
+			String professionalgroup = request.getParameter("professionalgroup");
+			String inspectionsection = request.getParameter("inspectionsection");
 
 			String id = sysConfApi.getSequence("DSF_L_YLXHDESCRIBE_SEQUENCE");
-			System.out.println(id + ":" + customerid + ":" + ylxh + ":" + ylmc
-					+ ":" + profiletest + ":" + professionalgroup + ":"
+			System.out.println(id + ":" + customerid + ":" + ylxh + ":" + ylmc + ":" + profiletest + ":" + professionalgroup + ":"
 					+ inspectionsection);
 			BigDecimal idBig = new BigDecimal(id);
 			DsfLYlxhdescribe lYlxhdescribe = new DsfLYlxhdescribe();
@@ -243,8 +227,7 @@ public class SysConfController extends MultiActionController {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("success", "增加检验目的成功！");
 
-			List<DsfLYlxhdescribe> resultYList = sysConfApi
-					.getYlxhdescribe(customerid);
+			List<DsfLYlxhdescribe> resultYList = sysConfApi.getYlxhdescribe(customerid);
 			resultString = PubJsonUtil.list2json(resultYList);
 			// System.out.println(resultString);
 			jsonObject.put("result_json", resultString);
@@ -265,12 +248,10 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 修改检验目的页面显示
-	public ModelAndView viewUpdateTestObjective(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView viewUpdateTestObjective(HttpServletRequest request, HttpServletResponse response) {
 		String resultString = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to viewUpdateTestObjective")));
+			logger.info((Object) (new StringBuilder("Begin to viewUpdateTestObjective")));
 			String id = request.getParameter("id");
 			/*
 			 * String ylxh = request.getParameter("ylxh"); String ylmc =
@@ -299,12 +280,10 @@ public class SysConfController extends MultiActionController {
 			 * rs.setProfiletest(profiletest); rs.setYlmc(ylmc);
 			 * rs.setYlxh(ylxh);
 			 */
-			ModelAndView modelAndView = new ModelAndView(
-					"viewUpdateTestObjective.jsp");
+			ModelAndView modelAndView = new ModelAndView("viewUpdateTestObjective.jsp");
 			DsfLYlxhdescribe rs = new DsfLYlxhdescribe();
 			System.out.println("id:" + id);
-			List<DsfLYlxhdescribe> resultList = sysConfApi
-					.getYlxhdescribeById(id);
+			List<DsfLYlxhdescribe> resultList = sysConfApi.getYlxhdescribeById(id);
 			System.out.println("返回结果2：" + resultList);
 			if (null != resultList && resultList.size() > 0) {
 				rs = resultList.get(0);
@@ -312,8 +291,7 @@ public class SysConfController extends MultiActionController {
 				System.out.println("返回结果1：" + resultString);
 				modelAndView.addObject("result_json", resultString);
 			}
-			logger.info((Object) (new StringBuilder(
-					"End to viewUpdateTestObjective ")));
+			logger.info((Object) (new StringBuilder("End to viewUpdateTestObjective ")));
 			return modelAndView;
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
@@ -330,24 +308,19 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 修改检验目的
-	public void updateTestObjective(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void updateTestObjective(HttpServletRequest request, HttpServletResponse response) {
 		String resultString = null;
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to updateTestObjective")));
+			logger.info((Object) (new StringBuilder("Begin to updateTestObjective")));
 			// 获取检验信息
 			String id = request.getParameter("id");
 			String customerid = request.getParameter("customerid");
 			String ylxh = request.getParameter("ylxh");
 			String ylmc = request.getParameter("ylmc");
 			String profiletest = request.getParameter("profiletest");
-			String professionalgroup = request
-					.getParameter("professionalgroup");
-			String inspectionsection = request
-					.getParameter("inspectionsection");
-			System.out.println(id + ":" + customerid + ":" + ylxh + ":" + ylmc
-					+ ":" + profiletest + ":" + professionalgroup + ":"
+			String professionalgroup = request.getParameter("professionalgroup");
+			String inspectionsection = request.getParameter("inspectionsection");
+			System.out.println(id + ":" + customerid + ":" + ylxh + ":" + ylmc + ":" + profiletest + ":" + professionalgroup + ":"
 					+ inspectionsection);
 			BigDecimal idBig = new BigDecimal(id);
 			DsfLYlxhdescribe lYlxhdescribe = new DsfLYlxhdescribe();
@@ -366,15 +339,13 @@ public class SysConfController extends MultiActionController {
 
 			jsonObject.put("success", "修改检验目的成功！");
 
-			List<DsfLYlxhdescribe> resultYList = sysConfApi
-					.getYlxhdescribe(customerid);
+			List<DsfLYlxhdescribe> resultYList = sysConfApi.getYlxhdescribe(customerid);
 			resultString = PubJsonUtil.list2json(resultYList);
 			System.out.println(resultString);
 			jsonObject.put("result_json", resultString);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to updateTestObjective")));
+			logger.info((Object) (new StringBuilder("End to updateTestObjective")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -389,12 +360,10 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 检验目的删除
-	public void deleteTestObjective(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void deleteTestObjective(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to deleteTestObjective")));
+			logger.info((Object) (new StringBuilder("Begin to deleteTestObjective")));
 			String id = request.getParameter("id");
 			String customerid = request.getParameter("customerid");
 
@@ -409,8 +378,7 @@ public class SysConfController extends MultiActionController {
 			jsonObject.put("result_json", resultJson);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to deleteTestObjective")));
+			logger.info((Object) (new StringBuilder("End to deleteTestObjective")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -425,12 +393,10 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// ajax展现检验项目
-	public void getInspectionItem(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void getInspectionItem(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to getInspectionItem")));
+			logger.info((Object) (new StringBuilder("Begin to getInspectionItem")));
 			String profiletest = request.getParameter("profiletest");
 			String customerid = request.getParameter("customerid");
 			// 将传入的参数以','分割并组装成字符串
@@ -477,13 +443,11 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 检验项目智能查询
-	public void addTestItemsSearch(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void addTestItemsSearch(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		List<DsfTestitems> iinfoList = null;
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to addTestItemsSearch ")));
+			logger.info((Object) (new StringBuilder("Begin to addTestItemsSearch ")));
 
 			iinfoList = sysConfApi.getTestItems();
 			JSONObject jsonObject = new JSONObject();
@@ -491,8 +455,7 @@ public class SysConfController extends MultiActionController {
 			jsonObject.put("result_json", resultJson);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to addTestItemsSearch ")));
+			logger.info((Object) (new StringBuilder("End to addTestItemsSearch ")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -504,8 +467,7 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 增加检验项目
-	public void addTestItems(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void addTestItems(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to addTestItems")));
@@ -565,19 +527,16 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 2001检验项目对照
-	public ModelAndView viewInspectionItemControl(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView viewInspectionItemControl(HttpServletRequest request, HttpServletResponse response) {
 		List<DsfCustomerBaseInfo> cinfoList = null;
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to viewInspectionItemControl")));
+			logger.info((Object) (new StringBuilder("Begin to viewInspectionItemControl")));
 			cinfoList = sysConfApi.getCustomerInfoList("");
 			String resultJson = PubJsonUtil.list2json(cinfoList);
 
 			ModelAndView modelAndView = new ModelAndView("viewCustomerInfo.jsp");
 			modelAndView.addObject("result_json", resultJson);
-			logger.info((Object) (new StringBuilder(
-					"End to viewInspectionItemControl")));
+			logger.info((Object) (new StringBuilder("End to viewInspectionItemControl")));
 			return modelAndView;
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
@@ -592,12 +551,10 @@ public class SysConfController extends MultiActionController {
 
 	// 根据客户检验名称和编号 搜索项目对照
 	// ajax展现检验项目对照
-	public void getControltestitems(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void getControltestitems(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to getControltestitems")));
+			logger.info((Object) (new StringBuilder("Begin to getControltestitems")));
 			String customerid = request.getParameter("customerid");
 			System.out.println(customerid);
 			List<DsfControltestitems> resultCList = new ArrayList<DsfControltestitems>();
@@ -609,8 +566,7 @@ public class SysConfController extends MultiActionController {
 			jsonObject.put("result_json", resultJson);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to getControltestitems")));
+			logger.info((Object) (new StringBuilder("End to getControltestitems")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -625,16 +581,13 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 项目对照搜索
-	public void getControltestitemsByNo(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void getControltestitemsByNo(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to getControltestitemsByNo")));
+			logger.info((Object) (new StringBuilder("Begin to getControltestitemsByNo")));
 			String nameorid = request.getParameter("nameorid");
 			List<DsfControltestitems> resultCList = new ArrayList<DsfControltestitems>();
-			resultCList = sysConfApi
-					.getControltestitemsByNo(nameorid, nameorid);
+			resultCList = sysConfApi.getControltestitemsByNo(nameorid, nameorid);
 
 			resultJson = PubJsonUtil.list2json(resultCList);
 			// System.out.println(resultJson);
@@ -642,8 +595,7 @@ public class SysConfController extends MultiActionController {
 			jsonObject.put("result_json", resultJson);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to getControltestitemsByNo")));
+			logger.info((Object) (new StringBuilder("End to getControltestitemsByNo")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -658,12 +610,10 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 检验项目对照
-	public void autoControlTestItems(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void autoControlTestItems(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to autoControlTestItems")));
+			logger.info((Object) (new StringBuilder("Begin to autoControlTestItems")));
 			// 需要选中
 			String customerid = request.getParameter("customerid");
 			// 获取第三方检验项目
@@ -693,21 +643,13 @@ public class SysConfController extends MultiActionController {
 					if (null != resultTList) {
 						// for(LTestitem iTestitem:resultTList ){
 						// if(resultControltestitems.getCustomeritemsname().trim().equals(iTestitem.getName().trim())){
-						if (null != map.get(resultControltestitems
-								.getCustomeritemsname())) {
+						if (null != map.get(resultControltestitems.getCustomeritemsname())) {
 							DsfControltestitems dctt = new DsfControltestitems();
 							dctt.setCustomerid(customerid);
-							dctt.setCustomeritems(resultControltestitems
-									.getCustomeritems());
-							dctt.setCustomeritemsname(resultControltestitems
-									.getCustomeritemsname());
-							dctt.setLocalitems(map.get(
-									resultControltestitems
-											.getCustomeritemsname())
-									.getIndexId());
-							dctt.setLocalitemsname(map.get(
-									resultControltestitems
-											.getCustomeritemsname()).getName());
+							dctt.setCustomeritems(resultControltestitems.getCustomeritems());
+							dctt.setCustomeritemsname(resultControltestitems.getCustomeritemsname());
+							dctt.setLocalitems(map.get(resultControltestitems.getCustomeritemsname()).getIndexId());
+							dctt.setLocalitemsname(map.get(resultControltestitems.getCustomeritemsname()).getName());
 							dctt.setId(resultControltestitems.getId());
 							// System.out.println("对照信息："+dctt);
 							dcttList.add(dctt);
@@ -720,8 +662,7 @@ public class SysConfController extends MultiActionController {
 				sysConfApi.saveAll(dcttList);
 			}
 
-			List<DsfControltestitems> results = sysConfApi
-					.getControltestitems(customerid);
+			List<DsfControltestitems> results = sysConfApi.getControltestitems(customerid);
 			resultJson = PubJsonUtil.list2json(results);
 			System.out.println(resultJson);
 
@@ -729,8 +670,7 @@ public class SysConfController extends MultiActionController {
 			jsonObject.put("result_json", resultJson);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to autoControlTestItems")));
+			logger.info((Object) (new StringBuilder("End to autoControlTestItems")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -744,8 +684,7 @@ public class SysConfController extends MultiActionController {
 		}
 	}
 
-	public void addControlItems(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void addControlItems(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to addControlItems")));
@@ -755,12 +694,10 @@ public class SysConfController extends MultiActionController {
 			System.out.println("id:" + id + "customerid:" + customerid);
 			// 根据id可以获取选中行唯一的对照表信息
 			BigDecimal bigId = new BigDecimal(id);
-			List<DsfControltestitems> dctiList = sysConfApi
-					.getControltestitemsById(bigId);
+			List<DsfControltestitems> dctiList = sysConfApi.getControltestitemsById(bigId);
 			System.out.println(dctiList);
 			//
-			List<LTestitem> ltocList = sysConfApi
-					.getTestItemsByIndexId(indexId);
+			List<LTestitem> ltocList = sysConfApi.getTestItemsByIndexId(indexId);
 			System.out.println(ltocList);
 			String customeritemsname = "";
 			if (null != ltocList && ltocList.size() > 0) {
@@ -800,12 +737,10 @@ public class SysConfController extends MultiActionController {
 
 	// ajax获取本地检验项目
 
-	public void getLocalInspectionItem(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void getLocalInspectionItem(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to getLocalInspectionItem")));
+			logger.info((Object) (new StringBuilder("Begin to getLocalInspectionItem")));
 			String customerid = request.getParameter("customerid");
 
 			List<LTestitem> resultTList = new ArrayList<LTestitem>();
@@ -817,8 +752,7 @@ public class SysConfController extends MultiActionController {
 			jsonObject.put("result_json", resultJson);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to getLocalInspectionItem")));
+			logger.info((Object) (new StringBuilder("End to getLocalInspectionItem")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -834,21 +768,17 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 3001客户信息增加页面
-	public ModelAndView viewAddBaseCustomerInfo(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView viewAddBaseCustomerInfo(HttpServletRequest request, HttpServletResponse response) {
 		String resultJson = "";
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to viewAddBaseCustomerInfo")));
+			logger.info((Object) (new StringBuilder("Begin to viewAddBaseCustomerInfo")));
 
 			// 获取sequence先
 			String id = sysConfApi.getSequence("DSFCUSTOMERBASEINFO_SEQUENCE");
 			System.out.println("新增序号:" + id);
-			ModelAndView modelAndView = new ModelAndView(
-					"viewAddBaseCustomerInfo.jsp");
+			ModelAndView modelAndView = new ModelAndView("viewAddBaseCustomerInfo.jsp");
 			modelAndView.addObject("baseInfo_id", id);
-			logger.info((Object) (new StringBuilder(
-					"End to viewAddBaseCustomerInfo ")));
+			logger.info((Object) (new StringBuilder("End to viewAddBaseCustomerInfo ")));
 			return modelAndView;
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
@@ -865,18 +795,16 @@ public class SysConfController extends MultiActionController {
 	}
 
 	// 客户信息增加页面
-	public void addBaseCustomerInfo(HttpServletRequest request,
-			HttpServletResponse response, DsfCustomerBaseInfo dcbi) {
+	public void addBaseCustomerInfo(HttpServletRequest request, HttpServletResponse response,DsfCustomerBaseInfo dcbi) {
 		String resultString = "";
 		try {
 			logger.info((Object) (new StringBuilder("Begin to addTestObjective")));
-
+			
 			JSONObject jsonObject = new JSONObject();
 			sysConfApi.saveData(dcbi, "DsfCustomerBaseInfo");
 			jsonObject.put("success", "增加客户信息成功！");
 			// 需要跟新页父页面的客户信息表格
-			List<DsfCustomerBaseInfo> dcbiList = sysConfApi
-					.getCustomerInfoList("");
+			List<DsfCustomerBaseInfo> dcbiList = sysConfApi.getCustomerInfoList("");
 			resultString = PubJsonUtil.list2json(dcbiList);
 			jsonObject.put("result_json", resultString);
 			response.setContentType("application/json;charset=utf-8");
@@ -895,11 +823,9 @@ public class SysConfController extends MultiActionController {
 		}
 	}
 
-	public void deleteBaseCustomerInfo(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void deleteBaseCustomerInfo(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to deleteBaseCustomerInfo ")));
+			logger.info((Object) (new StringBuilder("Begin to deleteBaseCustomerInfo ")));
 			String id = request.getParameter("id");
 
 			sysConfApi.deleteCustomerInfo(id);
@@ -908,8 +834,7 @@ public class SysConfController extends MultiActionController {
 			jsonObject.put("success", "删除客户信息成功！");
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to deleteBaseCustomerInfo ")));
+			logger.info((Object) (new StringBuilder("End to deleteBaseCustomerInfo ")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
@@ -923,8 +848,7 @@ public class SysConfController extends MultiActionController {
 		}
 	}
 
-	public void modifyBaseCustomerInfo(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void modifyBaseCustomerInfo(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			logger.info((Object) (new StringBuilder("Begin to modifyBase ")));
 			List<DsfCustomerBaseInfo> cList = new ArrayList<DsfCustomerBaseInfo>();
@@ -933,18 +857,13 @@ public class SysConfController extends MultiActionController {
 
 			String id = request.getParameter("id");
 			String customerKey = request.getParameter("customerKey");
-			String customerid = CommonUtil.getUTFtoISOEncode(request
-					.getParameter("customerid"));
+			String customerid = CommonUtil.getUTFtoISOEncode(request.getParameter("customerid"));
 			// String customername = request.getParameter("customername");
-			String customername = CommonUtil.getUTFtoISOEncode(request
-					.getParameter("customername"));
-			String address = CommonUtil.getUTFtoISOEncode(request
-					.getParameter("address"));
-			String basicinfostate = CommonUtil.getUTFtoISOEncode(request
-					.getParameter("basicinfostate"));
+			String customername = CommonUtil.getUTFtoISOEncode(request.getParameter("customername"));
+			String address = CommonUtil.getUTFtoISOEncode(request.getParameter("address"));
+			String basicinfostate = CommonUtil.getUTFtoISOEncode(request.getParameter("basicinfostate"));
 
-			System.out.println("id:" + id + "customerid:" + customerid
-					+ "customername:" + customername + "address:" + address);
+			System.out.println("id:" + id + "customerid:" + customerid + "customername:" + customername + "address:" + address);
 			DsfCustomerBaseInfo dcbi = new DsfCustomerBaseInfo();
 			dcbi.setAddress(address);
 			dcbi.setCustomerid(customerid);
@@ -979,12 +898,10 @@ public class SysConfController extends MultiActionController {
 		}
 	}
 
-	public ModelAndView viewCustomerInfo(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView viewCustomerInfo(HttpServletRequest request, HttpServletResponse response) {
 		List<DsfCustomerBaseInfo> cinfoList = new ArrayList<DsfCustomerBaseInfo>();
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to viewCustomerInfo ")));
+			logger.info((Object) (new StringBuilder("Begin to viewCustomerInfo ")));
 
 			cinfoList = sysConfApi.getCustomerInfoList("");
 			String resultJson = PubJsonUtil.list2json(cinfoList);
@@ -1005,24 +922,19 @@ public class SysConfController extends MultiActionController {
 
 	}
 
-	public ModelAndView viewSystemConfig(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView viewSystemConfig(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to showSystemBasicInfo ")));
+			logger.info((Object) (new StringBuilder("Begin to showSystemBasicInfo ")));
 
 			SystemConfigSetting sysConfig = sysConfApi.getSystemConfig();
-			request.setAttribute("defaultPassword",
-					sysConfig.getDefaultPassword());
+			request.setAttribute("defaultPassword", sysConfig.getDefaultPassword());
 			request.setAttribute("upftpRoot", sysConfig.getUpftpRoot());
 			request.setAttribute("downftpRoot", sysConfig.getDownftpRoot());
-			request.setAttribute("updateServerAddress",
-					sysConfig.getUpdateServerAddress());
+			request.setAttribute("updateServerAddress", sysConfig.getUpdateServerAddress());
 
 			String msg = request.getParameter("msg");
 			request.setAttribute("msg", msg);
-			logger.info((Object) (new StringBuilder(
-					"End to showSystemBasicInfo ")));
+			logger.info((Object) (new StringBuilder("End to showSystemBasicInfo ")));
 			return new ModelAndView("systemBasicInfo.jsp");
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
@@ -1035,32 +947,23 @@ public class SysConfController extends MultiActionController {
 		}
 	}
 
-	public ModelAndView updateSystemConfig(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView updateSystemConfig(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			String defaultPassword = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0))
-					.getDefaultPassword();
+			String defaultPassword = ((SystemConfigSetting) SIEContext.getSystemConfigTable().getConfigs().get(0)).getDefaultPassword();
 			if (request.getParameter("defaultPassword") != null) {
 				defaultPassword = request.getParameter("defaultPassword");
 			}
-			String upftpRoot = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0)).getUpftpRoot();
+			String upftpRoot = ((SystemConfigSetting) SIEContext.getSystemConfigTable().getConfigs().get(0)).getUpftpRoot();
 			if (request.getParameter("upftpRoot") != null) {
 				upftpRoot = request.getParameter("upftpRoot");
 			}
-			String downftpRoot = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0))
-					.getDownftpRoot();
+			String downftpRoot = ((SystemConfigSetting) SIEContext.getSystemConfigTable().getConfigs().get(0)).getDownftpRoot();
 			if (request.getParameter("downftpRoot") != null) {
 				downftpRoot = request.getParameter("downftpRoot");
 			}
-			String updateServerAddress = ((SystemConfigSetting) SIEContext
-					.getSystemConfigTable().getConfigs().get(0))
-					.getUpdateServerAddress();
+			String updateServerAddress = ((SystemConfigSetting) SIEContext.getSystemConfigTable().getConfigs().get(0)).getUpdateServerAddress();
 			if (request.getParameter("updateServerAddress") != null) {
-				updateServerAddress = request
-						.getParameter("updateServerAddress");
+				updateServerAddress = request.getParameter("updateServerAddress");
 			}
 
 			SystemConfigSetting config = new SystemConfigSetting();
@@ -1087,185 +990,4 @@ public class SysConfController extends MultiActionController {
 		return null;
 	}
 
-	// 检验单位信息管理
-	public ModelAndView viewTestCenter(HttpServletRequest request,
-			HttpServletResponse response) {
-		List<DsfTestCenterInfo> tinfoList = new ArrayList<DsfTestCenterInfo>();
-		try {
-			logger.info((Object) (new StringBuilder("Begin to viewTestCenter ")));
-			tinfoList = sysConfApi.getTestCenterInfoList();
-			String resultJson = PubJsonUtil.list2json(tinfoList);
-			ModelAndView modelAndView = new ModelAndView("viewTestCenter.jsp");
-			modelAndView.addObject("resultJson", resultJson);
-			logger.info((Object) (new StringBuilder("End to viewTestCenter ")));
-			return modelAndView;
-		} catch (Exception e) {
-			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
-			try {
-				response.sendRedirect("/error.jsp");
-			} catch (IOException e1) {
-				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
-			}
-			return null;
-		}
-	}
-
-	// 新增检验单位
-	public ModelAndView viewAddTestCenterInfo(HttpServletRequest request,
-			HttpServletResponse response) {
-		String resultJson = "";
-		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to viewAddTestCenterInfo")));
-			// 获取sequence先
-			ModelAndView modelAndView = new ModelAndView(
-					"viewAddTestCenterInfo.jsp");
-			/*
-			 * modelAndView.addObject("TestCenterInfo_id",
-			 * sysConfApi.getSequence("DSFTESTCENTERINFO_SEQUENCE"));
-			 */
-			logger.info((Object) (new StringBuilder(
-					"End to viewAddTestCenterInfo ")));
-			return modelAndView;
-		} catch (Exception e) {
-			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
-			try {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("error", "搜索数据失败，出现错误！");
-				response.setContentType("application/json;charset=utf-8");
-				response.getWriter().write(jsonObject.toString());
-			} catch (IOException e1) {
-				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
-			}
-			return null;
-		}
-	}
-
-	public void addTestCenterInfo(HttpServletRequest request,
-			HttpServletResponse response, DsfTestCenterInfo dtci) {
-		String resultString = "";
-		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to addTestCenterInfo")));
-			String i = sysConfApi.getSequence("DSFTESTCENTERINFO_SEQUENCE");
-			BigDecimal id = new BigDecimal(i);
-			dtci.setId(id);
-			JSONObject jsonObject = new JSONObject();
-			sysConfApi.saveData(dtci, "DsfTestCenterInfo");
-
-			jsonObject.put("success", "增加客户信息成功！");
-			// 需要跟新页父页面的客户信息表格
-			List<DsfTestCenterInfo> dcbiList = sysConfApi
-					.getTestCenterInfoList();
-			resultString = PubJsonUtil.list2json(dcbiList);
-			jsonObject.put("resultjson", resultString);
-			response.setContentType("application/json;charset=utf-8");
-			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder("End to addTestCenterInfo")));
-		} catch (Exception e) {
-			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
-			try {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("error", "搜索数据失败，出现错误！");
-				response.setContentType("application/json;charset=utf-8");
-				response.getWriter().write(jsonObject.toString());
-			} catch (IOException e1) {
-				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
-			}
-		}
-	}
-
-	public void deleteTestCenterInfo(HttpServletRequest request,
-			HttpServletResponse response) {
-		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to deleteTestCenterInfo ")));
-			String id = request.getParameter("id");
-			BigDecimal idBig = new BigDecimal(id);
-			sysConfApi.deleteTestCenterInfo(idBig);
-
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("success", "删除检验单位信息成功！");
-			response.setContentType("application/json;charset=utf-8");
-			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to deleteBaseCustomerInfo ")));
-		} catch (Exception e) {
-			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
-			try {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("error", "删除数据失败，出现错误！");
-				response.setContentType("application/json;charset=utf-8");
-				response.getWriter().write(jsonObject.toString());
-			} catch (IOException e1) {
-				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
-			}
-		}
-	}
-
-	public ModelAndView viewUpdateTestCenterInfo(HttpServletRequest request,
-			HttpServletResponse response) {
-		String resultString = "";
-		try {
-			logger.info((Object) (new StringBuilder(
-					"Begin to viewUpdateTestCenter")));
-			String id = request.getParameter("id");
-		
-			ModelAndView modelAndView = new ModelAndView(
-					"viewUpdateTestCenterInfo.jsp");
-			DsfTestCenterInfo rs = new DsfTestCenterInfo();
-			rs = sysConfApi.getTestCenterInfoById(id);
-				resultString = PubJsonUtil.bean2json(rs);
-				modelAndView.addObject("resultjson", resultString);
-			logger.info((Object) (new StringBuilder(
-					"End to viewUpdateTestCenter ")));
-			return modelAndView;
-		} catch (Exception e) {
-			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
-			try {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("error", "搜索数据失败，出现错误！");
-				response.setContentType("application/json;charset=utf-8");
-				response.getWriter().write(jsonObject.toString());
-			} catch (IOException e1) {
-				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
-			}
-			return null;
-		}
-	}
-
-	public void updateTestCenterInfo(HttpServletRequest request,
-			HttpServletResponse response,DsfTestCenterInfo dCenterInfo) {
-		String resultString = null;
-		try {
-			logger.info((Object) (new StringBuilder("Begin to updateTestCenterInfo")));
-	
-			// System.out.println("检验目的对象:"+lYlxhdescribe);
-			sysConfApi.updateDsfTestCenterInfo(dCenterInfo);
-			
-			JSONObject jsonObject = new JSONObject();
-
-			jsonObject.put("success", "修改检验单位成功！");
-
-			List<DsfTestCenterInfo> resultList = sysConfApi
-					.getTestCenterInfoList();
-			resultString = PubJsonUtil.list2json(resultList);
-			System.out.println("resultString = "+resultString);
-			jsonObject.put("resultjson", resultString);
-			response.setContentType("application/json;charset=utf-8");
-			response.getWriter().write(jsonObject.toString());
-			logger.info((Object) (new StringBuilder(
-					"End to updateTestCenterInfo")));
-		} catch (Exception e) {
-			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
-			try {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("error", "搜索数据失败，出现错误！");
-				response.setContentType("application/json;charset=utf-8");
-				response.getWriter().write(jsonObject.toString());
-			} catch (IOException e1) {
-				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
-			}
-		}
-	}
 }

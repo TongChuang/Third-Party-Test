@@ -17,7 +17,6 @@ import common.datamodel.LTestitem;
 import common.datamodel.LTestobjective;
 import common.datamodel.LTestresult;
 import common.datamodel.LabUser;
-import common.datamodel.DsfTestCenterInfo;
 
 public interface DataAccessApi
 	extends StartAPI {
@@ -42,6 +41,10 @@ public interface DataAccessApi
 	public abstract List<LTestitem> getLTestItemsByTestItem(String testitems,String customerid);
 	public abstract List<LTestresult> getLTestresultByNo(String sampleno);
 	public abstract List<LSample> getSampleByTime(String beginTime,String endTime,String customerid);
+	//
+	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_updown(String customerid);
+	//
+	public abstract DsfCustomerBaseInfo getCustomerInfoById_updown(String id);
 	/**
 	 * 如果KEY等于local就是本地转为客户的，否则就是客户的转为本地的
 	 * @param key
@@ -65,6 +68,8 @@ public interface DataAccessApi
 	 */
 	public abstract List<LTestresult> getTestResultsByWebService(LTestresult ltr);
 	
+	//
+	public void saveCustomerBaseInfo_sysconf(DsfCustomerBaseInfo dsfc);
 	/**
 	 * 查询客户信息
 	 * @return
@@ -99,6 +104,8 @@ public interface DataAccessApi
 	public abstract List<LTestitem> getLocalTestItemsByNo(String customerid);
 	public abstract void saveAll(List<DsfControltestitems> dcttList);
 	public abstract List<LTestitem> getTestItemsByIndexId(String indexId);
+	//
+	public abstract void saveData_sysconf(Object t,String tableName);
 	/**
 	 * 前处理
 	 */
@@ -111,10 +118,9 @@ public interface DataAccessApi
 	public abstract List<LabUser> getUserInfo(String username);
 	
 	/**
-	 * 检验单位
+	 * queryStats
 	 */
-	public abstract List<DsfTestCenterInfo> getTestCenterInfoList();
-	public abstract void deleteTestCenterInfo(BigDecimal id);
-	public abstract void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo);
-	public abstract DsfTestCenterInfo getTestCenterInfoById(String id);
+	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_querystats(String customerid);
+	public abstract void saveData_querystats(Object t,String tableName);
+	public abstract void saveDataByList_querystats(List <Object>objectList,String tableName);
 }

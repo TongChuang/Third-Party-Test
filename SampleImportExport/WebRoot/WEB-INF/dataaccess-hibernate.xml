@@ -44,7 +44,6 @@
 				<value>common/datamodel/DsfControltestitems.hbm.xml</value>
 				<value>common/datamodel/LTestitem.hbm.xml</value>
 				<value>common/datamodel/LTestobjective.hbm.xml</value>
-				<value>common/datamodel/DsfTestCenterInfo.hbm.xml</value>
 				
 			</list>
 		</property>
