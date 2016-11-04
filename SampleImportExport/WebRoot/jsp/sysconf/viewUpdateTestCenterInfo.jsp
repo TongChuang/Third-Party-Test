@@ -50,6 +50,11 @@ function updateTestCenterInfo(){
 		$.ligerDialog.warn('地址不能为空!');
 		return;
 	}
+	 var a=/^[0-9]*[1-9][0-9]*$/;
+    if(!a.test(row.phone)){ 
+		$.ligerDialog.warn('联系电话格式不正确!');
+		return;
+	}
 	
 	$.ajax({  
 		url: '/jsp/sysconf/sysConf.do?method=updateTestCenterInfo',

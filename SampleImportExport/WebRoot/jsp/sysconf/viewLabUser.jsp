@@ -36,13 +36,6 @@ body {
 	padding: 0;
 }
 
-#accordion1 {
-	height: 270px;
-}
-
-h4 {
-	margin: 20px;
-}
 </style>
 <script type="text/javascript">
 	var resultJson = null;
@@ -57,46 +50,54 @@ h4 {
 			columns : [
 			//当前状态，开始为空的，扫码后修改值为1
 			{
-				display : 'ID',
+				display : 'id',
 				name : 'id',
-				width : 50,
+				width : 40,
 				hide:true,
-			}, {
-				display : '检验单位名称',
+			},  {
+				display : '姓名',
 				name : 'name',
+				width : 80,
+			},{
+				display : '电话号码',
+				name : 'phoneNumber',
+				width : 130,
+			}, {
+				display : '用户名',
+				name : 'username',
+				width : 100,
+			},{
+				display : 'e-mail',
+				name : 'email',
 				width : 200,
 			}, {
 				display : '地址',
 				name : 'address',
-				width : 300,
-			}, {
-				display : '联系电话',
-				name : 'phone',
-				width : 200,
-			} ],
+				width : 350,
+			}],
 			data : resultJson,
-			pageSize : 30,
+			pageSize : 10,
 			width : '99%',
 			height : '95%',
 			checkbox : false,
-			rownumbers: true
+			rownumbers: true,
 		});
 		$("#toptoolbar").ligerToolBar({
 			items : [ {
-				text : '新增检验单位',
-				click : addTestCenter,
+				text : '新增账号',
+				click : addLabUser,
 				icon : 'add'
 			}, {
 				line : true
 			}, {
-				text : '修改检验单位',
-				click : modifyTestCenter
+				text : '修改账号',
+				click : modifyLabUser
 			}, {
 				line : true
 			}, {
-				text : '删除检验单位',
-				click : deleteTestCenter
-			} ]
+				text : '删除账号',
+				click : deleteLabUser
+			} ],
 		});
 	});
 
@@ -131,34 +132,34 @@ h4 {
 			}
 		});
 	}
-	function addTestCenter() {
+	function addLabUser() {
 		$.ligerDialog.open({
 			height : 400,
 			Width : 380,
-			url : '/jsp/sysconf/sysConf.do?method=viewAddTestCenterInfo',
-			title : "增加客户信息界面"
+			url : '/jsp/sysconf/sysConf.do?method=viewAddLabUser',
+			title : "增加系统账号界面"
 		});
 	}
 
-	function modifyTestCenter() {
+	function modifyLabUser() {
 		var row = grid.getSelectedRow();
 		if (!row) {
-		$.ligerDialog.warn('请选择需要修改的检验单位！');
+		$.ligerDialog.warn('请选择需要修改的账号！');
 			return;
 		} else {
 			$.ligerDialog
 					.open({
 						height : 400,
 						Width : 380,
-						url : '/jsp/sysconf/sysConf.do?method=viewUpdateTestCenterInfo&id='+ row.id,
+						url : '/jsp/sysconf/sysConf.do?method=viewUpdateLabUser&id='+ row.id,
 						title : "修改界面"
 					});
 		}
 	}
-	function deleteTestCenter() {
+	function deleteLabUser() {
 		var row = grid.getSelectedRow();
 		if (!row) {
-			$.ligerDialog.warn('请先选择检验单位！');
+			$.ligerDialog.warn('请先选择需要删除的行！');
 			return;
 		}
 		$.ligerDialog
@@ -166,9 +167,8 @@ h4 {
 						'确定要删除:' + row.name + '的信息吗?',
 						function(yes) {
 							if (yes) {
-								$
-										.ajax({
-											url : '/jsp/sysconf/sysConf.do?method=deleteTestCenterInfo',
+								$.ajax({
+											url : '/jsp/sysconf/sysConf.do?method=deleteLabUser',
 											data : 'id=' + row.id,
 											dataType : 'json',
 											type : 'post',
@@ -199,7 +199,7 @@ h4 {
 	<div id="layout1">
 		<div position="center" title="检验单位信息">
 			<div id="toptoolbar"></div>
-			<div id="maingridData" style="margin: 0; padding: 0"></div>
+			<div id="maingridData" style="margin: 0; padding: 0;"></div>
 		</div>
 	</div>
 </body>

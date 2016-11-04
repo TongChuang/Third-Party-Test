@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.sun.accessibility.internal.resources.accessibility;
+
 import common.StartAPI;
 import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
@@ -11,6 +13,7 @@ import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LTestitem;
 import common.datamodel.DsfTestCenterInfo;
+import common.datamodel.LabUser;
 import common.xmlmodel.SystemConfigSetting;
 
 public interface SysConfApi
@@ -57,9 +60,21 @@ public interface SysConfApi
 	public abstract void saveData(Object t,String tableName);
 	public abstract List<LTestitem> getTestItemsByIndexId(String indexId);
 	
-	/*检验单位信息*/
+	/**
+	 * 检验单位信息
+	 * 
+	 */
+	
 	public abstract List<DsfTestCenterInfo> getTestCenterInfoList();
 	public abstract void deleteTestCenterInfo(BigDecimal id);
 	public abstract void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo);
 	public abstract DsfTestCenterInfo getTestCenterInfoById(String id);
+	
+	/**
+	 * 系统账号管理
+	 */
+	public abstract List<LabUser> getLabUserList();
+	public abstract void deleteLabUser(BigDecimal id);
+	public abstract void updateLabUser(LabUser labuser);
+	public abstract LabUser getLabUserById(String id);
 }

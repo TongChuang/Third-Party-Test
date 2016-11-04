@@ -15,6 +15,7 @@ import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LTestitem;
 import common.datamodel.DsfTestCenterInfo;
+import common.datamodel.LabUser;
 
 import dataaccess.help.DataAccessUtil;
 
@@ -294,23 +295,7 @@ public class SysConfDao extends HibernateDaoSupport {
 
 	public void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo) {
 		String sqlString = "";
-		/*
-		 * if("".equals(DsfTestCenterInfo)){
-		 * 
-		 * }else{ sqlString = "from DsfTestCenterInfo "; } try {
-		 * getHibernateTemplate().update(DsfTestCenterInfo); } catch
-		 * (DataAccessException e) {
-		 * 
-		 * }
-		 */
 		try {
-			/*
-			 * sqlString = "update DsfTestCenterInfo tc set tc.name='" +
-			 * DsfTestCenterInfo.getName() + "'tc.address='" +
-			 * DsfTestCenterInfo.getAddress() + "'tc.phone='" +
-			 * DsfTestCenterInfo.getPhone() + "' where id=1"; Query query =
-			 * getSession().createQuery(sqlString); query.executeUpdate();
-			 */
 			DataAccessUtil.updateObject(dsftestcenterinfo, "DsfTestCenterInfo",
 					getHibernateTemplate());
 		} catch (Exception e) {
@@ -328,5 +313,32 @@ public class SysConfDao extends HibernateDaoSupport {
 	}
 	public void saveCustomerBaseInfo(DsfCustomerBaseInfo dsfc){
 		DataAccessUtil.saveOrUpdate(dsfc, "DsfCustomerBaseInfo", getHibernateTemplate());
+	}
+	
+	public List<LabUser> getLabUserList() {
+		return DataAccessUtil.getAllObjects("LabUser",
+				getHibernateTemplate());
+	}
+	public void deleteLabUser(BigDecimal id) {
+		DataAccessUtil.deleteObjectsByStrColum(id, "id", "LabUser",
+				getSession());
+	}
+	public void updateLabUser(LabUser labuser) {
+		String sqlString = "";
+		try {
+			DataAccessUtil.updateObject(labuser, "LabUser",
+					getHibernateTemplate());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+	public LabUser getLabUserById(String id) {
+		try {
+			return (LabUser) DataAccessUtil.getObjectById(new BigDecimal(id), "LabUser",
+					getHibernateTemplate());
+		} catch (DataAccessException e) {
+			return null;
+		}
 	}
 }

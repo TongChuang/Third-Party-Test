@@ -284,4 +284,16 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+	public List<LabUser> getLabUserList(){
+		return sysconfDao.getLabUserList();
+	}
+	public void deleteLabUser(BigDecimal id){
+		sysconfDao.deleteLabUser(id);
+	}
+	public void updateLabUser(LabUser labuser){
+		sysconfDao.updateLabUser(labuser);
+	}
+	public  LabUser getLabUserById(String id){
+		return sysconfDao.getLabUserById(id);
+	}
 }

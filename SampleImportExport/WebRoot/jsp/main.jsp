@@ -217,7 +217,7 @@
 	}
 	function labuser() {
 		f_addTab("labuser", "系统账号管理",
-				"/jsp/sysconf/sysConf.do?method=viewTestObjective");
+				"/jsp/sysconf/sysConf.do?method=viewLabUser");
 	}
 	function inspectionItemControl() {
 		f_addTab("inspectionItemControl", "检验项目对照",

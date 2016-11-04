@@ -15,6 +15,7 @@ import common.datamodel.DsfTestobjective;
 import common.datamodel.DsfTestitems;
 import common.datamodel.LTestitem;
 import common.datamodel.DsfTestCenterInfo;
+import common.datamodel.LabUser;
 import common.util.CommonUtil;
 import common.xmlmodel.SystemConfigSetting;
 import common.xmlmodel.SystemConfigTable;
@@ -197,5 +198,19 @@ public class SysConfApiImpl
 	}
 	public DsfTestCenterInfo getTestCenterInfoById(String id){
 		return dataAccessApi.getTestCenterInfoById(id);
+	}
+	
+	public List<LabUser> getLabUserList(){
+		return dataAccessApi.getLabUserList();
+	}
+	
+	public void deleteLabUser(BigDecimal id){
+		dataAccessApi.deleteLabUser(id);
+	}
+	public void updateLabUser(LabUser labuser){
+		dataAccessApi.updateLabUser(labuser);
+	}
+	public LabUser getLabUserById(String id){
+		return dataAccessApi.getLabUserById(id);
 	}
 }

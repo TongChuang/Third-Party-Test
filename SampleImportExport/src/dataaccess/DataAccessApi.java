@@ -124,4 +124,12 @@ public interface DataAccessApi
 	public abstract void deleteTestCenterInfo(BigDecimal id);
 	public abstract void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo);
 	public abstract DsfTestCenterInfo getTestCenterInfoById(String id);
+	
+	/**
+	 * 系统账号
+	 */
+	public abstract List<LabUser> getLabUserList();
+	public abstract void deleteLabUser(BigDecimal id);
+	public abstract void updateLabUser(LabUser labuser);
+	public abstract LabUser getLabUserById(String id);
 }

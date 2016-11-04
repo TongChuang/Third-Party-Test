@@ -25,9 +25,11 @@ import common.datamodel.DsfTestobjective;
 import common.datamodel.LTestitem;
 import common.datamodel.LTestobjective;
 import common.datamodel.DsfTestCenterInfo;
+import common.datamodel.LabUser;
 import common.util.CommonUtil;
 import common.util.PubJsonUtil;
 import common.xmlmodel.SystemConfigSetting;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SysConfController extends MultiActionController {
 	private SysConfApi sysConfApi = null;
@@ -173,10 +175,12 @@ public class SysConfController extends MultiActionController {
 		String resultJson = "";
 		try {
 
-			logger.info((Object) (new StringBuilder("Begin to viewAddTestObjective")));
+			logger.info((Object) (new StringBuilder(
+					"Begin to viewAddTestObjective")));
 			String customerid = request.getParameter("customerid");
-			 System.out.println("客户编号:"+customerid);
-			ModelAndView modelAndView = new ModelAndView("viewAddTestObjective.jsp");
+			System.out.println("客户编号:" + customerid);
+			ModelAndView modelAndView = new ModelAndView(
+					"viewAddTestObjective.jsp");
 			modelAndView.addObject("customerid", customerid);
 			logger.info((Object) (new StringBuilder("End to viewTestObjective ")));
 			return modelAndView;
@@ -242,8 +246,8 @@ public class SysConfController extends MultiActionController {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("success", "增加检验目的成功！");
 
- 
-			List<DsfTestobjective> resultYList = sysConfApi.getYlxhdescribe(customerid);
+			List<DsfTestobjective> resultYList = sysConfApi
+					.getYlxhdescribe(customerid);
 			resultString = PubJsonUtil.list2json(resultYList);
 			// System.out.println(resultString);
 			jsonObject.put("result_json", resultString);
@@ -298,10 +302,12 @@ public class SysConfController extends MultiActionController {
 			 * rs.setProfiletest(profiletest); rs.setYlmc(ylmc);
 			 * rs.setYlxh(ylxh);
 			 */
-			ModelAndView modelAndView = new ModelAndView("viewUpdateTestObjective.jsp");
+			ModelAndView modelAndView = new ModelAndView(
+					"viewUpdateTestObjective.jsp");
 			DsfTestobjective rs = new DsfTestobjective();
 			System.out.println("id:" + id);
-			List<DsfTestobjective> resultList = sysConfApi.getYlxhdescribeById(id);
+			List<DsfTestobjective> resultList = sysConfApi
+					.getYlxhdescribeById(id);
 			System.out.println("返回结果2：" + resultList);
 			if (null != resultList && resultList.size() > 0) {
 				rs = resultList.get(0);
@@ -363,7 +369,8 @@ public class SysConfController extends MultiActionController {
 
 			jsonObject.put("success", "修改检验目的成功！");
 
-			List<DsfTestobjective> resultYList = sysConfApi.getYlxhdescribe(customerid);
+			List<DsfTestobjective> resultYList = sysConfApi
+					.getYlxhdescribe(customerid);
 			resultString = PubJsonUtil.list2json(resultYList);
 			System.out.println(resultString);
 			jsonObject.put("result_json", resultString);
@@ -629,7 +636,8 @@ public class SysConfController extends MultiActionController {
 					"Begin to getControltestitemsByNo")));
 			String nameorid = request.getParameter("nameorid");
 			List<DsfInspectionItemControl> resultCList = new ArrayList<DsfInspectionItemControl>();
-			resultCList = sysConfApi.getControltestitemsByNo(nameorid, nameorid);
+			resultCList = sysConfApi
+					.getControltestitemsByNo(nameorid, nameorid);
 
 			resultJson = PubJsonUtil.list2json(resultCList);
 			// System.out.println(resultJson);
@@ -688,7 +696,8 @@ public class SysConfController extends MultiActionController {
 					if (null != resultTList) {
 						// for(LTestitem iTestitem:resultTList ){
 						// if(resultControltestitems.getCustomeritemsname().trim().equals(iTestitem.getName().trim())){
-						if (null != map.get(resultControltestitems.getCustomeritemsname())) {
+						if (null != map.get(resultControltestitems
+								.getCustomeritemsname())) {
 							DsfInspectionItemControl dctt = new DsfInspectionItemControl();
 							dctt.setCustomerid(customerid);
 							dctt.setCustomeritems(resultControltestitems
@@ -714,7 +723,8 @@ public class SysConfController extends MultiActionController {
 				sysConfApi.saveAll(dcttList);
 			}
 
-			List<DsfInspectionItemControl> results = sysConfApi.getControltestitems(customerid);
+			List<DsfInspectionItemControl> results = sysConfApi
+					.getControltestitems(customerid);
 			resultJson = PubJsonUtil.list2json(results);
 			System.out.println(resultJson);
 
@@ -748,7 +758,8 @@ public class SysConfController extends MultiActionController {
 			System.out.println("id:" + id + "customerid:" + customerid);
 			// 根据id可以获取选中行唯一的对照表信息
 			BigDecimal bigId = new BigDecimal(id);
-			List<DsfInspectionItemControl> dctiList = sysConfApi.getControltestitemsById(bigId);
+			List<DsfInspectionItemControl> dctiList = sysConfApi
+					.getControltestitemsById(bigId);
 			System.out.println(dctiList);
 			//
 			List<LTestitem> ltocList = sysConfApi
@@ -886,7 +897,8 @@ public class SysConfController extends MultiActionController {
 		}
 	}
 
-	public void deleteBaseCustomerInfo(HttpServletRequest request, HttpServletResponse response) {
+	public void deleteBaseCustomerInfo(HttpServletRequest request,
+			HttpServletResponse response) {
 		String resultString = "";
 		try {
 			logger.info((Object) (new StringBuilder(
@@ -894,8 +906,9 @@ public class SysConfController extends MultiActionController {
 			String id = request.getParameter("id");
 
 			sysConfApi.deleteCustomerInfo(id);
-			
-			List<DsfCustomerBaseInfo> dcbiList = sysConfApi.getCustomerInfoByCostomerId("");
+
+			List<DsfCustomerBaseInfo> dcbiList = sysConfApi
+					.getCustomerInfoByCostomerId("");
 			resultString = PubJsonUtil.list2json(dcbiList);
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("success", "删除客户信息成功！");
@@ -1204,13 +1217,13 @@ public class SysConfController extends MultiActionController {
 			logger.info((Object) (new StringBuilder(
 					"Begin to viewUpdateTestCenter")));
 			String id = request.getParameter("id");
-		
+
 			ModelAndView modelAndView = new ModelAndView(
 					"viewUpdateTestCenterInfo.jsp");
 			DsfTestCenterInfo rs = new DsfTestCenterInfo();
 			rs = sysConfApi.getTestCenterInfoById(id);
-				resultString = PubJsonUtil.bean2json(rs);
-				modelAndView.addObject("resultjson", resultString);
+			resultString = PubJsonUtil.bean2json(rs);
+			modelAndView.addObject("resultjson", resultString);
 			logger.info((Object) (new StringBuilder(
 					"End to viewUpdateTestCenter ")));
 			return modelAndView;
@@ -1229,14 +1242,15 @@ public class SysConfController extends MultiActionController {
 	}
 
 	public void updateTestCenterInfo(HttpServletRequest request,
-			HttpServletResponse response,DsfTestCenterInfo dCenterInfo) {
+			HttpServletResponse response, DsfTestCenterInfo dCenterInfo) {
 		String resultString = null;
 		try {
-			logger.info((Object) (new StringBuilder("Begin to updateTestCenterInfo")));
-	
+			logger.info((Object) (new StringBuilder(
+					"Begin to updateTestCenterInfo")));
+
 			// System.out.println("检验目的对象:"+lYlxhdescribe);
 			sysConfApi.updateDsfTestCenterInfo(dCenterInfo);
-			
+
 			JSONObject jsonObject = new JSONObject();
 
 			jsonObject.put("success", "修改检验单位成功！");
@@ -1244,7 +1258,180 @@ public class SysConfController extends MultiActionController {
 			List<DsfTestCenterInfo> resultList = sysConfApi
 					.getTestCenterInfoList();
 			resultString = PubJsonUtil.list2json(resultList);
-			System.out.println("resultString = "+resultString);
+			System.out.println("resultString = " + resultString);
+			jsonObject.put("resultjson", resultString);
+			response.setContentType("application/json;charset=utf-8");
+			response.getWriter().write(jsonObject.toString());
+			logger.info((Object) (new StringBuilder(
+					"End to updateTestCenterInfo")));
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "搜索数据失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().write(jsonObject.toString());
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+		}
+	}
+
+	// 系统账号管理
+	public ModelAndView viewLabUser(HttpServletRequest request,
+			HttpServletResponse response) {
+		List<LabUser> tinfoList = new ArrayList<LabUser>();
+		try {
+			logger.info((Object) (new StringBuilder("Begin to viewLabUser ")));
+			tinfoList = sysConfApi.getLabUserList();
+			String resultJson = PubJsonUtil.list2json(tinfoList);
+			ModelAndView modelAndView = new ModelAndView("viewLabUser.jsp");
+			modelAndView.addObject("resultJson", resultJson);
+			logger.info((Object) (new StringBuilder("End to viewLabUser ")));
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				response.sendRedirect("/error.jsp");
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+			return null;
+		}
+	}
+
+	// 账号管理添加页面
+	public ModelAndView viewAddLabUser(HttpServletRequest request,
+			HttpServletResponse response) {
+		String resultJson = "";
+		try {
+			logger.info((Object) (new StringBuilder("Begin to viewAddLabUser")));
+			ModelAndView modelAndView = new ModelAndView("viewAddLabUser.jsp");
+			logger.info((Object) (new StringBuilder("End to viewAddLabUser ")));
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "搜索数据失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().write(jsonObject.toString());
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+			return null;
+		}
+	}
+
+	public void addLabUser(HttpServletRequest request,
+			HttpServletResponse response, LabUser lu) {
+		String resultString = "";
+		try {
+			logger.info((Object) (new StringBuilder("Begin to addLabUser")));
+			String i = sysConfApi.getSequence("LABUSER_SEQUENCE");
+			BigDecimal id = new BigDecimal(i);
+			lu.setId(id);
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String password =passwordEncoder.encode("12345");
+			lu.setPassword(password);
+			JSONObject jsonObject = new JSONObject();
+			sysConfApi.saveData(lu, "LabUser");
+
+			jsonObject.put("success", "增加客户信息成功！");
+			// 需要跟新页父页面的客户信息表格
+			List<LabUser> dcbiList = sysConfApi.getLabUserList();
+			resultString = PubJsonUtil.list2json(dcbiList);
+			jsonObject.put("resultjson", resultString);
+			response.setContentType("application/json;charset=utf-8");
+			response.getWriter().write(jsonObject.toString());
+			logger.info((Object) (new StringBuilder("End to addLabUser")));
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "搜索数据失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().write(jsonObject.toString());
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+		}
+	}
+
+	public void deleteLabUser(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			logger.info((Object) (new StringBuilder("Begin to deleteLabUser ")));
+			String id = request.getParameter("id");
+			BigDecimal idBig = new BigDecimal(id);
+			sysConfApi.deleteLabUser(idBig);
+
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("success", "删除检验单位信息成功！");
+			response.setContentType("application/json;charset=utf-8");
+			response.getWriter().write(jsonObject.toString());
+			logger.info((Object) (new StringBuilder("End to deleteLabUser ")));
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "删除数据失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().write(jsonObject.toString());
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+		}
+	}
+
+	public ModelAndView viewUpdateLabUser(HttpServletRequest request,
+			HttpServletResponse response) {
+		String resultString = "";
+		try {
+			logger.info((Object) (new StringBuilder(
+					"Begin to viewUpdateLabUser")));
+			String id = request.getParameter("id");
+
+			ModelAndView modelAndView = new ModelAndView(
+					"viewUpdateLabUser.jsp");
+			LabUser rs = new LabUser();
+			rs = sysConfApi.getLabUserById(id);
+			resultString = PubJsonUtil.bean2json(rs);
+			modelAndView.addObject("resultjson", resultString);
+			logger.info((Object) (new StringBuilder(
+					"End to viewUpdateLabUser ")));
+			return modelAndView;
+		} catch (Exception e) {
+			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "搜索数据失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().write(jsonObject.toString());
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
+			return null;
+		}
+	}
+
+	public void updateLabUser(HttpServletRequest request,
+			HttpServletResponse response, LabUser labuser) {
+		String resultString = null;
+		try {
+			logger.info((Object) (new StringBuilder(
+					"Begin to updateTestCenterInfo")));
+			// System.out.println("检验目的对象:"+lYlxhdescribe);
+			sysConfApi.updateLabUser(labuser);
+
+			JSONObject jsonObject = new JSONObject();
+
+			jsonObject.put("success", "修改账号成功！");
+
+			List<LabUser> resultList = sysConfApi
+					.getLabUserList();
+			resultString = PubJsonUtil.list2json(resultList);
+			System.out.println("resultString = " + resultString);
 			jsonObject.put("resultjson", resultString);
 			response.setContentType("application/json;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());

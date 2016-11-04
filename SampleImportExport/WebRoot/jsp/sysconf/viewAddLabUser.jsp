@@ -36,10 +36,12 @@ $(function () {
                 inputWidth: 170, labelWidth: 90, space: 40,
                 validate : true,
                 fields: [
-                { display: "检验单位名称", name: "name", newline: true, type: "text", group: "检验单位增加", groupicon: groupicon,validate:{required:true,minlength:1} },
+                { display: "姓名", name: "name", newline: true, type: "text", group: "检验单位增加", groupicon: groupicon,validate:{required:true,minlength:1} },
+                { display: "电话号码", name: "phoneNumber", newline: true, type: "text" },
+                { display: "用户名", name: "username", newline: true, type: "text", validate:{required:true,minlength:1} },
+                { display: "e-mail", name: "email", newline: true, type: "text" },
                 { display: "地址", name: "address", newline: true, type: "text", validate:{required:true,minlength:1} },
-                { display: "联系电话", name: "phone", newline: true, type: "text" },
-                ], buttons: [{ text: "保存", width: 160, click: addTestCenterInfo }]
+                ], buttons: [{ text: "保存", width: 160, click: addLabUser }]
             });
 });
 
@@ -48,30 +50,35 @@ $(function () {
 	 dialog.close();//关闭dialog 
  }
  
-function addTestCenterInfo(){
+function addLabUser(){
 	var data = form.getData();
 	if(data.name==''){
-		$.ligerDialog.error('请输入检验单位名称！');
+		$.ligerDialog.error('请输入姓名！');
 		return;
 	}
-	if(data.address==''){
+	if(data.username==''){
+		$.ligerDialog.error('请输入用户名！');
+		return;
+	}
+		if(data.address==''){
 		$.ligerDialog.error('请输入地址！');
 		return;
 	}
 	 var a=/^[0-9]*[1-9][0-9]*$/;
-    if(!a.test(data.phone)){ 
+    if(!a.test(data.phoneNumber)){ 
 		$.ligerDialog.warn('联系电话格式不正确!');
 		return;
 	}
+
 	var cgridData = window.parent.grid.getData();
 	for(var i=0;i<cgridData.length;i++){
-		if(data.name==cgridData[i].name){
-			$.ligerDialog.error('检验单位已经存在，请重新填写！');
+		if(data.username==cgridData[i].username){
+			$.ligerDialog.error('用户名已经存在，请重新填写！');
 			return;
 		}
 	}
 	$.ajax({  
-		url: '/jsp/sysconf/sysConf.do?method=addTestCenterInfo',
+		url: '/jsp/sysconf/sysConf.do?method=addLabUser',
 		dataType: 'json',
 		data: form.getData(),
 		type: 'post', 

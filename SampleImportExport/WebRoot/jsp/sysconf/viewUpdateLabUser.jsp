@@ -20,67 +20,51 @@
 <script src="/resources/ligerUI/js/plugins/ligerWindow.js" type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerDialog.js" type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerButton.js" type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerCheckBox.js" type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerDialog.js" type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerTip.js" type="text/javascript"></script>
-<script src="/resources/jquery-validation/jquery.validate.min.js" type="text/javascript"></script>
-<script src="/resources/jquery-validation/jquery.metadata.js" type="text/javascript"></script>
-<script src="/resources/jquery-validation/messages_cn.js" type="text/javascript"></script>
-<script src="/resources/ligerUI/js/plugins/ligerComboBox.js" type="text/javascript"></script>
 <script type="text/javascript">
 var groupicon = "/resources/ligerUI/skins/icons/communication.gif";
+var resultJson = null;
 var form = null;
 $(function () {
-             //创建表单结构
-             form = $("#form").ligerForm({
+            //创建表单结构
+            form = $("#form").ligerForm({
                 inputWidth: 170, labelWidth: 90, space: 40,
                 validate : true,
                 fields: [
-                { display: "检验单位名称", name: "name", newline: true, type: "text", group: "检验单位增加", groupicon: groupicon,validate:{required:true,minlength:1} },
+                { display: "姓名", name: "name", newline: true, type: "text", group: "系统账号修改", groupicon: groupicon,validate:{required:true,minlength:1} },
+                { display: "电话号码", name: "phoneNumber", newline: true, type: "text", validate:{required:true,minlength:1} },
+                { display: "用户名", name: "username", newline: true, type: "text", validate:{required:true,minlength:1} },
+                { display: "e-mail", name: "email", newline: true, type: "text", validate:{required:true,minlength:1} },
                 { display: "地址", name: "address", newline: true, type: "text", validate:{required:true,minlength:1} },
-                { display: "联系电话", name: "phone", newline: true, type: "text" },
-                ], buttons: [{ text: "保存", width: 160, click: addTestCenterInfo }]
+                { display: "密码", name: "password", newline: true, type: "hidden"},
+                { display: "passwordHint", name: "passwordHint", newline: true, type: "hidden"},
+                { display: "id", name: "id", newline: true, type: "hidden"},
+                ]
+                , buttons: [{ text: "保存", width: 160, click: updateLabUser }]
             });
+            form.setData(resultJson);
 });
-
- var dialog = frameElement.dialog; //调用页面的dialog对象(ligerui对象)
- function colseDialog(){
-	 dialog.close();//关闭dialog 
- }
- 
-function addTestCenterInfo(){
-	var data = form.getData();
-	if(data.name==''){
-		$.ligerDialog.error('请输入检验单位名称！');
+function updateLabUser(){
+	//alert(alert(JSON.stringify(form.getData()))); 
+	var row = form.getData();
+	if(""==row.name){
+		$.ligerDialog.warn('姓名不能为空!');
 		return;
 	}
-	if(data.address==''){
-		$.ligerDialog.error('请输入地址！');
+	if(""==row.username){
+		$.ligerDialog.warn('用户名不能为空!');
 		return;
 	}
-	 var a=/^[0-9]*[1-9][0-9]*$/;
-    if(!a.test(data.phone)){ 
-		$.ligerDialog.warn('联系电话格式不正确!');
-		return;
-	}
-	var cgridData = window.parent.grid.getData();
-	for(var i=0;i<cgridData.length;i++){
-		if(data.name==cgridData[i].name){
-			$.ligerDialog.error('检验单位已经存在，请重新填写！');
-			return;
-		}
-	}
+	
 	$.ajax({  
-		url: '/jsp/sysconf/sysConf.do?method=addTestCenterInfo',
+		url: '/jsp/sysconf/sysConf.do?method=updateLabUser',
 		dataType: 'json',
 		data: form.getData(),
 		type: 'post', 
 		success:function(datas)  
 		{
-
 			if (datas.success != undefined) {
 				window.parent.grid.loadData(datas.resultjson);
-				parent.$.ligerDialog.success(datas.success);
+				window.parent.$.ligerDialog.success(datas.success);
 				colseDialog();
 			}
 			if (datas.error != undefined) {
@@ -93,10 +77,19 @@ function addTestCenterInfo(){
         	$.ligerDialog.error('未知错误');
         } 
 	});
+	
+	 var dialog = frameElement.dialog; //调用页面的dialog对象(ligerui对象)
+ function colseDialog(){
+	 dialog.close();//关闭dialog 
+ }
+ 
 }
 </script>
 </head>
 <body style="padding:10px">
 	<div id="form"></div>
 </body>
+<script type="text/javascript">
+	resultJson = ${resultjson};
+</script>
 </html>
