@@ -89,7 +89,7 @@ public class UpDownController extends MultiActionController {
 	
 	public void getCustomerInfoByBasicInfoState(HttpServletRequest request, HttpServletResponse response){
 		try {
-			logger.info((Object) (new StringBuilder("Begin to getSampleInfoByBarCode ")));
+			logger.info((Object) (new StringBuilder("Begin to getCustomerInfoByBasicInfoState ")));
 			String dsfcustomerid = request.getParameter("dsfcustomerid");
 			DsfCustomerBaseInfo dcbiBaseInfo = upDownApi.getCustomerInfoById(dsfcustomerid);
 			
@@ -107,6 +107,14 @@ public class UpDownController extends MultiActionController {
 			logger.info((Object) (new StringBuilder("End to getCustomerInfoByBasicInfoState ")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "获取客户基本信息状态失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().write(jsonObject.toString());
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
 		}
 	}
 	
@@ -116,19 +124,17 @@ public class UpDownController extends MultiActionController {
 		try {
 			logger.info((Object) (new StringBuilder("Begin to getSampleInfoByBarCode ")));
 			String barcode = request.getParameter("barcode");
-			//System.out.println("扫描枪的扫描号码:"+barcode);
 			String customerid = barcode.substring(0, 5);
 			//根据本地条码号获取样本信息
 			DsfSampleInfo lSample = null;
 			List<DsfSampleInfo> lsList = upDownApi.getSamplesByBarCode(barcode);
-			System.out.println("根据本地条码号获取样本信息"+lsList);
+			//System.out.println("根据本地条码号获取样本信息"+lsList);
 			if(null!=lsList&&lsList.size()>0){
 				lSample = lsList.get(0);
 			}
 			System.out.println("根据条码查询样本信息："+lSample);
 			//根据客户id获取Dsf检验目的
 			List<DsfTestobjective> lYlxhdescribeList = upDownApi.getDsfTestObjectiveById(customerid);
-			lYlxhdescribeList = upDownApi.getDsfTestObjectiveById(customerid);
 			//流水值
 			int num = 0;
 			//流水号
@@ -147,8 +153,6 @@ public class UpDownController extends MultiActionController {
 						jo.put("id", ly.getId());
 						jo.put("ylmc", ly.getYlmc());
 						jo.put("customerid",ly.getCustomerid());
-						jo.put("professiongroup", ly.getProfessionalgroup());
-						jo.put("inspectionsection", ly.getInspectionsection());
 						
 						num = upDownApi.getSeralNumber(dateString+ly.getInspectionsection());
 						num += 1; 
@@ -189,9 +193,17 @@ public class UpDownController extends MultiActionController {
 			sampleJsonString = jsonObject.toString();
 			response.setContentType("application/json;charset=utf-8");     
 			response.getWriter().write(sampleJsonString); 
-			logger.info((Object) (new StringBuilder("End to getSampleInfoByBarCode ")));
+			logger.info((Object) (new StringBuilder("End to  ")));
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
+			try {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "获取样本信息失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().write(jsonObject.toString());
+			} catch (IOException e1) {
+				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
+			}
 		}
 	}
 	
@@ -757,7 +769,10 @@ public class UpDownController extends MultiActionController {
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
-				response.sendRedirect("/error.jsp");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "获取样本进程失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().write(jsonObject.toString());
 			} catch (IOException e1) {
 				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
 			}
@@ -782,7 +797,10 @@ public class UpDownController extends MultiActionController {
 		} catch (Exception e) {
 			logger.error(((Object) (e.getMessage())), ((Throwable) (e)));
 			try {
-				response.sendRedirect("/error.jsp");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("error", "获取检验结果失败，出现错误！");
+				response.setContentType("application/json;charset=utf-8");
+				response.getWriter().write(jsonObject.toString());
 			} catch (IOException e1) {
 				logger.error(((Object) (e1.getMessage())), ((Throwable) (e1)));
 			}

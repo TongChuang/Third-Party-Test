@@ -9,13 +9,13 @@ import org.hibernate.Query;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfTestobjective;
+import common.datamodel.DsfInspectionItemControl;
+import common.datamodel.DsfSampleTypeControl;
 import common.datamodel.DsfTestitems;
+import common.datamodel.DsfTestobjective;
+import common.datamodel.LSampleType;
 import common.datamodel.LTestitem;
-import common.datamodel.DsfTestCenterInfo;
-import common.datamodel.LabUser;
 
 import dataaccess.help.DataAccessUtil;
 
@@ -26,15 +26,11 @@ public class SysConfDao extends HibernateDaoSupport {
 	 * @param state
 	 * @return
 	 */
-	public List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(
-			String customername, String state) {
+	public List<DsfCustomerBaseInfo> getCustomerInfoByCnameState(String customername, String state) {
 		if ("".equals(state)) {
-			return DataAccessUtil.getObjectsByColum(customername,
-					"customername", "DsfCustomerBaseInfo",
-					getHibernateTemplate());
+			return DataAccessUtil.getObjectsByColum(customername, "customername", "DsfCustomerBaseInfo", getHibernateTemplate());
 		} else {
-			String sqlString = "from DsfCustomerBaseInfo where customername like '%"
-					+ customername + "%'";
+			String sqlString = "from DsfCustomerBaseInfo where customername like '%" + customername + "%'";
 			try {
 				return getHibernateTemplate().find(sqlString);
 			} catch (DataAccessException e) {
@@ -45,72 +41,60 @@ public class SysConfDao extends HibernateDaoSupport {
 
 	public List<DsfCustomerBaseInfo> getCustomerInfoList(String customerid) {
 		if (!"".equals(customerid)) {
-			return DataAccessUtil.getObjectsByColum(customerid, "customerid",
-					"DsfCustomerBaseInfo", getHibernateTemplate());
+			return DataAccessUtil.getObjectsByColum(customerid, "customerid", "DsfCustomerBaseInfo", getHibernateTemplate());
 		} else {
-			return DataAccessUtil.getAllObjects("DsfCustomerBaseInfo",
-					getHibernateTemplate());
+			return DataAccessUtil.getAllObjects("DsfCustomerBaseInfo", getHibernateTemplate());
 		}
 	}
-
-	public List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername) {
+	public List<DsfCustomerBaseInfo> getCustomerInfoByName(String customername){
 		if (!"".equals(customername)) {
-			return DataAccessUtil.getObjectsByColum(customername,
-					"customername", "DsfCustomerBaseInfo",
-					getHibernateTemplate());
-		} else {
+			return DataAccessUtil.getObjectsByColum(customername, "customername", "DsfCustomerBaseInfo", getHibernateTemplate());
+		}else{
 			return null;
 		}
 	}
 
 	public DsfCustomerBaseInfo getCustomerInfoById(String id) {
 		BigDecimal bigDecimal = new BigDecimal(id);
-		return (DsfCustomerBaseInfo) DataAccessUtil.getObjectById(bigDecimal,
-				"DsfCustomerBaseInfo", getHibernateTemplate());
+		return (DsfCustomerBaseInfo) DataAccessUtil.getObjectById(bigDecimal, "DsfCustomerBaseInfo", getHibernateTemplate()) ;
 	}
 
 	public void deleteCustomerInfo(String id) {
-		DataAccessUtil.deleteObjectsByStrColum(id, "id", "DsfCustomerBaseInfo",
-				getSession());
+		DataAccessUtil.deleteObjectsByStrColum(id, "id", "DsfCustomerBaseInfo", getSession());
 	}
-
-	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(
-			String customerid) {
+	
+	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String customerid){
 		String sqlString = "";
-		if ("".equals(customerid)) {
+		if("".equals(customerid)){
 			sqlString = "from DsfCustomerBaseInfo";
-		} else {
-			sqlString = "from DsfCustomerBaseInfo where customerid '"
-					+ customerid + "'";
+		}else{
+			sqlString = "from DsfCustomerBaseInfo where customerid '"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
 		} catch (DataAccessException e) {
 			return null;
-		}
+		}	
 	}
-
 	/**
 	 * 检验信息
 	 */
-	public List<DsfCustomerBaseInfo> getCustomerInfoByCostomerId(
-			String customerid) {
+	public List<DsfCustomerBaseInfo> getCustomerInfoByCostomerId(String customerid){
 		String sqlString = "";
-		if ("".equals(customerid)) {
+		if("".equals(customerid)){
 			sqlString = "from DsfCustomerBaseInfo";
-		} else {
-			sqlString = "from DsfCustomerBaseInfo where customerid ='"
-					+ customerid + "'";
+		}else {
+			sqlString = "from DsfCustomerBaseInfo where customerid ='"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
 		} catch (DataAccessException e) {
 			return null;
-		}
+		}	
 	}
 	public List<DsfTestobjective> getYlxhdescribe(String customerid){
 		String sqlString = "";
-		if ("".equals(customerid)) {
+		if("".equals(customerid)){
 			return null;
 		}else{
 			sqlString = "from DsfTestobjective where customerid='"+customerid+"'";
@@ -123,7 +107,7 @@ public class SysConfDao extends HibernateDaoSupport {
 	}
 	public List<DsfTestobjective> getYlxhdescribeById(String id){
 		String sqlString = "";
-		if ("".equals(id)) {
+		if("".equals(id)){
 			return null;
 		}else{
 			sqlString = "from DsfTestobjective where id="+id;
@@ -157,7 +141,7 @@ public class SysConfDao extends HibernateDaoSupport {
 		try {
 			getHibernateTemplate().update(lYlxhdescribe);
 		} catch (DataAccessException e) {
-
+			
 		}
 	}
 	public void deleteYlxhdescribe(BigDecimal id){
@@ -166,12 +150,10 @@ public class SysConfDao extends HibernateDaoSupport {
 	public void addYlxhdescribe(DsfTestobjective lYlxhdescribe){
 		DataAccessUtil.saveOrUpdate(lYlxhdescribe, "DsfTestobjective", getHibernateTemplate());
 	}
-
-	public List<DsfTestitems> getTestItemsByNo(String proList, String customerid) {
+	public List<DsfTestitems> getTestItemsByNo(String proList,String customerid){
 		String sqlString = "";
-		if (!"".equals(proList) || !"".equals(customerid)) {
-			sqlString = "from DsfTestitems where indexId in(" + proList
-					+ ") and customerid = '" + customerid + "'";
+		if(!"".equals(proList)||!"".equals(customerid)){
+			sqlString = "from DsfTestitems where indexId in("+proList+") and customerid = '"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -179,19 +161,17 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}
 	}
-
-	public List<DsfTestitems> getTestItems() {
+	public List<DsfTestitems> getTestItems(){
 		String sqlString = "";
 		sqlString = "from DsfTestitems";
-		// sqlString = "from LTestitem";
+		//sqlString = "from LTestitem";
 		try {
 			return getHibernateTemplate().find(sqlString);
 		} catch (DataAccessException e) {
 			return null;
 		}
 	}
-
-	public void saveTestObjective(String ylxh, String profiletest) {
+	public void saveTestObjective(String ylxh, String profiletest){
 		String hql = "";
 		try {
 			hql = "update DsfTestobjective yl set yl.profiletest = '"+profiletest+"' where yl.ylxh = '"+ylxh+"'";
@@ -200,11 +180,9 @@ public class SysConfDao extends HibernateDaoSupport {
 		} catch (DataAccessException e) {
 		}
 	}
-
-	public String getSequence(String seqName) {
-		return DataAccessUtil.getNextSequence(seqName, getSession());
+	public String getSequence(String seqName){
+		return DataAccessUtil.getNextSequence(seqName,getSession());
 	}
-
 	/**
 	 * 检验项目对照
 	 */
@@ -219,7 +197,7 @@ public class SysConfDao extends HibernateDaoSupport {
 			return getHibernateTemplate().find(sqlString);
 		} catch (DataAccessException e) {
 			return null;
-		}
+		}		
 	}
 	public List<DsfInspectionItemControl> getControltestitemsById(BigDecimal id){
 		String sqlString = "";
@@ -232,7 +210,7 @@ public class SysConfDao extends HibernateDaoSupport {
 			return getHibernateTemplate().find(sqlString);
 		} catch (DataAccessException e) {
 			return null;
-		}
+		}		
 	}
 	public List<DsfInspectionItemControl> getControltestitems(String customerid){
 		String sqlString = "";
@@ -245,20 +223,17 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}
 	}
-
-	public List<LTestitem> getLocalTestItems() {
+	public List<LTestitem> getLocalTestItems(){
 		try {
-			return DataAccessUtil.getAllObjects("LTestitem",
-					getHibernateTemplate());
+			return DataAccessUtil.getAllObjects("LTestitem", getHibernateTemplate());
 		} catch (DataAccessException e) {
 			return null;
 		}
 	}
-
-	public List<LTestitem> getLocalTestItemsByNo(String customerid) {
+	public List<LTestitem> getLocalTestItemsByNo(String customerid){
 		String sqlString = "";
-		if (!"".equals(customerid)) {
-			sqlString = "from LTestitem where customerid='" + customerid + "'";
+		if(!"".equals(customerid)){
+			sqlString = "from LTestitem where customerid='"+customerid+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -266,11 +241,10 @@ public class SysConfDao extends HibernateDaoSupport {
 			return null;
 		}
 	}
-
-	public List<LTestitem> getTestItemsByIndexId(String indexId) {
+	public List<LTestitem> getTestItemsByIndexId(String indexId){
 		String sqlString = "";
-		if (!"".equals(indexId)) {
-			sqlString = "from LTestitem where indexId='" + indexId + "'";
+		if(!"".equals(indexId)){
+			sqlString = "from LTestitem where indexId='"+indexId+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -279,64 +253,41 @@ public class SysConfDao extends HibernateDaoSupport {
 		}
 	}
 	public void saveAll(List<DsfInspectionItemControl> dcttList){
-		DataAccessUtil.saveOrUpdateAll(((Collection) (dcttList)),
-				"DsfControltestitems", getHibernateTemplate(), "update");
+		DataAccessUtil.saveOrUpdateAll(((Collection) (dcttList)), "DsfInspectionItemControl", getHibernateTemplate(), "update");
 	}
-
-	public List<DsfTestCenterInfo> getTestCenterInfoList() {
-		return DataAccessUtil.getAllObjects("DsfTestCenterInfo",
-				getHibernateTemplate());
+	public void saveAllDsfSampleTypeControl(List<DsfSampleTypeControl> dstList){
+		DataAccessUtil.saveOrUpdateAll(((Collection) (dstList)), "DsfSampleTypeControl", getHibernateTemplate(), "update");
 	}
-
-	public void deleteTestCenterInfo(BigDecimal id) {
-		DataAccessUtil.deleteObjectsByStrColum(id, "id", "DsfTestCenterInfo",
-				getSession());
+	//
+	public void saveData(Object t,String tableName){
+		DataAccessUtil.saveOrUpdate(t, tableName, getHibernateTemplate());
 	}
-
-	public void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo) {
+	//
+	public void saveCustomerBaseInfo(DsfCustomerBaseInfo dsfc){
+		DataAccessUtil.saveOrUpdate(dsfc, "DsfCustomerBaseInfo", getHibernateTemplate());
+	}
+	public List<LSampleType> getLSampleTypeById(String id){
 		String sqlString = "";
-		try {
-			DataAccessUtil.updateObject(dsftestcenterinfo, "DsfTestCenterInfo",
-					getHibernateTemplate());
-		} catch (Exception e) {
-			// TODO: handle exception
+		if("".equals(id)){
+			sqlString = "from LSampleType";
+		}else{
+			sqlString = "from LSampleType where id='"+id+"'";
 		}
-	}
-
-	public DsfTestCenterInfo getTestCenterInfoById(String id) {
 		try {
-			return (DsfTestCenterInfo) DataAccessUtil.getObjectById(new BigDecimal(id), "DsfTestCenterInfo",
-					getHibernateTemplate());
+			return getHibernateTemplate().find(sqlString);
 		} catch (DataAccessException e) {
 			return null;
 		}
 	}
-	public void saveCustomerBaseInfo(DsfCustomerBaseInfo dsfc){
-		DataAccessUtil.saveOrUpdate(dsfc, "DsfCustomerBaseInfo", getHibernateTemplate());
-	}
-	
-	public List<LabUser> getLabUserList() {
-		return DataAccessUtil.getAllObjects("LabUser",
-				getHibernateTemplate());
-	}
-	public void deleteLabUser(BigDecimal id) {
-		DataAccessUtil.deleteObjectsByStrColum(id, "id", "LabUser",
-				getSession());
-	}
-	public void updateLabUser(LabUser labuser) {
+	public List<DsfSampleTypeControl> getDsfSampleTypeControlByCustomerId(String customerid){
 		String sqlString = "";
-		try {
-			DataAccessUtil.updateObject(labuser, "LabUser",
-					getHibernateTemplate());
-		} catch (Exception e) {
-			// TODO: handle exception
+		if("".equals(customerid)){
+			sqlString = "from DsfSampleTypeControl";
+		}else{
+			sqlString = "from DsfSampleTypeControl where customerId='"+customerid+"'";
 		}
-	}
-
-	public LabUser getLabUserById(String id) {
 		try {
-			return (LabUser) DataAccessUtil.getObjectById(new BigDecimal(id), "LabUser",
-					getHibernateTemplate());
+			return getHibernateTemplate().find(sqlString);
 		} catch (DataAccessException e) {
 			return null;
 		}

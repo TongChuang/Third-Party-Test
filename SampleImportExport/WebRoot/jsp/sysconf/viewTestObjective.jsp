@@ -170,8 +170,7 @@ var availableTags = null;
 			rightWidth : 300,
 		});
 		$("#toptoolbar").ligerToolBar({ items: [
-                {
-                    text: '新增检验目的', click: addTestObjective, icon:'add'},
+                { text: '新增检验目的', click: addTestObjective, icon:'add'},
                 { line:true },
                 { text: '修改检验目的', click: modifyTestObjective },
                  { line:true },
@@ -344,10 +343,6 @@ function ajaxTestItems(data){
 }
 	
 function addTestObjective(){
-	//$.ligerWindow.show({ target: $("#addTestObjective").clone(), width: 300, height: 400, title:"增加界面" });
-	//$.ligerDialog.open({ height: 300,url: 'addTestObjective.jsp',title:"增加界面" });
-	
-	
 	var row = grid.getSelectedRow();
     if (!row) { 
     	$.ligerDialog.warn('客户信息行未选中');
@@ -355,7 +350,6 @@ function addTestObjective(){
     }
     else{
     	$.ligerDialog.open({ height: 400, Width: 350, url: '/jsp/sysconf/sysConf.do?method=viewAddTestObjective&customerid='+row.customerid,title:"增加界面" });
-    
     }
 }
 

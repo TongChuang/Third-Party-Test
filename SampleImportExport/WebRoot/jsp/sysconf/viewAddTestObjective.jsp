@@ -36,9 +36,9 @@ $(function () {
                 inputWidth: 170, labelWidth: 90, space: 40,
                 validate : true,
                 fields: [
-                { display: "客户编号", name: "customerid", newline: true, readonly: true, type: "text", group: "检验目的增加", groupicon: groupicon },
+                { display: "客户编号", name: "customerid", newline: true, type: "text", readonly:true, group: "检验目的增加", groupicon: groupicon },
                 { display: "id", name: "id", newline: true, type: "hidden" },
-                { display: "医疗序号", name: "ylxh", newline: true, type: "digits", validate:{required:true,minlength:5} },
+                { display: "医疗序号", name: "ylxh", newline: true, type: "text", validate:{required:true,minlength:4} },
                 { display: "医疗名称", name: "ylmc", id:"ylmc", newline: true, type: "text", validate:{required:true,minlength:1} },
                 { display: "项目编号", name: "profiletest", newline: true, type: "text", validate:{required:true,minlength:1} },
                 { display: "专业组", name: "professionalgroup", newline: true, type: "text", validate:{required:true,minlength:1} }, 
@@ -49,7 +49,6 @@ $(function () {
             var rs = $("#hidden_input").val();
             //设置表单内容
             form.setData({customerid:rs});
-            
 });
 function colseDialog(){
  	dialog.close();//关闭dialog 
@@ -75,6 +74,6 @@ function addTestObjectiveButton(){
 </head>
 <body style="padding:10px">
 	<div id="form"></div>
-	<input id="hidden_input" type="hidden" name="customerid" value="${customerid}"/>
+	<input type="hidden" name="customerid" id="hidden_input" value="${customerid}"/>
 </body>
 </html>

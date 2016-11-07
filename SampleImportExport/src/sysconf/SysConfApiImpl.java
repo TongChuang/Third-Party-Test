@@ -9,13 +9,13 @@ import sysconf.xml.XmlWriter;
 import sysconf.xml.XmlWriterImpl;
 
 import common.SIEContext;
-import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfTestobjective;
+import common.datamodel.DsfInspectionItemControl;
+import common.datamodel.DsfSampleTypeControl;
 import common.datamodel.DsfTestitems;
+import common.datamodel.DsfTestobjective;
+import common.datamodel.LSampleType;
 import common.datamodel.LTestitem;
-import common.datamodel.DsfTestCenterInfo;
-import common.datamodel.LabUser;
 import common.util.CommonUtil;
 import common.xmlmodel.SystemConfigSetting;
 import common.xmlmodel.SystemConfigTable;
@@ -96,7 +96,7 @@ public class SysConfApiImpl
 		return dataAccessApi.getCustomerInfoByName(customername);
 	}
 	public void saveCustomerInfo(DsfCustomerBaseInfo dcbi){
-		dataAccessApi.saveCustomerBaseInfo(dcbi);
+		dataAccessApi.saveCustomerBaseInfo_sysconf(dcbi);
 	}
 	public void deleteCustomerInfo(String customerid){
 		dataAccessApi.deleteCustomerInfo(customerid);
@@ -179,38 +179,27 @@ public class SysConfApiImpl
 	public void saveAll(List<DsfInspectionItemControl> dcttList){
 		dataAccessApi.saveAll(dcttList);
 	}
+	
+	//
 	@Override
 	public void saveData(Object t,String tableName){
-		dataAccessApi.saveData(t,tableName);
+		dataAccessApi.saveData_sysconf(t,tableName);
 	}
 	@Override
 	public List<LTestitem> getTestItemsByIndexId(String indexId){
 		return dataAccessApi.getTestItemsByIndexId(indexId);
 	}
-	public List<DsfTestCenterInfo> getTestCenterInfoList(){
-		return dataAccessApi.getTestCenterInfoList();
+	//样本类型对照
+	@Override
+	public List<LSampleType> getLSampleTypeById(String id){
+		return dataAccessApi.getLSampleTypeById(id);
 	}
-	public void deleteTestCenterInfo(BigDecimal id){
-		dataAccessApi.deleteTestCenterInfo(id);
+	@Override
+	public void saveAllDsfSampleTypeControl(List<DsfSampleTypeControl> dstList){
+		dataAccessApi.saveAllDsfSampleTypeControl(dstList);
 	}
-	public void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo){
-		dataAccessApi.updateDsfTestCenterInfo(dsftestcenterinfo );
-	}
-	public DsfTestCenterInfo getTestCenterInfoById(String id){
-		return dataAccessApi.getTestCenterInfoById(id);
-	}
-	
-	public List<LabUser> getLabUserList(){
-		return dataAccessApi.getLabUserList();
-	}
-	
-	public void deleteLabUser(BigDecimal id){
-		dataAccessApi.deleteLabUser(id);
-	}
-	public void updateLabUser(LabUser labuser){
-		dataAccessApi.updateLabUser(labuser);
-	}
-	public LabUser getLabUserById(String id){
-		return dataAccessApi.getLabUserById(id);
+	@Override
+	public List<DsfSampleTypeControl> getDsfSampleTypeControlByCustomerId(String customerid){
+		return dataAccessApi.getDsfSampleTypeControlByCustomerId(customerid);
 	}
 }

@@ -8,7 +8,7 @@
 
 <link href="/resources/ligerUI/skins/Aqua/css/ligerui-all.css"
 	rel="stylesheet" type="text/css" />
-<script src="/resources/jquery/jquery-1.5.2.min.js"
+<script src="/resources/jquery/jquery-1.9.0.min.js"
 	type="text/javascript"></script>
 <script src="/resources/ligerUI/js/core/base.js" type="text/javascript"></script>
 <script src="/resources/ligerUI/js/plugins/ligerLayout.js"
@@ -359,7 +359,6 @@ body {
 			</div>
 		</div>
 	</div>
-
 	<div style="display:none;">
 </body>
 </html>

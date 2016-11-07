@@ -188,7 +188,7 @@ public class UpDownDao extends HibernateDaoSupport {
 	public List<DsfSampleInfo> getSamplesByBarCode(String barcode){
 		String sqlString = "";
 		if(null!=barcode){
-			sqlString = "from DSF_SAMPLE_INFO where localbarcode = '"+barcode+"' order by id desc";
+			sqlString = "from DsfSampleInfo where localbarcode = '"+barcode+"'";
 		}
 		try {
 			return getHibernateTemplate().find(sqlString);
@@ -294,5 +294,24 @@ public class UpDownDao extends HibernateDaoSupport {
 		}else {
 			return getHibernateTemplate().find(sql.toString());
 		}
+	}
+	
+	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId(String customerid){
+		String sqlString = "";
+		if("".equals(customerid)){
+			sqlString = "from DsfCustomerBaseInfo";
+		}else{
+			sqlString = "from DsfCustomerBaseInfo where customerid '"+customerid+"'";
+		}
+		try {
+			return getHibernateTemplate().find(sqlString);
+		} catch (DataAccessException e) {
+			return null;
+		}	
+	}
+	
+	public DsfCustomerBaseInfo getCustomerInfoById(String id) {
+		BigDecimal bigDecimal = new BigDecimal(id);
+		return (DsfCustomerBaseInfo) DataAccessUtil.getObjectById(bigDecimal, "DsfCustomerBaseInfo", getHibernateTemplate()) ;
 	}
 }

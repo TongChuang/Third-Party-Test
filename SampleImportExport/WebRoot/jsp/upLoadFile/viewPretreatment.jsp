@@ -112,12 +112,15 @@
 				alert('出现未知错误');
 			},
 			success : function(datas) {
+				if (datas.error != undefined) {
+					$.ligerDialog.error(datas.error);
+				}
 				manager.loadData(datas.jsonresult1);
 				testObjectiveJson = datas.jsonresult1;
 				var data = manager.getData();
 				//var data = manager.getColumn();
-				alert(JSON.stringify(data))
-				alert(data.length);
+				//alert(JSON.stringify(data))
+				//alert(data.length);
 				for(var i=0;i<data.length;i++){
 					if(data[i].serialnumber!=""){
 						

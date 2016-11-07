@@ -2,22 +2,22 @@ package dataaccess;
 
 
 
-import java.math.BigDecimal;	
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import common.StartAPI;
-import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfTestobjective;
+import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfProcess;
-import common.datamodel.DsfTestitems;
 import common.datamodel.DsfSampleInfo;
-import common.datamodel.LTestitem;
-import common.datamodel.LTestobjective;
+import common.datamodel.DsfSampleTypeControl;
 import common.datamodel.DsfTestResult;
+import common.datamodel.DsfTestitems;
+import common.datamodel.DsfTestobjective;
+import common.datamodel.LSampleType;
+import common.datamodel.LTestitem;
 import common.datamodel.LabUser;
-import common.datamodel.DsfTestCenterInfo;
 
 public interface DataAccessApi
 	extends StartAPI {
@@ -72,6 +72,8 @@ public interface DataAccessApi
 	 */
 	public abstract List<DsfTestResult> getTestResultsByWebService(DsfTestResult ltr);
 	
+	//
+	public void saveCustomerBaseInfo_sysconf(DsfCustomerBaseInfo dsfc);
 	/**
 	 * 查询客户信息
 	 * @return
@@ -106,6 +108,8 @@ public interface DataAccessApi
 	public abstract List<LTestitem> getLocalTestItemsByNo(String customerid);
 	public abstract void saveAll(List<DsfInspectionItemControl> dcttList);
 	public abstract List<LTestitem> getTestItemsByIndexId(String indexId);
+	//
+	public abstract void saveData_sysconf(Object t,String tableName);
 	/**
 	 * 前处理
 	 */
@@ -113,23 +117,19 @@ public interface DataAccessApi
 	public abstract int getSeralNumber(String dateAndSection);
 	public abstract void saveAllSerialNumber(List<DsfTestobjective> dydList);
 	public abstract List<String> getInspectionSectionByYLXH(String ylxh,String customerid);
-
 	
 	public abstract List<LabUser> getUserInfo(String username);
 	
 	/**
-	 * 检验单位
+	 * queryStats
 	 */
-	public abstract List<DsfTestCenterInfo> getTestCenterInfoList();
-	public abstract void deleteTestCenterInfo(BigDecimal id);
-	public abstract void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo);
-	public abstract DsfTestCenterInfo getTestCenterInfoById(String id);
-	
+	public abstract List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_querystats(String customerid);
+	public abstract void saveData_querystats(Object t,String tableName);
+	public abstract void saveDataByList_querystats(List <Object>objectList,String tableName);
 	/**
-	 * 系统账号
+	 * 样本类型对照
 	 */
-	public abstract List<LabUser> getLabUserList();
-	public abstract void deleteLabUser(BigDecimal id);
-	public abstract void updateLabUser(LabUser labuser);
-	public abstract LabUser getLabUserById(String id);
+	public abstract List<LSampleType> getLSampleTypeById(String id);
+	public abstract void saveAllDsfSampleTypeControl(List<DsfSampleTypeControl> dstList);
+	public abstract List<DsfSampleTypeControl> getDsfSampleTypeControlByCustomerId(String customerid);
 }

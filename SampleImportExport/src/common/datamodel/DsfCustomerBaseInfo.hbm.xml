@@ -25,7 +25,7 @@
                 <comment>客户号5位</comment>
             </column>
         </property>
-        <property name="currentbarcode" type="java.math.BigDecimal">
+        <property name="currentbarcode" type="java.lang.String">
             <column name="currentbarcode" precision="22" scale="0">
                 <comment>当前使用到的条码号</comment>
             </column>

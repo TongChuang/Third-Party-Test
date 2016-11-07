@@ -1,22 +1,22 @@
 package dataaccess;
 
-import java.math.BigDecimal;	
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfCustomerBaseInfo;
-import common.datamodel.DsfTestobjective;
+import common.datamodel.DsfInspectionItemControl;
 import common.datamodel.DsfProcess;
-import common.datamodel.DsfTestitems;
 import common.datamodel.DsfSampleInfo;
-import common.datamodel.LTestitem;
-import common.datamodel.LTestobjective;
+import common.datamodel.DsfSampleTypeControl;
 import common.datamodel.DsfTestResult;
+import common.datamodel.DsfTestitems;
+import common.datamodel.DsfTestobjective;
+import common.datamodel.LSampleType;
+import common.datamodel.LTestitem;
 import common.datamodel.LabUser;
-import common.datamodel.DsfTestCenterInfo;
 
 import dataaccess.dao.QueryStatsDao;
 import dataaccess.dao.SecurityDao;
@@ -87,6 +87,7 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 	public void saveCustomerBaseInfo(DsfCustomerBaseInfo dsfc){
 		securityDao.saveCustomerBaseInfo(dsfc);
 	}
+	
 	public List<DsfCustomerBaseInfo> getCustomerInfo(){
 		return	updownDao.getCustomerInfo();
 	}
@@ -144,6 +145,10 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		return updownDao.getSamplesByBarCode( barcode);
 	}
 	
+	public DsfCustomerBaseInfo getCustomerInfoById_updown(String id){
+		return updownDao.getCustomerInfoById(id);
+	}
+	
 	//webservice
 	public boolean checkDsfUserInfo(String customerid,String customerKey){
 		return updownDao.checkDsfUserInfo(customerid,customerKey);
@@ -160,6 +165,7 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		return updownDao.getSampleTime(sampleno);
 	}
 	
+	//
 	public void saveCustomerBaseInfo_sysconf(DsfCustomerBaseInfo dsfc){
 		sysconfDao.saveCustomerBaseInfo(dsfc);
 	}
@@ -235,9 +241,12 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 		public void saveAll(List<DsfInspectionItemControl> dcttList){
 			sysconfDao.saveAll(dcttList);
 		}
-
 		public List<LTestitem> getTestItemsByIndexId(String indexId){
 			return sysconfDao.getTestItemsByIndexId(indexId);
+		}
+		//
+		public void saveData_sysconf(Object t,String tableName){
+			sysconfDao.saveData(t,tableName);
 		}
 		/**
 		 * 前处理
@@ -255,45 +264,36 @@ public class DataAccessApiImpl extends HibernateDaoSupport implements
 			return updownDao.getInspectionSectionByYLXH(ylxh,customerid);
 		}
 
-	public List<LabUser> getUserInfo(String username){
-		return updownDao.getUserInfo(username);
-	}
+	    public List<LabUser> getUserInfo(String username){
+		    return updownDao.getUserInfo(username);
+	    }
+	    //
+	    public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_updown(String clientnumber){
+			return updownDao.getCustomerBaseInfoByCustomerId(clientnumber);
+		}
 	
-	public List<DsfTestCenterInfo> getTestCenterInfoList(){
-		return sysconfDao.getTestCenterInfoList();
+	/**
+	 * queryStats
+	 */
+	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_querystats(String clientnumber){
+		return queryStatsDao.getCustomerBaseInfoByCustomerId(clientnumber);
 	}
-	public void deleteTestCenterInfo(BigDecimal id){
-		sysconfDao.deleteTestCenterInfo(id);
+	public void saveData_querystats(Object t,String tableName){
+		queryStatsDao.saveData(t,tableName);
 	}
-	public void updateDsfTestCenterInfo(DsfTestCenterInfo dsftestcenterinfo){
-		sysconfDao.updateDsfTestCenterInfo(dsftestcenterinfo);
+	public void saveDataByList_querystats(List <Object>objectList,String tableName){
+		queryStatsDao.saveDataByList(objectList,tableName);
 	}
-	public  DsfTestCenterInfo getTestCenterInfoById(String id){
-		return sysconfDao.getTestCenterInfoById(id);
+	/**
+	 * 样本类型对照
+	 */
+	public List<LSampleType> getLSampleTypeById(String id){
+		return sysconfDao.getLSampleTypeById(id);
 	}
-
-	@Override
-	public List<DsfCustomerBaseInfo> getCustomerBaseInfoByCustomerId_updown(
-			String customerid) {
-		// TODO Auto-generated method stub
-		return null;
+	public void saveAllDsfSampleTypeControl(List<DsfSampleTypeControl> dstList){
+		sysconfDao.saveAllDsfSampleTypeControl(dstList);
 	}
-
-	@Override
-	public DsfCustomerBaseInfo getCustomerInfoById_updown(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public List<LabUser> getLabUserList(){
-		return sysconfDao.getLabUserList();
-	}
-	public void deleteLabUser(BigDecimal id){
-		sysconfDao.deleteLabUser(id);
-	}
-	public void updateLabUser(LabUser labuser){
-		sysconfDao.updateLabUser(labuser);
-	}
-	public  LabUser getLabUserById(String id){
-		return sysconfDao.getLabUserById(id);
+	public List<DsfSampleTypeControl> getDsfSampleTypeControlByCustomerId(String customerid){
+		return sysconfDao.getDsfSampleTypeControlByCustomerId(customerid);
 	}
 }
